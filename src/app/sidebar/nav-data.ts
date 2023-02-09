@@ -6,32 +6,32 @@ export const navbarData = [
     },
     {
         routeLink: 'entretien',
-        icon: 'fal fa-box-open',
+        icon: 'fal fa-list',
         label: 'Entretiens'
     },
     {
         routeLink: 'jury',
-        icon: 'fal fa-chart-bar',
+        icon: 'fal fa-gavel',
         label: 'Jurys'
     },
     {
         routeLink: 'postulant',
-        icon: 'fal fa-tags',
+        icon: 'fal fa-users',
         label: 'Postulants'
     },
     {
         routeLink: 'critere',
-        icon: 'fal fa-file',
+        icon: 'fal fa-ticket',
         label: 'Criteres'
     },
     {
         routeLink: 'questionnaire',
-        icon: 'fal fa-camera',
+        icon: 'fal fa-question',
         label: 'Questionnaires'
     },
     {
         routeLink: 'profile',
-        icon: 'fal fa-cog',
+        icon: 'fal fa-user',
         label: 'Profiles'
     },
 ];
