@@ -16,6 +16,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { CritereComponent } from './critere/critere.component';
 import { EntretienComponent } from './entretien/entretien.component';
 import { BodyComponent } from "./body/body.component";
+import { SigninComponent } from './signin/signin.component';
+
 
 @NgModule({
     declarations: [
@@ -29,7 +31,8 @@ import { BodyComponent } from "./body/body.component";
         ProfileComponent,
         CritereComponent,
         EntretienComponent,
-        BodyComponent
+        BodyComponent,
+        SigninComponent,
     ],
     providers: [],
     bootstrap: [AppComponent],
@@ -39,7 +42,8 @@ import { BodyComponent } from "./body/body.component";
         FormsModule,
         HttpClientModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+       // NgxLoadingModule.forRoot({})
     ]
 })
 export class AppModule { }

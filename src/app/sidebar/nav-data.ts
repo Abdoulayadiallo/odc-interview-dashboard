@@ -1,3 +1,5 @@
+import { last } from "rxjs";
+
 export const navbarData = [
     {
         routeLink: 'dashboard',
@@ -34,4 +36,8 @@ export const navbarData = [
         icon: 'fal fa-user',
         label: 'Profiles'
     },
+    {
+        icon:'fas fa-sign-out',
+        label:'Se deconnecter'
+    }
 ];

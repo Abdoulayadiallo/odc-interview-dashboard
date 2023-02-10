@@ -1,5 +1,5 @@
 .sidenav {
-    background: #263238;
+    background: #fff;
     transition: all .5s ease;
     position: fixed;
     z-index: 1;
@@ -16,6 +16,7 @@
 
         .logo {
             background: #fff;
+            color: #000;
             text-align: center;
             width: 3rem;
             min-width: 3rem;
@@ -27,13 +28,15 @@
             border: none;
         }
 
-        .logo-text {
-            margin-left: 1.5rem;
-            font-size: 24px;
-            font-weight: 700;
-            color: #fff;
+        // .logo-text {
+        //     margin-left: 1.5rem;
+        //     font-size: 24px;
+        //     font-weight: 700;
+        //     color: #FF7900;
+        // }
+        .logoI{
+            width: 90%;
         }
-
         .btn-close {
             margin-left: auto;
             cursor: pointer;
@@ -44,7 +47,11 @@
             border: none;
 
             .fa-times {
-                color: #fff;
+                // color: #fff;
+                font-size: 24px;
+            }
+            .fa-times:hover {
+                color: #FF7900;
                 font-size: 24px;
             }
         }
@@ -53,6 +60,9 @@
 
 .sidenav-collapsed {
     width: 16.5625rem;
+}
+.logo-hidded{
+    display: none;
 }
 
 .sidenav-nav {
@@ -73,7 +83,7 @@
             display: flex;
             align-items: center;
             height: 3rem;
-            color: #f3f3f3;
+            color: #000;
             text-decoration: none;
             border-radius: 0.625rem;
             transition: all .3s ease;
@@ -94,17 +104,25 @@
 
     .sidenav-nav-item:hover {
         .sidenav-nav-link {
-            background-color: #fff;
-            color: #000;
+            background-color: #FF7900;
+            color: #FFF;
         }
+    }
+}
+.deconnect {
+    color: #FFF !important;
+    background-color: #845EC2;
+
+    .sidenav-link-icon {
+        color: #FFF;
     }
 }
 
 .active {
-    background-color: #fff;
+    background-color: #FF7900;
 
     .sidenav-link-icon,
     .sidenav-link-text {
-        color: #000;
+        color: #FFF;
     }
 }

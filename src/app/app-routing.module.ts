@@ -7,6 +7,7 @@ import { JuryComponent } from './jury/jury.component';
 import { PostulantComponent } from './postulant/postulant.component';
 import { ProfileComponent } from './profile/profile.component';
 import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
+import { SigninComponent } from './signin/signin.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -16,7 +17,8 @@ const routes: Routes = [
   {path: 'postulant', component: PostulantComponent},
   {path: 'critere', component: CritereComponent},
   {path: 'questionnaire', component: QuestionnaireComponent},
-  {path: 'profile', component: ProfileComponent}
+  {path: 'profile', component: ProfileComponent},
+  {path: 'signin', component: SigninComponent}
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

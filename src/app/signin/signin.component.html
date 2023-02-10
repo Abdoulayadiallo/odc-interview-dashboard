@@ -1,0 +1,72 @@
+<section class="intro">
+  <div class="mask d-flex align-items-center h-100 gradient-custom">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+          <div class="card">
+            <div class="card-body p-5">
+
+              <div class="row d-flex align-items-center .flex-md-column">
+                <div class="col-md-6 col-xl-7">
+
+                  <div class="text-center pt-md-5 pb-5 my-md-5" style="padding-right: 24px;">
+                    <img src="../../assets/Logo.png">
+                  </div>
+
+                </div>
+                <div class="col-md-6 col-xl-4 text-center">
+
+                  <h2 class="fw-bold mb-4 pb-2">Connexion</h2>
+
+                  <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm.value)" class="form-signin">
+                    <div class="user-details">
+                      <div class="form-group">
+                        <label for="username">Username: </label>
+                        <input type="text" class="form-control" name="username" placeholder="Username" required ngModel
+                          #usernameInput="ngModel" required>
+                        <span class="help-block" *ngIf="usernameInput.invalid && usernameInput.touched">Entrer un
+                          username
+                          valide</span>
+                      </div>
+                      <div class="form-group">
+                        <label for="password">Mot de passe: </label>
+                        <input type="password" class="form-control" name="password" placeholder="Password" required
+                          ngModel #passwordInput="ngModel" />
+                        <span class="help-block" *ngIf="passwordInput.invalid && passwordInput.touched">Entrer un mots
+                          depasse valide.</span>
+                      </div>
+                      <div class="button">
+                        <input type="submit" value="Connecter" [disabled]="loginForm.invalid">
+                      </div>
+                      <div class="passf">
+                        <button (click)="!isForgetpass ? isForgetpass = true : isForgetpass=false">
+                          Mot de passe oublié
+                        </button>
+                      </div>
+
+                    </div>
+                  </form>
+                  <div class="user-details forgetpassword" *ngIf="isForgetpass">
+                    <form action="" #resetForm="ngForm" (ngSubmit)="onResetpassword(resetForm.value)">
+                      <div class="form-group">
+                        <label for="email">Email : </label>
+                        <input type="email" class="form-control" name="email" placeholder="email@gmail.com" required
+                          ngModel #emailInput="ngModel" />
+                        <span class="help-block" *ngIf="emailInput.invalid && emailInput.touched">Entrer email
+                          valide.</span>
+                      </div>
+                      <div class="button">
+                        <input type="submit" value="Réinitialiser" [disabled]="resetForm.invalid">
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -6,4 +7,6 @@ import { Injectable } from '@angular/core';
 export class LoadingService {
 
   constructor() { }
+  public isLoading: Subject<boolean> =  new Subject();
+
 }
