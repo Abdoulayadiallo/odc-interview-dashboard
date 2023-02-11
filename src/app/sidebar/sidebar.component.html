@@ -1,35 +1,49 @@
 <div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
-  <div class="logo-container">
-      <button class="logo" [ngClass]="hidded ? 'logo-hidded': ''" (click)="toggleCollapse()" ><img class="logoI" src="assets/Logo sans ecrit.png"></button>
-      <div class="logo-text" @fadeInOut *ngIf="collapsed" (click)="closeSidenav()"><img class="logoI" src="assets/Logo.png"></div>
-      <button class="btn-close" @rotate *ngIf="collapsed && hidded" (click)="closeSidenav()">
-          <i class="fal fa-times close-icon"></i>
-      </button>
-  </div>
-  <ul class="sidenav-nav">
-      <li class="sidenav-nav-item" *ngFor="let data of navData" >
-          <a class="sidenav-nav-link" [routerLink]="[data.routeLink]" 
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{exact: true}"
-              *ngIf="data!==navData[navData.length-1]"
-          >
-              <i *ngIf="data!==navData[navData.length-1]" class="sidenav-link-icon" [class]="data.icon"></i>
-              <span  class="sidenav-link-text" @fadeInOut *ngIf="collapsed && data!==navData[navData.length-1]"
-              >
-                  {{data.label}}
-              </span>
-          </a>
-      </li>
-      <li class="sidenav-nav-item">
-          <a class="sidenav-nav-link deconnect" (click)="logOut()"
-          >
-              <i class="sidenav-link-icon" [class]="navData[navData.length-1].icon"></i>
-              <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
-                  {{navData[navData.length-1].label}}
-              </span>
-          </a>
-      </li>
-      
-      
-  </ul>
+    <div class="logo-container">
+        <button class="logo" [ngClass]="hidded ? 'logo-hidded': ''" (click)="toggleCollapse()"><img class="logoI"
+                src="assets/Logo sans ecrit.png"></button>
+        <div class="logo-text" @fadeInOut *ngIf="collapsed" (click)="closeSidenav()"><img class="logoI"
+                src="assets/Logo.png"></div>
+        <button class="btn-close" @rotate *ngIf="collapsed && hidded" (click)="closeSidenav()">
+            <i class="fal fa-times close-icon"></i>
+        </button>
+    </div>
+    <ul class="sidenav-nav">
+        <li class="sidenav-nav-item">
+            <form>
+                <div class="input-group" *ngIf="collapsed && hidded">
+                    <input class="form-control py-2 border-right-0 border" type="search" value="search"
+                        id="example-search-input">
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
+                    </span>
+                </div>
+            </form>
+            <div class="input-group" *ngIf="!collapsed || !hidded" (click)="toggleCollapse()">
+                <span class="input-group-append sidenav-nav-link">
+                    <i class="fa fa-search sidenav-link-icon"></i>
+                </span>
+            </div>
+        </li>
+
+        <li class="sidenav-nav-item" *ngFor="let data of navData">
+            <a class="sidenav-nav-link" [routerLink]="[data.routeLink]" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}" *ngIf="data!==navData[navData.length-1]">
+                <i *ngIf="data!==navData[navData.length-1]" class="sidenav-link-icon" [class]="data.icon"></i>
+                <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed && data!==navData[navData.length-1]">
+                    {{data.label}}
+                </span>
+            </a>
+        </li>
+        <li class="sidenav-nav-item">
+            <a class="sidenav-nav-link deconnect" (click)="logOut()">
+                <i class="sidenav-link-icon" [class]="navData[navData.length-1].icon"></i>
+                <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
+                    {{navData[navData.length-1].label}}
+                </span>
+            </a>
+        </li>
+
+
+    </ul>
 </div>
