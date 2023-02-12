@@ -17,6 +17,7 @@ import { CritereComponent } from './critere/critere.component';
 import { EntretienComponent } from './entretien/entretien.component';
 import { BodyComponent } from "./body/body.component";
 import { SigninComponent } from './signin/signin.component';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 
 @NgModule({
@@ -43,6 +44,18 @@ import { SigninComponent } from './signin/signin.component';
         HttpClientModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        NgCircleProgressModule.forRoot({
+            responsive: true,
+            // set defaults here
+            radius: 100,
+            outerStrokeWidth: 16,
+            innerStrokeWidth: 8,
+            outerStrokeColor: "#78C000",
+            innerStrokeColor: "#C7E596",
+            animationDuration: 300,
+            showSubtitle: false
+          })
+      
        // NgxLoadingModule.forRoot({})
     ]
 })
