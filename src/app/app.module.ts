@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
+import {MatToolbarModule} from '@angular/material/toolbar';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AccueilComponent } from './accueil/accueil.component';
@@ -18,6 +18,8 @@ import { EntretienComponent } from './entretien/entretien.component';
 import { BodyComponent } from "./body/body.component";
 import { SigninComponent } from './signin/signin.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { PostulantDetailsComponent } from './postulant-details/postulant-details.component';
+import { JuryDetailsComponent } from './jury-details/jury-details.component';
 
 
 @NgModule({
@@ -34,6 +36,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
         EntretienComponent,
         BodyComponent,
         SigninComponent,
+        PostulantDetailsComponent,
+        JuryDetailsComponent,
     ],
     providers: [],
     bootstrap: [AppComponent],
@@ -54,7 +58,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
             innerStrokeColor: "#C7E596",
             animationDuration: 300,
             showSubtitle: false
-          })
+          }),
+          MatToolbarModule
       
        // NgxLoadingModule.forRoot({})
     ]
