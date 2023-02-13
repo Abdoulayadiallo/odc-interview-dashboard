@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AlertType } from '../Model/alert-type.enum';
@@ -13,7 +13,7 @@ import { LoadingService } from '../Service/loading.service';
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.scss']
 })
-export class SigninComponent implements OnInit {
+export class SigninComponent implements OnInit{
 
   private subscriptions: Subscription[] = [];
   public isForgetpass=false;
@@ -95,5 +95,6 @@ export class SigninComponent implements OnInit {
       )
     );
   }
+
 
 }

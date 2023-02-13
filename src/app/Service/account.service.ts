@@ -17,6 +17,7 @@ export class AccountService {
   public redirectUrl!: string;
   private jwtHelper = new JwtHelperService();
   public userPicture =`${this.host}/image/user/`;
+  isAuthentificate: boolean;
   constructor(private http: HttpClient) { }
 
   login(utilisateur: Utilisateur): Observable<HttpErrorResponse | HttpResponse<any>> {
@@ -53,11 +54,13 @@ export class AccountService {
       if (this.jwtHelper.decodeToken(this.token).sub != null || '') {
         if (!this.jwtHelper.isTokenExpired(this.token)) {
           this.loggInUsername = this.jwtHelper.decodeToken(this.token).sub;
+          this.isAuthentificate=true
           return true;
         }
       }
     } else {
       this.logOut();
+      this.isAuthentificate=false
       return false;
     }
   }

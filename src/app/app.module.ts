@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AccueilComponent } from './accueil/accueil.component';
@@ -20,6 +20,26 @@ import { SigninComponent } from './signin/signin.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { PostulantDetailsComponent } from './postulant-details/postulant-details.component';
 import { JuryDetailsComponent } from './jury-details/jury-details.component';
+import { HeaderComponent } from './header/header.component';
+
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { EntretienDetailsComponent } from './entretien-details/entretien-details.component';
+import { AuthInterceptor } from './interceptor/auth.interceptor';
+import { CacheInterceptor } from './interceptor/cache.interceptor';
+import { AccountService } from './Service/account.service';
+import { EntretienService } from './Service/entretien.service';
+import { PostulantService } from './Service/postulant.service';
+import { AlertService } from './Service/alert.service';
+import { CritereService } from './Service/critere.service';
+import { NoteService } from './Service/note.service';
+import { QuestionService } from './Service/question.service';
+import { CacheService } from './Service/cache.service';
+import { LoadingService } from './Service/loading.service';
 
 
 @NgModule({
@@ -38,8 +58,23 @@ import { JuryDetailsComponent } from './jury-details/jury-details.component';
         SigninComponent,
         PostulantDetailsComponent,
         JuryDetailsComponent,
+        HeaderComponent,
+        EntretienDetailsComponent,
     ],
-    providers: [],
+    providers: [
+        AccountService,
+        EntretienService,
+        PostulantService,
+        AlertService,
+        CritereService,
+        NoteService,
+        NoteService,
+        QuestionService,
+        CacheService,
+        LoadingService,
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
+    ],
     bootstrap: [AppComponent],
     imports: [
         BrowserModule,
@@ -58,10 +93,17 @@ import { JuryDetailsComponent } from './jury-details/jury-details.component';
             innerStrokeColor: "#C7E596",
             animationDuration: 300,
             showSubtitle: false
-          }),
-          MatToolbarModule
-      
-       // NgxLoadingModule.forRoot({})
+        }),
+        MatToolbarModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatIconModule,
+        MatDividerModule,
+        MatListModule
+
+
+        // NgxLoadingModule.forRoot({})
     ]
 })
 export class AppModule { }

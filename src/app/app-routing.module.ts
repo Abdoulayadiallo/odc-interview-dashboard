@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CritereComponent } from './critere/critere.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { EntretienDetailsComponent } from './entretien-details/entretien-details.component';
 import { EntretienComponent } from './entretien/entretien.component';
+import { AuthentificationGuard } from './guard/authentification.guard';
 import { JuryDetailsComponent } from './jury-details/jury-details.component';
 import { JuryComponent } from './jury/jury.component';
 import { PostulantDetailsComponent } from './postulant-details/postulant-details.component';
@@ -22,7 +24,8 @@ const routes: Routes = [
   {path: 'critere', component: CritereComponent},
   {path: 'questionnaire', component: QuestionnaireComponent},
   {path: 'profile', component: ProfileComponent},
-  {path: 'signin', component: SigninComponent}
+  {path: 'signin', component: SigninComponent},
+  {path: 'entretien-details', component: EntretienDetailsComponent}
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

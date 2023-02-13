@@ -1,3 +1,8 @@
+.entete{
+  color: #FF7900 !important;
+  background-color:rgba(202, 202, 202, 0.4);
+  border-radius: 1px;
+}
 .taille{
   height: 99%;
 }
@@ -10,6 +15,9 @@
   margin: 30px 0;
   border-radius: 3px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.text-violet{
+  color: #845EC2;
 }
 .table-title {
   padding-bottom: 15px;
@@ -26,8 +34,22 @@
 .table-title .btn-group {
   float: right;
 }
+.bgg{
+  color: #ff7900;
+}
+
+
 .orange{
     background-color: #ff7900;
+}
+.orange:hover{
+    background-color: #fff;
+    color: #FF7900 !important;
+    border: #FF7900 1px solid ;
+    .bgg{
+      background-color: #FF7900 !important;  
+      color: #fff;
+      }
 }
 .table-title .btn {
   // color: #fff;
@@ -48,6 +70,37 @@
   position: relative;
   display: inline-block;
 }
+.search {
+  position: relative;
+  box-shadow: 0 0 40px rgba(51, 51, 51, 0.1);
+}
+
+.search input {
+  height: 60px;
+  text-indent: 25px;
+  border: 2px solid #d6d4d4;
+}
+
+.search input:focus {
+  box-shadow: none;
+//   border: 2px solid blue;
+}
+
+.search .fa-search {
+  position: absolute;
+  top: 20px;
+  left: 16px;
+}
+
+.search button {
+  position: absolute !important;
+  top: 5px;
+  right: 5px;
+  height: 50px;
+  width: 110px;
+  background: #FF7900;
+}
+
 // .table-title .btn i {
 //     float: left;
 //     font-size: 21px;
@@ -101,6 +154,9 @@ table.table td a.edit {
 table.table td a.delete {
   color: #f44336;
 }
+table.table td a.view {
+  color: #50BE87;
+}
 table.table td i {
   font-size: 19px;
 }
@@ -118,7 +174,7 @@ table.table .avatar {
   font-size: 13px;
   min-width: 30px;
   min-height: 30px;
-  color: #999;
+  color: #000;
   margin: 0 2px;
   line-height: 30px;
   border-radius: 2px !important;
@@ -126,14 +182,20 @@ table.table .avatar {
   padding: 0 6px;
 }
 .pagination li a:hover {
-  color: #666;
+  color: #FF7900;
+  background-color: #fff;
+  border: 1px solid #ff7900;
 }
 .pagination li.active a,
 .pagination li.active a.page-link {
-  background: #03a9f4;
+  color: #FF7900;
+  background-color: #fff;
+  border: 1px solid #ff7900;
 }
 .pagination li.active a:hover {
-  background: #0397d6;
+  color: #FF7900;
+  background-color: #fff;
+  border: 1px solid #ff7900;
 }
 .pagination li.disabled i {
   color: #ccc;
@@ -199,6 +261,36 @@ table.table .avatar {
   background: #ddd;
 }
 /* Modal styles */
+ .iorange{
+  background-color: #FF7900;
+  color: white;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  width: 100%;
+}
+ .iviolet{
+  background-color: #845EC2;
+  color: white;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  width: 100%;
+}
+ .iorange:hover {
+  background-color: #fff;
+  color: #FF7900;
+  border: 1px solid #FF7900;
+}
+ .iviolet:hover {
+  background-color: #fff;
+  color: #845EC2;
+  border: 1px solid #845EC2;
+}
 .modal .modal-dialog {
   max-width: 400px;
 }

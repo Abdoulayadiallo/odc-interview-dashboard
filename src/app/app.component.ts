@@ -16,7 +16,7 @@ export class AppComponent {
  isAuthentification:boolean = false
 
   constructor(private accountService:AccountService){}
-  isAuthenfication = this.accountService.isLoggedIn
+  isAuthenfication = this.accountService.isAuthentificate
   onToggleSideNav(data: SideNavToggle): void {
     this.screenWidth = data.screenWidth;
     this.isSideNavCollapsed = data.collapsed;
