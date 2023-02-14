@@ -1,5 +1,5 @@
 <h1>Dashboard</h1>
-<div class="container-fluid">
+<div class="container-fluid mb-3">
   <div class="row">
     <div class="col-12 col-lg-12 col-sm-12 col-xl-6 col-md-12">
       <div class="card taille ">
@@ -13,14 +13,14 @@
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold text-violet text-uppercase mb-1">
-                      Postulant
+                      Postulants
                     </div>
                     <div class="h5 mb-0 font-weight-bold text-gray-800">
-                      40,000
+                      {{postulantNombre}}
                     </div>
                   </div>
                   <div class="col-auto">
-                    <i class='fa-solid fa-people-roof fa-5x' style="color: #cacaca;"></i>
+                    <i class='fa-solid fa-people-roof fa-4x' style="color: #cacaca;"></i>
                   </div>
                 </div>
               </div>
@@ -34,14 +34,14 @@
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold text-violet text-uppercase mb-1">
-                      Entretien
+                      Entretiens
                     </div>
                     <div class="h5 mb-0 font-weight-bold text-gray-800">
                       {{entretienNombre}}
                     </div>
                   </div>
                   <div class="col-auto">
-                    <i class="fas fa-list-check fa-5x" style="color: #cacaca;"></i>
+                    <i class="fas fa-list-check fa-4x" style="color: #cacaca;"></i>
                   </div>
                 </div>
               </div>
@@ -55,14 +55,14 @@
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold text-violet text-uppercase mb-1">
-                      Jury
+                      Jurys
                     </div>
                     <div class="h5 mb-0 font-weight-bold text-gray-800">
                       {{juryNombre}}
                     </div>
                   </div>
                   <div class="col-auto ">
-                    <i class="fas fa-gavel fa-5x" style="color: #cacaca;"></i>
+                    <i class="fas fa-gavel fa-4x" style="color: #cacaca;"></i>
                   </div>
                 </div>
               </div>
@@ -81,7 +81,7 @@
                     <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
                   </div>
                   <div class="col-auto">
-                    <i class="fas fa-bell fa-5x" style="color: #cacaca;"></i>
+                    <i class="fas fa-bell fa-4x" style="color: #cacaca;"></i>
                   </div>
                 </div>
               </div>
@@ -96,17 +96,17 @@
     <div class="col-12 col-lg-12 col-sm-12 col-xl-6 col-md-12">
       <div class="card taille">
         <div class="card-body">
-          <h5 class="card-title text-center">Les postulant par genre</h5>
+          <h5 class="card-title text-center">Les postulants par genre</h5>
           <hr />
           <div class="card-text d-flex justify-content-center">
             <div>
-              <circle-progress [percent]="85" [radius]="75" [outerStrokeWidth]="10" [innerStrokeWidth]="5"
+              <circle-progress [percent]="MasculinNombre" [radius]="75" [outerStrokeWidth]="10" [innerStrokeWidth]="5"
                 [outerStrokeColor]="'#845EC2'" [innerStrokeColor]="'#cacaca'" [animation]="true"
                 [animationDuration]="300"></circle-progress>
               <h6 class="text-center">Homme</h6>
             </div>
             <div>
-              <circle-progress [percent]="85" [radius]="75" [outerStrokeWidth]="10" [innerStrokeWidth]="5"
+              <circle-progress [percent]="FemininNombre" [radius]="75" [outerStrokeWidth]="10" [innerStrokeWidth]="5"
                 [outerStrokeColor]="'#50BE87'" [innerStrokeColor]="'#cacaca'" [animation]="true"
                 [animationDuration]="300"></circle-progress>
               <h6 class="text-center">Femme</h6>
@@ -116,7 +116,9 @@
       </div>
     </div>
   </div>
+  <ng-container *ngIf="(entretienState$ | async) as state" [ngSwitch]="state.appState">
   <div class="container-fluid">
+    <ng-container *ngSwitchCase="'APP_LOADED'">      
     <div class="table-wrapper">
       <div class="table-title">
         <div>
@@ -125,7 +127,7 @@
         <div class="row">
           <div class="col-sm-12 col-12 col-md-12 col-lg-6">
             <!-- Ajouter Entretien -->
-            <button href="#addEmployeeModal" type="button" data-toggle="modal" class="btn btn orange">
+            <button href="#addEntretienModal" type="button" data-toggle="modal" class="btn btn orange">
               <span class="bg-light rounded bgg px-1 mr-1"><i class="fas fa-plus "></i></span>Ajouter
             </button>
             <!-- <button data-toggle="modal" type="button" class="btn btn orange">
@@ -141,7 +143,7 @@
             </button> -->
           </div>
           <div class="col-sm-12 col-12 col-md-12 col-lg-6">
-            <form>
+            <form #searchForm="ngForm" (ngSubmit)="gotToPage(searchForm.value.keyword)">
               <div class="row">
                 <div class="col-sm">
                   <div class="container">
@@ -149,8 +151,8 @@
                       <div class="col-md-8">
                         <div class="search">
                           <i class="fa fa-search"></i>
-                          <input type="text" class="form-control" placeholder="Search" />
-                          <button class="btn btn my-0 py-2">Search</button>
+                          <input type="search" class="form-control" name="keyword"  ngModel placeholder="Search" />
+                          <button type="submit" class="btn btn my-0 py-2">Search</button>
                         </div>
                       </div>
                     </div>
@@ -159,7 +161,7 @@
               </div>
             </form>
             <!-- <a
-              href="#addEmployeeModal"
+              href="#addEntretienModal"
               class="btn btn-success"
               data-toggle="modal"
               ><i class="material-icons">&#xE147;</i>
@@ -175,7 +177,7 @@
         </div>
       </div>
       <div class="table-responsive">
-        <table class="table table-striped table-hover ">
+        <table class="table table-striped table-hover " >
           <thead class="entete">
             <tr>
               <th>
@@ -193,20 +195,20 @@
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
+          <tbody *ngFor="let entretien of state.appData?.contenu ;let i = index">
+            <tr >
               <td>
                 <span class="custom-checkbox">
                   <input type="checkbox" id="checkbox1" name="options[]" value="1" />
                   <label for="checkbox1"></label>
                 </span>
               </td>
-              <td>001</td>
-              <td>Entretien</td>
+              <td>{{i+1}}</td>
+              <td>{{entretien.entretienNom}}</td>
               <td>5000</td>
-              <td>encour</td>
-              <td>14-12-2022</td>
-              <td>14-12-2023</td>
+              <td>{{entretien.etat.status}}</td>
+              <td>{{entretien.dateDebut | date:"dd/MM/YYYY"}}</td>
+              <td>{{entretien.dateFin | date:"dd/MM/YYYY"}}</td>
               <td class="action">
                 <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
                     data-toggle="tooltip" title="Modifier">&#xE254;</i></a>
@@ -217,109 +219,29 @@
 
               </td>
             </tr>
-            <tr>
-              <td>
-                <span class="custom-checkbox">
-                  <input type="checkbox" id="checkbox2" name="options[]" value="1" />
-                  <label for="checkbox2"></label>
-                </span>
-              </td>
-              <td>002</td>
-              <td>Entretien</td>
-              <td>5000</td>
-              <td>encour</td>
-              <td>14-12-2022</td>
-              <td>14-12-2023</td>
-              <td>
-                <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <span class="custom-checkbox">
-                  <input type="checkbox" id="checkbox3" name="options[]" value="1" />
-                  <label for="checkbox3"></label>
-                </span>
-              </td>
-              <td>003</td>
-              <td>Entretien</td>
-              <td>5000</td>
-              <td>encour</td>
-              <td>14-12-2022</td>
-              <td>14-12-2023</td>
-              <td>
-                <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <span class="custom-checkbox">
-                  <input type="checkbox" id="checkbox4" name="options[]" value="1" />
-                  <label for="checkbox4"></label>
-                </span>
-              </td>
-              <td>004</td>
-              <td>Entretien</td>
-              <td>5000</td>
-              <td>encour</td>
-              <td>14-12-2022</td>
-              <td>14-12-2023</td>
-              <td>
-                <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <span class="custom-checkbox">
-                  <input type="checkbox" id="checkbox5" name="options[]" value="1" />
-                  <label for="checkbox5"></label>
-                </span>
-              </td>
-              <td>005</td>
-              <td>Entretien</td>
-              <td>5000</td>
-              <td>encour</td>
-              <td>14-12-2022</td>
-              <td>14-12-2023</td>
-              <td>
-                <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-              </td>
-            </tr>
           </tbody>
         </table>
+        <div class="clearfix">
+          <div class="hint-text">Showing <b>{{state.appData.pageNo+1}}</b> out of <b>{{state.appData?.totalPages}}</b> entries</div>
+          <ul class="pagination">
+            <li class="page-item disabled"  [ngClass]="0 == (currentPage$ | async) ? ' disabled' : ''"><a (click)="goToNextOrPreviousPage('backward',searchForm.value.keyword)">&laquo;</a></li>
+            <li class="page-item"  *ngFor="let number of [].constructor(state.appData?.totalPages); let i = index"><a href="#" class="page-link" [ngClass]="i == (currentPage$ | async) ? 'active' : ''" (click)="gotToPage('',i,10)">{{i+1}}</a></li>
+            <li class="page-item" [ngClass]=" (state.appData?.totalPages - 1) == (currentPage$ | async) ? ' disabled' : ''"><a href="#" class="page-link"(click)="goToNextOrPreviousPage('forward',searchForm.value.keyword)">&raquo;</a></li>
+          </ul>
+        </div>
       </div>
 
-      <div class="clearfix">
-        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-        <ul class="pagination">
-          <li class="page-item disabled"><a href="#">Previous</a></li>
-          <li class="page-item"><a href="#" class="page-link">1</a></li>
-          <li class="page-item"><a href="#" class="page-link">2</a></li>
-          <li class="page-item active"><a href="#" class="page-link">3</a></li>
-          <li class="page-item"><a href="#" class="page-link">4</a></li>
-          <li class="page-item"><a href="#" class="page-link">5</a></li>
-          <li class="page-item"><a href="#" class="page-link">Next</a></li>
-        </ul>
-      </div>
     </div>
+  </ng-container>
   </div>
+</ng-container>
+
+
   <!-- Ajout Modal HTML -->
-  <div id="addEmployeeModal" tabindex="-1" class="modal fade">
+  <div id="addEntretienModal"  tabindex="-1" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form>
+        <form #addEntretienForm="ngForm" (ngSubmit)="AjouterEntretien(addEntretienForm.value)">
           <div class="modal-header">
             <h4 class="modal-title">Ajouter Entretien</h4>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -337,19 +259,19 @@
             </div>
             <div class="form-group">
               <label>Nom</label>
-              <input type="text" class="form-control" required />
+              <input type="text" class="form-control" name="entretienNom" ngModel required />
             </div>
             <div class="form-group">
               <label>Description</label>
-              <textarea class="form-control" required></textarea>
+              <textarea class="form-control" name="description" ngModel required></textarea>
             </div>
             <div class="form-group">
               <label>Date Debut</label>
-              <input type="date" class="form-control" required />
+              <input type="date" class="form-control" name="dateDebut" ngModel required />
             </div>
             <div class="form-group">
               <label>Date Fin</label>
-              <input type="date" class="form-control" required />
+              <input type="date" class="form-control" name="dateFin" ngModel required />
             </div>
           </div>
           <div class="modal-footer">
@@ -431,5 +353,4 @@
       </div>
     </div>
   </div>
-
 </div>

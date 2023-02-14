@@ -204,11 +204,17 @@ table.table .avatar {
   font-size: 16px;
   padding-top: 6px;
 }
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
 .hint-text {
   float: left;
   margin-top: 10px;
   font-size: 13px;
 }
+
 /* Custom checkbox */
 .custom-checkbox {
   position: relative;

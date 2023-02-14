@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { JuryResponse } from '../Model/jury-response';
 import { PasswordChange } from '../Model/password-change';
 import { Utilisateur } from '../Model/utilisateur';
 
@@ -97,8 +98,8 @@ export class AccountService {
         }
       );
   }
-  getAllJury(): Observable<Utilisateur[]> {
-    return this.http.get<Utilisateur[]>(`${this.host}/utilisateur/jurylist`);
+  getAllJury(pageNo:number = 0,pageSize:number = 10,sortBy:string ="",sortDir:string="",keyword:string=""): Observable<JuryResponse> {
+    return this.http.get<JuryResponse>(`${this.host}/utilisateur/jurylist?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}&keyword=${keyword}`);
   }
   getOneJuryById(juryId: number): Observable<Utilisateur> {
     return this.http.get<Utilisateur>(`${this.host}/utillsateur/${juryId}`);
