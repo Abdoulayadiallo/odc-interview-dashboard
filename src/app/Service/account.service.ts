@@ -104,4 +104,7 @@ export class AccountService {
   getOneJuryById(juryId: number): Observable<Utilisateur> {
     return this.http.get<Utilisateur>(`${this.host}/utillsateur/${juryId}`);
   }
+  getAllJuryByEntretien(idEntretien:number,pageNo:number = 0,pageSize:number = 10,sortBy:string ="",sortDir:string="",keyword:string=""): Observable<JuryResponse> {
+    return this.http.get<JuryResponse>(`${this.host}/utilisateur/entretien/${idEntretien}?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}&keyword=${keyword}`);
+  }
 }
