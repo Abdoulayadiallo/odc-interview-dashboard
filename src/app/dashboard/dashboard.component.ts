@@ -1,6 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, of, startWith, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  of,
+  startWith,
+  Subscription,
+} from 'rxjs';
 import { Entretien } from '../Model/entretien';
 import { Entretienresponse } from '../Model/entretienresponse';
 import { Postulantresponse } from '../Model/postulantresponse';
@@ -12,22 +20,24 @@ import { PostulantService } from '../Service/postulant.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
   entretienPicture: File;
   private subscriptions: Subscription[] = [];
   utilisateur: Utilisateur;
   userpicture: string;
-  entretienNombre: number=0;
+  entretienNombre: number = 0;
   juryNombre: number;
   postulantNombre: number;
   MasculinNombre: number;
   FemininNombre: number;
 
   //Entretien Variable
-  entretienResponse!:Entretienresponse
-  entretienId:number
+  entretien: Entretien = new Entretien();
+  entretienUpdate: Entretien = new Entretien()
+  entretienResponse!: Entretienresponse;
+  entretienId: number;
   postulantState$!: Observable<{
     appState: string;
     appData?: Entretien;
@@ -39,7 +49,7 @@ export class DashboardComponent implements OnInit {
     this.entretienResponse
   );
   currentPage$ = this.currentPageSubject.asObservable();
-  
+
   entretienState$!: Observable<{
     appState: string;
     appData?: Entretienresponse;
@@ -47,36 +57,33 @@ export class DashboardComponent implements OnInit {
   }>;
   profilePictureChange: boolean;
 
-
   constructor(
     private accountService: AccountService,
     private postulantService: PostulantService,
-    private entretienService: EntretienService,
-  ) { }
+    private entretienService: EntretienService
+  ) {}
 
   ngOnInit(): void {
     this.userpicture = this.accountService.userPicture;
     if (this.accountService.loggInUsername) {
-      const username = this.accountService.loggInUsername
+      const username = this.accountService.loggInUsername;
       if (username) {
-        this.getUserInfo(username)
+        this.getUserInfo(username);
       }
     }
 
     //Postulant Nombre
-    this.getAllPostulantNombre()
+    this.getAllPostulantNombre();
     //Entretien Nombre
-    this.getAllEntretienNombre()
+    this.getAllEntretienNombre();
     //Jury Nombre
-    this.getAlljuryNombre()
+    this.getAlljuryNombre();
     //Postulant Par Genre
-    this.getPostulantPargenre("M")
-    this.getPostulantPargenre("F")
+    this.getPostulantPargenre('M');
+    this.getPostulantPargenre('F');
 
     //---------------Entretien Liste----------------------------
-    this.entretienState$ = this.entretienService
-    .getAllEntretien()
-    .pipe(
+    this.entretienState$ = this.entretienService.getAllEntretien().pipe(
       map((response: Entretienresponse) => {
         // this.loadingService.loadingOff();
         this.responseSubject.next(response);
@@ -93,8 +100,7 @@ export class DashboardComponent implements OnInit {
         return of({ appState: 'APP_ERROR', error });
       })
     );
-  //----------------- Fin Entretien Liste------------
-
+    //----------------- Fin Entretien Liste------------
   }
   //Naviguer entre page entretien
   gotToPage(
@@ -102,23 +108,18 @@ export class DashboardComponent implements OnInit {
     pageNo: number = 0,
     pageSize: number = 10,
     sortBy: string = '',
-    sortDir: string = '',
+    sortDir: string = ''
   ): void {
     // this.loadingService.loadingOn();
     this.entretienState$ = this.entretienService
-      .getAllEntretien(
-        keyword,
-        pageNo,
-        pageSize,
-        sortBy,
-        sortDir,
-      )
+      .getAllEntretien(keyword, pageNo, pageSize, sortBy, sortDir)
       .pipe(
         map((response: Entretienresponse) => {
           // this.loadingService.loadingOff();
           this.responseSubject.next(response);
           this.currentPageSubject.next(pageNo);
           console.log(response);
+
           return { appState: 'APP_LOADED', appData: response };
         }),
         startWith({
@@ -147,43 +148,72 @@ export class DashboardComponent implements OnInit {
     this.profilePictureChange = true;
   }
   //Ajouter Entretien
-  AjouterEntretien(entretien: Entretien): void {
+  AjouterEntretien() {
     // this.loadingService.isLoading.next(true);
-    console.log(entretien);
-    this.subscriptions.push(
-      this.entretienService.AjouterEntretien(entretien).subscribe(
-        response => {
-          this.entretienId=entretien.id
-          console.log(this.entretienId)
-          this.entretienService.uploadeUserEntretienPicture(this.entretienPicture,this.entretienId)
-
-          //const token: string|any = response.headers.get('Authorization');
-          //this.accountService.saveToken(token);
-          // if (this.accountService.redirectUrl) {
-          //   this.router.navigateByUrl(this.accountService.redirectUrl);
-          // } else {
-          //   this.router.navigateByUrl('/tabs/home');
-          // }
-          // this.loadingService.isLoading.next(false);
-        },
-        error => {
-          console.log(error);
-          // this.loadingService.isLoading.next(false);
-          // this.alerteService.presentToast(' <ion-icon name="warning" size="large"></ion-icon> Email ou mots de passe incorrecte',"danger")
+    this.entretienService.AjouterEntretien(this.entretien).subscribe(
+      (response) => {
+        //this.entretienId=entretien.id
+        console.log(response);
+        console.log(
+          this.entretien + '-------------------------------------------'
+        );
+        if (this.profilePictureChange) {
+          this.entretienService.uploadeUserEntretienPicture(
+            this.entretienPicture,
+            this.entretien.entretienNom
+          );
         }
-      )
+        this.getAllEntretienNombre();
+        //const token: string|any = response.headers.get('Authorization');
+        //this.accountService.saveToken(token);
+        // if (this.accountService.redirectUrl) {
+        //   this.router.navigateByUrl(this.accountService.redirectUrl);
+        // } else {
+        //   this.router.navigateByUrl('/tabs/home');
+        // }
+        // this.loadingService.isLoading.next(false);
+      },
+      (error) => {
+        console.log(error);
+        // this.loadingService.isLoading.next(false);
+        // this.alerteService.presentToast(' <ion-icon name="warning" size="large"></ion-icon> Email ou mots de passe incorrecte',"danger")
+      }
     );
   }
 
-  // AjouterPhotoEntretien(){
-  //   this.entretienService.uploadeUserEntretienPicture(this.entretienPicture,this.entretienId)
-  // }
+  // Recuperer Entretien Par Id
+  GetEntretienById(id: number) {    
+    this.entretienService.getOneEntretienById(id).subscribe((data) => {
+      this.entretienId = data.id;
+      console.log(data);
+    });
+  }
 
-
-  
-
-
-
+  //Modifier Entretien
+  updateEntretien() {
+    this.subscriptions.push(
+      this.entretienService
+        .ModifierEntretien(this.entretienId, this.entretienUpdate)
+        .subscribe((data) => {
+          console.log(this.entretienId);
+          console.log(data);
+          if (this.profilePictureChange) {
+            this.entretienService.uploadeUserEntretienPicture(
+              this.entretienPicture,
+              this.entretienUpdate.entretienNom
+            );
+          }
+        })
+    );
+  }
+// Supprimer entretien
+DeleteEntretien(){
+  this.entretienService.deleteEntretien(this.entretienId).subscribe(
+    data=>{
+      console.log(data)
+    }
+  )
+}
   getUserInfo(username: string): void {
     this.subscriptions.push(
       this.accountService.getUserInformation(username).subscribe(
@@ -199,42 +229,41 @@ export class DashboardComponent implements OnInit {
           //this.idEntretien=response.entretien.id
           //console.log(this.utilisateur)
         },
-        error => {
+        (error) => {
           console.log(error);
           this.utilisateur = null;
         }
-      ));
+      )
+    );
   }
   getAllEntretienNombre() {
-    this.entretienService.getAllEntretien().subscribe(data => {
-      this.entretienNombre = data.totalElements
-      console.log(data)
-    })
+    this.entretienService.getAllEntretien().subscribe((data) => {
+      this.entretienNombre = data.totalElements;
+      console.log(data);
+    });
   }
   getAlljuryNombre() {
-    this.accountService.getAllJury().subscribe(data => {
-      this.juryNombre = data.totalElements
-      console.log(data)
-    })
+    this.accountService.getAllJury().subscribe((data) => {
+      this.juryNombre = data.totalElements;
+      console.log(data);
+    });
   }
   getAllPostulantNombre() {
-    this.postulantService.getAllPostulant().subscribe(data => {
-      this.postulantNombre = data.totalElements
-      console.log(data)
-    })
+    this.postulantService.getAllPostulant().subscribe((data) => {
+      this.postulantNombre = data.totalElements;
+      console.log(data);
+    });
   }
   // Liste Postulant Par genre
   getPostulantPargenre(genre: string) {
-    this.postulantService.getAllPostulantNombre(genre).subscribe(
-      data => {
-        console.log(data)
-        if (genre == "M") {
-          this.MasculinNombre = data.pourcentage;
-        }
-        if (genre == "F") {
-          this.FemininNombre = data.pourcentage;
-        }
-      },)
+    this.postulantService.getAllPostulantNombre(genre).subscribe((data) => {
+      console.log(data);
+      if (genre == 'M') {
+        this.MasculinNombre = data.pourcentage;
+      }
+      if (genre == 'F') {
+        this.FemininNombre = data.pourcentage;
+      }
+    });
   }
-
 }

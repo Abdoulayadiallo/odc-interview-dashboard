@@ -8,19 +8,19 @@
                     <table class="table table-borderless">
                         <tr>
                             <th>Nom</th>
-                            <td>data</td>
+                            <td>{{entretien.entretienNom}}</td>
                         </tr>
                         <tr>
                             <th>Date debut</th>
-                            <td>data</td>
+                            <td>{{entretien.dateDebut}}</td>
                         </tr>
                         <tr>
                             <th>Date Fin</th>
-                            <td>data</td>
+                            <td>{{entretien.dateFin}}</td>
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <td>data</td>
+                            <td>{{entretien.etat.status}}</td>
                         </tr>
                         <tr>
                             <th>Nombre Postulant</th>
@@ -32,7 +32,7 @@
                         </tr>
                         <tr>
                             <th>Description</th>
-                            <td>data</td>
+                            <td>{{entretien.description}}</td>
                         </tr>
                     </table>
                 </div>
@@ -44,7 +44,7 @@
         <div class="col">
             <!-- Carte image Details -->
             <div class="card">
-                <img class="card-img w-100 h-100" src="../../assets/Logo.png" alt="Card image">
+                <img class="card-img w-100 h-100" src="{{entretienPicture}}{{entretien.entretienNom}}.png" alt="Card image">
               </div>
             <!-- Carte image Details -->
 
@@ -133,6 +133,7 @@
         </div>
     </div>
     <!-- Jury Liste -->
+    <ng-container *ngIf="(postulantState$ | async) as state" [ngSwitch]="state.appState">
     <!-- Liste des Postulants -->
     <div class="card">
         <div class="card-body">
@@ -186,33 +187,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr *ngFor="let postulant of state.appData?.contenu ;let i = index">
                                 <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
+                                <td>{{postulant.id}}</td>
+                                <td>{{postulant.nom}}</td>
+                                <td>{{postulant.prenom}}</td>
+                                <td>{{postulant.noteFinal}}</td>
+                                <td>{{postulant.id}}</td>
+                                <td>{{postulant.id}}</td>
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@twitter</td>
-                                <td>@twitter</td>
-                                <td>@twitter</td>
-                                <td>@twitter</td>
-                            </tr>
+                            
                         </tbody>
                     </table>
 
@@ -260,6 +244,7 @@
             </div>
         </div>
     </div>
+    </ng-container>
     <!-- Liste des Postulants -->
 
 </div>

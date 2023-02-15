@@ -10,22 +10,28 @@ import { Entretienresponse } from '../Model/entretienresponse';
 })
 export class EntretienService {
   public host = environment.host;
+  public imageentretien = `${this.host}/image/interview/`
   public clientHost = environment.client;
   constructor(private http:HttpClient) { }
   
   AjouterEntretien(entretien: Entretien): Observable<HttpErrorResponse | HttpResponse<any>> {
-    return this.http.post<HttpErrorResponse | HttpResponse<any>>(`${this.host}/entretien/add`, entretien, { observe: 'response' });
+    return this.http.post<HttpErrorResponse | HttpResponse<any>>(`${this.host}/entretien/add`, entretien);
   }
-
+  ModifierEntretien(id:number,entretien: Entretien): Observable<HttpErrorResponse | HttpResponse<any>> {
+    return this.http.put<HttpErrorResponse | HttpResponse<any>>(`${this.host}/entretien/update/${id}`, entretien);
+  }
+  deleteEntretien(id:number): Observable<HttpErrorResponse | HttpResponse<any>> {
+    return this.http.delete<HttpErrorResponse | HttpResponse<any>>(`${this.host}/entretien/delete/${id}`);
+  }
   getAllEntretien(keyword:string="",pageNo:number = 0,pageSize:number = 10,sortBy:string ="",sortDir:string="",username:string=""): Observable<Entretienresponse> {
     return this.http.get<Entretienresponse>(`${this.host}/entretien/list?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}$keyword=${keyword}$username=${username}`);
   }
 
-  uploadeUserEntretienPicture(EntretienPicture: File,id:number) {
+  uploadeUserEntretienPicture(EntretienPicture: File,entretienNom:string) {
     const fd = new FormData();
     fd.append('image', EntretienPicture);
     return this.http
-      .post(`${this.host}/entretien/photo/upload/${id}`, fd, { responseType: 'text' })
+      .post(`${this.host}/entretien/photo/upload/${entretienNom}`, fd, { responseType: 'text' })
       .subscribe(
         (response: any) => {
           console.log(response);
