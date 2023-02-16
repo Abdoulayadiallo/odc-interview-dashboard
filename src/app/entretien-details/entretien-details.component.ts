@@ -1,10 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, BehaviorSubject, catchError, map, of, startWith } from 'rxjs';
+import { Observable, BehaviorSubject, catchError, map, of, startWith, Subscription } from 'rxjs';
 import { Entretien } from '../Model/entretien';
 import { JuryResponse } from '../Model/jury-response';
 import { Postulantresponse } from '../Model/postulantresponse';
+import { Utilisateur } from '../Model/utilisateur';
 import { AccountService } from '../Service/account.service';
 import { EntretienService } from '../Service/entretien.service';
 import { PostulantService } from '../Service/postulant.service';
@@ -19,6 +20,7 @@ export class EntretienDetailsComponent implements OnInit {
   entretien: Entretien;
   selectedPage:number;
   entretienPicture: string
+  subcriptions:Subscription[]=[]
   //Postulant Liste
   postulantResponse!: Postulantresponse;
   postulantState$!: Observable<{
@@ -40,12 +42,16 @@ export class EntretienDetailsComponent implements OnInit {
     appData?: JuryResponse;
     error?: HttpErrorResponse;
   }>;
+  //Jury ajout
+  juryAjout: Utilisateur = new Utilisateur()
 
   private currentPageSubjectJury = new BehaviorSubject<number>(0);
   responseSubjectJury = new BehaviorSubject<JuryResponse>(
     this.juryResponse
   );
   currentPageJury$ = this.currentPageSubject.asObservable();
+  excel: File;
+  excelChange: boolean;
 
   //Fin jury Liste
 
@@ -162,7 +168,6 @@ export class EntretienDetailsComponent implements OnInit {
     pageSize: number = 10,
     sortBy: string = '',
     sortDir: string = '',
-    genre: string = ''
   ): void {
     // this.loadingService.loadingOn();
     this.juryState$ = this.juryService
@@ -208,5 +213,59 @@ export class EntretienDetailsComponent implements OnInit {
       }
     )
   }
+  //Ajout jury
 
+  AjouterJury(utilisateur:Utilisateur): void {
+    // this.loadingService.isLoading.next(true);
+    console.log(utilisateur);
+    this.subcriptions.push(
+    this.juryService.addJury(utilisateur,this.id).subscribe(
+      response => {
+
+        // this.loadingService.isLoading.next(false);
+        // this.alertService.showAlert(
+        //   'You have registered successfully. Please check your email for account details.',
+        //   AlertType.SUCCESS
+        // );
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+        // this.loadingService.isLoading.next(false);
+        // const errorMsg: string = error.error;
+        // if (errorMsg === 'username Existe') {
+        //   this.alertService.showAlert(
+        //     'Ce username existe déjà. Veuillez essayer avec un autre username',
+        //     AlertType.DANGER
+        //   );
+        // } else if (errorMsg === 'email Existe') {
+        //   this.alertService.showAlert(
+        //     'Cette email existe déjà. Veuillez essayer avec une autre adresse e-mail',
+        //     AlertType.DANGER
+        //   );
+        // } else {
+        //   this.alertService.showAlert(
+        //     'Un problème est survenu. Veuillez réessayer.',
+        //     AlertType.DANGER
+        //   );
+        // }
+      }
+    )
+    );
+  }
+
+
+   //Importation u fichier excel
+   onExcelFileSelected(event: any): void {
+    console.log(event);
+    this.excel = event.target.files[0] as File;
+    console.log(this.entretienPicture);
+    this.excelChange = true;
+  }
+
+  importer(){
+    this.postulantService.UploadPostulant(this.id,this.excel).subscribe(data=>{
+      console.log(data)
+    })
+  }
 }

@@ -24,6 +24,9 @@ export class AccountService {
   login(utilisateur: Utilisateur): Observable<HttpErrorResponse | HttpResponse<any>> {
     return this.http.post<HttpErrorResponse | HttpResponse<any>>(`${this.host}/utilisateur/login`, utilisateur, { observe: 'response' });
   }
+  addJury(utilisateur: Utilisateur,idEntretien:number): Observable<Utilisateur | HttpErrorResponse> {
+    return this.http.post<Utilisateur>(`${this.host}/utilisateur/register/${idEntretien}`, utilisateur);
+  }
 
   resetPassword(email: string) {
     return this.http.get(`${this.host}/utilisateur/resetPassword/${email}`, {

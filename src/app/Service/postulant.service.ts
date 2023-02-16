@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -18,6 +18,11 @@ export class PostulantService {
 
   getOnePostulantById(postId: number): Observable<Postulant> {
     return this.http.get<Postulant>(`${this.host}/postulant/${postId}`);
+  }
+  UploadPostulant(idEntretien: number,file:File): Observable<HttpErrorResponse | HttpResponse<any>> {
+    const fd = new FormData();
+    fd.append('file', file);
+    return this.http.post<HttpErrorResponse | HttpResponse<any>>(`${this.host}/postulant/upload/${idEntretien}`,fd);
   }
 
   getAllPostulant(pageNo: number = 0, pageSize: number = 10, sortBy: string = "", sortDir: string = "", genre: string = "", nom: string = ""): Observable<Postulantresponse> {
