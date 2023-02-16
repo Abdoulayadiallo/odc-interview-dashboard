@@ -9,6 +9,8 @@ import { Utilisateur } from '../Model/utilisateur';
 import { AccountService } from '../Service/account.service';
 import { EntretienService } from '../Service/entretien.service';
 import { PostulantService } from '../Service/postulant.service';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-entretien-details',
@@ -16,15 +18,16 @@ import { PostulantService } from '../Service/postulant.service';
   styleUrls: ['./entretien-details.component.scss']
 })
 export class EntretienDetailsComponent implements OnInit {
-  id: any;
-  entretien: Entretien;
-  selectedPage:number;
-  entretienPicture: string
-  subcriptions:Subscription[]=[]
+  id: number;
+  entretien: Entretien = new Entretien();
+  selectedPage: number;
+  entretienPicture?: string
+  subcriptions: Subscription[] = []
   //Postulant Liste
+  postulantId:number
   postulantResponse!: Postulantresponse;
   postulantState$!: Observable<{
-    appState: string;
+    appState?: string;
     appData?: Postulantresponse;
     error?: HttpErrorResponse;
   }>;
@@ -36,11 +39,11 @@ export class EntretienDetailsComponent implements OnInit {
   currentPage$ = this.currentPageSubject.asObservable();
 
   //Jury Liste
-  juryResponse!: JuryResponse;
+  juryResponse: JuryResponse = new JuryResponse();
   juryState$!: Observable<{
-    appState: string;
-    appData?: JuryResponse;
-    error?: HttpErrorResponse;
+    appStateJury: string;
+    appDataJury?: JuryResponse;
+    errorJury?: HttpErrorResponse;
   }>;
   //Jury ajout
   juryAjout: Utilisateur = new Utilisateur()
@@ -51,7 +54,7 @@ export class EntretienDetailsComponent implements OnInit {
   );
   currentPageJury$ = this.currentPageSubject.asObservable();
   excel: File;
-  excelChange: boolean;
+  excelChange: boolean = false;
 
   //Fin jury Liste
 
@@ -66,31 +69,35 @@ export class EntretienDetailsComponent implements OnInit {
     //Recuperer path variable id
     this.id = this.route.snapshot.params["id"]
     //Recuperer l'emplacement de l'image
-    this.entretienPicture = this.entretienService.imageentretien
-
-    //Recuperer la liste des Postulants
-    this.getEntretienById()
     if (this.id) {
 
-      this.postulantState$ = this.postulantService
-        .getAllPostulantByEntretien(this.id)
-        .pipe(
-          map((response: Postulantresponse) => {
-            // this.loadingService.loadingOff();
-            this.responseSubject.next(response);
-            this.currentPageSubject.next(response.pageNo);
-            console.log(response);
-            return { appState: 'APP_LOADED', appData: response };
-          }),
-          startWith({
-            appState: 'APP_LOADED',
-            appData: this.responseSubject.value,
-          }),
-          catchError((error: HttpErrorResponse) => {
-            // this.loadingService.loadingOff();
-            return of({ appState: 'APP_ERROR', error });
-          })
-        );
+      this.entretienPicture = this.entretienService?.imageentretien
+    }
+
+    //Recuperer la liste des Postulants
+    if (this.id) {
+
+
+        this.postulantState$ = this.postulantService
+          .getAllPostulantByEntretien(this.id)
+          .pipe(
+            map((response: Postulantresponse) => {
+              // this.loadingService.loadingOff();
+              this.responseSubject.next(response);
+              this.currentPageSubject.next(response.pageNo);
+              console.log(response);
+              return { appState: 'APP_LOADED', appData: response };
+            }),
+            startWith({
+              appState: 'APP_LOADED',
+              appData: this.responseSubject.value,
+            }),
+            catchError((error: HttpErrorResponse) => {
+              // this.loadingService.loadingOff();
+              return of({ appState: 'APP_ERROR', error });
+            })
+          );
+      // }, 1000)
     }
     if (this.id) {
 
@@ -102,15 +109,15 @@ export class EntretienDetailsComponent implements OnInit {
             this.responseSubjectJury.next(response);
             this.currentPageSubjectJury.next(response.pageNo);
             console.log(response);
-            return { appState: 'APP_LOADED', appData: response };
+            return { appStateJury: 'APP_LOADED', appDataJury: response };
           }),
           startWith({
-            appState: 'APP_LOADED',
-            appData: this.responseSubjectJury.value,
+            appStateJury: 'APP_LOADED',
+            appDataJury: this.responseSubjectJury.value,
           }),
           catchError((error: HttpErrorResponse) => {
             // this.loadingService.loadingOff();
-            return of({ appState: 'APP_ERROR', error });
+            return of({ appStateJury: 'APP_ERROR', error });
           })
         );
     }
@@ -185,15 +192,15 @@ export class EntretienDetailsComponent implements OnInit {
           this.responseSubjectJury.next(response);
           this.currentPageSubjectJury.next(pageNo);
           console.log(response);
-          return { appState: 'APP_LOADED', appData: response };
+          return { appStateJury: 'APP_LOADED', appDataJury: response };
         }),
         startWith({
-          appState: 'APP_LOADED',
-          appData: this.responseSubjectJury.value,
+          appStateJury: 'APP_LOADED',
+          appDataJury: this.responseSubjectJury.value,
         }),
         catchError((error: HttpErrorResponse) => {
           // this.loadingService.loadingOff();
-          return of({ appState: 'APP_ERROR', error });
+          return of({ appStateJury: 'APP_ERROR', error });
         })
       );
   }
@@ -215,57 +222,78 @@ export class EntretienDetailsComponent implements OnInit {
   }
   //Ajout jury
 
-  AjouterJury(utilisateur:Utilisateur): void {
+  AjouterJury(utilisateur: Utilisateur): void {
     // this.loadingService.isLoading.next(true);
     console.log(utilisateur);
     this.subcriptions.push(
-    this.juryService.addJury(utilisateur,this.id).subscribe(
-      response => {
+      this.juryService.addJury(utilisateur, this.id).subscribe(
+        response => {
 
-        // this.loadingService.isLoading.next(false);
-        // this.alertService.showAlert(
-        //   'You have registered successfully. Please check your email for account details.',
-        //   AlertType.SUCCESS
-        // );
-        console.log(response);
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error);
-        // this.loadingService.isLoading.next(false);
-        // const errorMsg: string = error.error;
-        // if (errorMsg === 'username Existe') {
-        //   this.alertService.showAlert(
-        //     'Ce username existe déjà. Veuillez essayer avec un autre username',
-        //     AlertType.DANGER
-        //   );
-        // } else if (errorMsg === 'email Existe') {
-        //   this.alertService.showAlert(
-        //     'Cette email existe déjà. Veuillez essayer avec une autre adresse e-mail',
-        //     AlertType.DANGER
-        //   );
-        // } else {
-        //   this.alertService.showAlert(
-        //     'Un problème est survenu. Veuillez réessayer.',
-        //     AlertType.DANGER
-        //   );
-        // }
-      }
-    )
+          // this.loadingService.isLoading.next(false);
+          // this.alertService.showAlert(
+          //   'You have registered successfully. Please check your email for account details.',
+          //   AlertType.SUCCESS
+          // );
+          console.log(response);
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error);
+          // this.loadingService.isLoading.next(false);
+          // const errorMsg: string = error.error;
+          // if (errorMsg === 'username Existe') {
+          //   this.alertService.showAlert(
+          //     'Ce username existe déjà. Veuillez essayer avec un autre username',
+          //     AlertType.DANGER
+          //   );
+          // } else if (errorMsg === 'email Existe') {
+          //   this.alertService.showAlert(
+          //     'Cette email existe déjà. Veuillez essayer avec une autre adresse e-mail',
+          //     AlertType.DANGER
+          //   );
+          // } else {
+          //   this.alertService.showAlert(
+          //     'Un problème est survenu. Veuillez réessayer.',
+          //     AlertType.DANGER
+          //   );
+          // }
+        }
+      )
     );
   }
 
 
-   //Importation u fichier excel
-   onExcelFileSelected(event: any): void {
+
+  //Importation du fichier excel
+  onExcelFileSelected(event: any): void {
     console.log(event);
     this.excel = event.target.files[0] as File;
     console.log(this.entretienPicture);
     this.excelChange = true;
   }
 
-  importer(){
-    this.postulantService.UploadPostulant(this.id,this.excel).subscribe(data=>{
+  importer() {
+    this.postulantService.UploadPostulant(this.id, this.excel).subscribe(data => {
       console.log(data)
     })
   }
+  //Recuperer Postulant Id
+  getPostulantId(id:number){
+    this.postulantId=id
+    console.log(this.postulantId)
+  }
+
+  // Supprimer Postulant
+DeletePostulant(){
+  this.postulantService.deletePostulant(this.postulantId).subscribe(
+    data=>{
+      console.log(data)
+    }
+  )
+}
+DownloadPostulant(){
+  this.postulantService.DownloadPostulant(this.id).subscribe(blob => saveAs(blob,this.entretien?.entretienNom));
+
+}
+
+
 }

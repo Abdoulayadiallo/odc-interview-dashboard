@@ -15,4 +15,9 @@ export class QuestionService {
 
   getAllQuestion(): Observable<Question> {
     return this.http.get<Question>(`${this.host}/question/list`);
-  }}
+  }
+  getQuestionBycritere(idCritere:number): Observable<Question[]> {
+    return this.http.get<Question[]>(`${this.host}/question/critere/${idCritere}`);
+  }
+
+}

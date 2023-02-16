@@ -20,7 +20,7 @@
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <td>{{entretien.etat.status}}</td>
+                            <td>{{entretien.etat?.status}}</td>
                         </tr>
                         <tr>
                             <th>Nombre Postulant</th>
@@ -52,77 +52,94 @@
         </div>
     </div>
     <!-- Jury Liste -->
-    <ng-container *ngIf="(juryState$ | async) as state" [ngSwitch]="state.appState">
-    <div class="card">
-        <div class="card-body">
-            <div class="container-fluid">
-                <div class="jury">
-                    <div class="pstentet d-flex justify-content-start">
-                        <h5 class="my-3 mb-0">Les Jurys</h5>
-                        <p class="violet ml-3 mb-0">{{state.appData.totalElements}}</p>
-                    </div>
+    <ng-container *ngIf="(juryState$ | async) as state" [ngSwitch]="state.appStateJury">
+        <div class="card">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="jury">
+                        <div class="pstentet d-flex justify-content-start">
+                            <h5 class="my-3 mb-0">Les Jurys</h5>
+                            <p class="violet ml-3 mb-0">{{state.appDataJury?.totalElements}}</p>
+                        </div>
 
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="container my-3">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="search">
-                                            <form #searchForm="ngForm"
-                                            (ngSubmit)="gotToPageJury(searchForm.value.keyword)">
-                                            <i class="fa fa-search"></i>
-                                            <input type="search" name="keyword" ngModel class="form-control"
-                                                placeholder="Search" />
-                                            <button class="btn btn-primary" type="submit">Search</button>
-                                        </form>
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="container my-3">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="search">
+                                                <form #searchForm="ngForm"
+                                                    (ngSubmit)="gotToPageJury(searchForm.value.keyword)">
+                                                    <i class="fa fa-search"></i>
+                                                    <input type="search" name="keyword" ngModel class="form-control"
+                                                        placeholder="Search" />
+                                                    <button class="btn btn-primary" type="submit">Search</button>
+                                                </form>
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="container my-3 d-flex justify-content-end">
-                                <button type="button" class="btn btn-outline-dark mx-2 my-1 util px-3">Importer</button>
-                                <button type="button" class="btn btn-outline-dark mx-2 my-1 util px-3">Exporter</button>
-                                <button type="button" data-toggle="modal" class="btn btn mx-2 my-1 util orange px-3"  href="#addJuryModal" ><i
-                                        class="fa-sharp fa-regular fa-plus mr-1 "></i>Ajouter</button>
+                            <div class="col-sm">
+                                <div class="container my-3 d-flex justify-content-end">
+                                    <button type="button"
+                                        class="btn btn-outline-dark mx-2 my-1 util px-3">Importer</button>
+                                    <button type="button"
+                                        class="btn btn-outline-dark mx-2 my-1 util px-3">Exporter</button>
+                                    <button type="button" data-toggle="modal" class="btn btn mx-2 my-1 util orange px-3"
+                                        href="#addJuryModal"><i
+                                            class="fa-sharp fa-regular fa-plus mr-1 "></i>Ajouter</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="thead entete">
-                            <tr>
-                                <td scope="col">N°</td>
-                                <td scope="col">Nom</td>
-                                <td scope="col">Prenom</td>
-                                <td scope="col">Email</td>
-                                <td scope="col">Status</td>
-                                <td scope="col">Date de Naissance</td>
-                                <td scope="col">Contact</td>
-                                <td scope="col">Actions</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let jury of state.appData?.contenu ;let i = index">
-                                <td scope="row">{{jury.id}}</td>
-                                <td scope="row">{{jury.nom}}</td>
-                                <td scope="row">{{jury.prenom}}</td>
-                                <td scope="row">{{jury.email}}</td>
-                                <td scope="row">{{jury.role.roleName}}</td>
-                                <td scope="col">Date de Naissance</td>
-                                <td scope="row">{{jury.numero}}</td>
-                                <td scope="row">Action</td>  
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                    <div class="table-responsive">
+                        <div class="alert alert-primary" role="alert" *ngIf="state.appDataJury?.contenu?.length<1">
+                            Pas encore de jury
+                        </div>
+                        <table class="table" *ngIf="state.appDataJury?.contenu?.length>0">
+                            <thead class="thead entete">
+                                <tr>
+                                    <td scope="col">N°</td>
+                                    <td scope="col">Nom</td>
+                                    <td scope="col">Prenom</td>
+                                    <td scope="col">Email</td>
+                                    <td scope="col">Status</td>
+                                    <td scope="col">Date de Naissance</td>
+                                    <td scope="col">Contact</td>
+                                    <td scope="col">Actions</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let jury of state.appDataJury?.contenu ;let i = index">
+                                    <td scope="row">{{jury.id}}</td>
+                                    <td scope="row">{{jury.nom}}</td>
+                                    <td scope="row">{{jury.prenom}}</td>
+                                    <td scope="row">{{jury.email}}</td>
+                                    <td scope="row">{{jury.role.roleName}}</td>
+                                    <td scope="col">Date de Naissance</td>
+                                    <td scope="row">{{jury.numero}}</td>
+                                    <td scope="row">
+                                        <a href="#editEntretienModal" class="edit" data-toggle="modal"><i
+                                                class="material-icons" data-toggle="tooltip"
+                                                title="Modifier">&#xE254;</i></a>
 
+                                        <a href="#deletePostulantModal" class="delete" data-toggle="modal"><i
+                                                class="material-icons" data-toggle="tooltip"
+                                                title="supprimer">&#xE872;</i></a>
+
+                                        <a class="view" data-toggle="modal"><i class="material-icons"
+                                                data-toggle="tooltip" title="Voir">&#xe417;</i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
     </ng-container>
     <!-- Jury Liste -->
     <ng-container *ngIf="(postulantState$ | async) as state" [ngSwitch]="state.appState">
@@ -134,7 +151,7 @@
                         <div class="postulant">
                             <div class="pstentet d-flex justify-content-start">
                                 <h5 class="my-3 mb-0">Les Postulants</h5>
-                                <p class="violet ml-3 mb-0">{{state.appData.totalElements}}</p>
+                                <p class="violet ml-3 mb-0">{{state.appData?.totalElements}}</p>
                             </div>
 
                             <div class="row">
@@ -157,10 +174,11 @@
                                 </div>
                                 <div class="col-sm">
                                     <div class="container my-3 d-flex justify-content-end">
-                                        <button type="button" class="btn btn-outline-dark mx-2 my-1 util px-3" data-toggle="modal" href="#importPostulantModal">
+                                        <button type="button" class="btn btn-outline-dark mx-2 my-1 util px-3"
+                                            data-toggle="modal" href="#importPostulantModal">
                                             Importer
                                         </button>
-                                        <button type="button" class="btn btn-outline-dark mx-2 my-1 util px-3">
+                                        <button type="button" class="btn btn-outline-dark mx-2 my-1 util px-3" (click)="DownloadPostulant()" download>
                                             Exporter
                                         </button>
                                         <button type="button" class="btn btn mx-2 my-1 util orange px-3">
@@ -170,8 +188,12 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="table-responsive">
-                            <table class="table">
+                            <div class="alert alert-primary" *ngIf="state.appData?.contenu.length<1">
+                                Pas encore de Postulant
+                            </div>
+                            <table class="table" *ngIf="state.appData?.contenu?.length>0">
                                 <thead class="thead entete">
                                     <tr>
                                         <th scope="col">Nom</th>
@@ -187,35 +209,45 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let postulant of state.appData?.contenu ;let i = index">
-                                        <!-- <th scope="row">1</th>
-                                        <td>{{postulant.id}}</td> -->
                                         <td>{{postulant.nom}}</td>
                                         <td>{{postulant.prenom}}</td>
                                         <td>{{postulant.noteFinal}}</td>
-                                        <td *ngIf="postulant.decisionFinal!==null">{{postulant.decisionFinal}}</td>
-                                        <td *ngIf="postulant.decisionFinal===null">{{postulant}}</td>
+                                        <td *ngIf="postulant?.decisionFinal!==null">{{postulant?.decisionFinal}}</td>
+                                        <td *ngIf="postulant?.decisionFinal===null">{{postulant}}</td>
                                         <td>{{postulant.rang}}</td>
                                         <td>{{postulant.numeroMTCL}}</td>
-                                        <!-- <td>{{postulant.id}}</td> -->
+                                        <td>
+                                            <!-- <a href="#editEntretienModal" class="edit" data-toggle="modal"><i class="material-icons"
+                                                data-toggle="tooltip" title="Modifier">&#xE254;</i></a> -->
+
+                                            <a class="view" data-toggle="modal"><i class="material-icons"
+                                                    data-toggle="tooltip" title="Voir"
+                                                    [routerLink]="['/postulant-details',postulant.id]">&#xe417;</i></a>
+                                            <a href="#deletePostulantModal" class="delete" data-toggle="modal" ><i
+                                                    class="material-icons" data-toggle="tooltip"
+                                                    title="supprimer" (click)="getPostulantId(postulant.id)">&#xE872;</i></a>
+
+                                        </td>
                                     </tr>
 
                                 </tbody>
                             </table>
 
-                            <div class="row">
+                            <div class="row" *ngIf="state.appData?.contenu?.length>0">
                                 <div class="col">
-                                    Total <strong>{{state.appData.totalElements}}</strong>
+                                    Total <strong>{{state.appData?.totalElements}}</strong>
                                 </div>
-                                <div class="col d-flex justify-content-end">
+                                <div class="col d-flex justify-content-end" *ngIf="state.appData?.contenu?.length > 0">
                                     <div class="row">
                                         <div class="col">
                                             <div class="col d-flex justify-content-end">
                                                 <select class="form-select form-select-lg" [(ngModel)]="selectedPage"
                                                     aria-label="Default select example">
                                                     <!-- <option selected></option> -->
-                                                    <option *ngFor="let lang of state.appData.contenu;let i=index"
+                                                    <option *ngFor="let lang of state.appData?.contenu;let i=index"
                                                         [ngValue]="lang"
-                                                        (click)="gotToPage(searchForm.value.keyword,i,selectedPage)">{{i+1}}
+                                                        (click)="gotToPage(searchForm.value.keyword,i,selectedPage)">
+                                                        {{i+1}}
                                                     </option>
 
                                                 </select>
@@ -255,72 +287,102 @@
         </div>
     </ng-container>
     <!-- Liste des Postulants -->
-<!-- Ajout Modal HTML -->
-<div id="addJuryModal"  tabindex="-1" class="modal fade">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <form #addjuryForm="ngForm" (ngSubmit)="AjouterJury(addjuryForm.value)">
-          <div class="modal-header">
-            <h4 class="modal-title">Ajouter Jury</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-              &times;
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label>Nom</label>
-              <input type="text" class="form-control" name="nom" placeholder="nom" required ngModel #nomInput="ngModel" />
+    <!-- Ajout Modal Jury HTML -->
+    <div id="addJuryModal" tabindex="-1" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form #addjuryForm="ngForm" (ngSubmit)="AjouterJury(addjuryForm.value)">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Ajouter Jury</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Nom</label>
+                            <input type="text" class="form-control" name="nom" placeholder="nom" required ngModel
+                                #nomInput="ngModel" />
+                        </div>
+                        <div class="form-group">
+                            <label>Prenom</label>
+                            <input type="text" class="form-control" name="prenom" placeholder="prenom" required ngModel
+                                #prenomInput="ngModel" />
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="email" placeholder="email" required ngModel
+                                #emailInput="ngModel" />
+                        </div>
+                        <div class="form-group">
+                            <label>Numero</label>
+                            <input type="tel" class="form-control" name="numero" placeholder="numero" required ngModel
+                                #numeroInput="ngModel" />
+                        </div>
+                        <div class="form-group">
+                            <label>Genre</label>
+                            <input type="text" class="form-control" name="genre" placeholder="genre" required ngModel
+                                #nomInput="ngModel" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancel" />
+                        <input type="submit" class="btn btn add" value="Add" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-              <label>Prenom</label>
-              <input type="text" class="form-control" name="prenom" placeholder="prenom" required ngModel #prenomInput="ngModel" />
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" class="form-control" name="email" placeholder="email" required ngModel #emailInput="ngModel" />
-            </div>
-            <div class="form-group">
-              <label>Numero</label>
-              <input type="tel" class="form-control" name="numero" placeholder="numero" required ngModel #numeroInput="ngModel" />
-            </div>
-            <div class="form-group">
-              <label>Genre</label>
-              <input type="text" class="form-control" name="genre" placeholder="genre" required ngModel #nomInput="ngModel" />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancel" />
-            <input type="submit" class="btn btn add" value="Add" />
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
+    <!-- Delete Modal jury HTML -->
+    <div id="deletePostulantModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Effacer Postulant</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Etes vous sure de vouloir supprimer ce postulant?</p>
+                        <p class="text-warning">
+                            <small>Cette action est irréversible</small>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+                        <input type="submit" class="btn btn-danger" value="Delete" (click)="DeletePostulant()" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Import Postulant Modal HTML -->
-<div id="importPostulantModal"  tabindex="-1" class="modal fade">
+<div id="importPostulantModal" tabindex="-1" class="modal fade">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <form #addjuryForm="ngForm" (ngSubmit)="AjouterJury(addjuryForm.value)">
-          <div class="modal-header">
-            <h4 class="modal-title">Ajouter Jury</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-              &times;
-            </button>
-          </div>
-          <div class="form-group text-center">
-              <label for="actual-btn" class="image-label"
-                ><i class="fa-solid fa-cloud-arrow-down fa-10x " [ngClass]="excel.name==null ? ' not-choose' : ' choose' "></i></label>
-              <input type="file" id="actual-btn" name="actual-btn" (change)="onExcelFileSelected($event)" class="form-control" hidden
-               ngModel required />
-              <!-- Nom du fichier choisir -->
-              <span id="file-chosen" *ngIf="excel.name!=null">{{excel.name}}</span>
-            </div>
-          <div class="modal-footer">
-            <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancel" />
-            <input type="submit" class="btn btn add" value="Add" />
-          </div>
-        </form>
-      </div>
+        <div class="modal-content">
+            <form #addjuryForm="ngForm" (ngSubmit)="importer()">
+                <div class="modal-header">
+                    <h4 class="modal-title">Ajouter Jury</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="form-group text-center">
+                    <label for="actual-btn" class="image-label"><i class="fa-solid fa-cloud-arrow-down fa-10x "
+                            [ngClass]="!excelChange? ' not-choose' : ' choose' "></i></label>
+                    <input type="file" id="actual-btn" name="file" (change)="onExcelFileSelected($event)"
+                        class="form-control" [(ngModel)]="excel" hidden required />
+                    <!-- Nom du fichier choisir -->
+                    <span id="file-chosen" *ngIf="excelChange">{{excel?.name}}</span>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancel" />
+                    <input type="submit" class="btn btn add" value="Add" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>

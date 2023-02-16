@@ -38,4 +38,12 @@ export class PostulantService {
   getOnePostulantParGenre(idEntretien: number, genre: string): Observable<NombreResponse> {
     return this.http.get<NombreResponse>(`${this.host}/postulant/nombreGenre/${idEntretien}/${genre}`);
   }
+  deletePostulant(id:number): Observable<HttpErrorResponse | HttpResponse<any>> {
+    return this.http.delete<HttpErrorResponse | HttpResponse<any>>(`${this.host}/postulant/delete/${id}`);
+  }
+  DownloadPostulant(id:number): Observable<Blob> {
+    return this.http.get(`${this.host}/postulant/download/${id}`,{
+      responseType: 'blob'
+    });
+  }
 }

@@ -76,8 +76,10 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
     this.userpicture = this.accountService.userPicture;
-    this.getUserInfo(this.accountService.loggInUsername);
     this.username = this.accountService.loggInUsername;
+    if(this.username){
+      this.getUserInfo(this.username);
+    }
   }
 
   toggleCollapse(): void {

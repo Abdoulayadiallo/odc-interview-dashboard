@@ -11,7 +11,6 @@ import {
 } from 'rxjs';
 import { Entretien } from '../Model/entretien';
 import { Entretienresponse } from '../Model/entretienresponse';
-import { Postulantresponse } from '../Model/postulantresponse';
 import { Utilisateur } from '../Model/utilisateur';
 import { AccountService } from '../Service/account.service';
 import { EntretienService } from '../Service/entretien.service';
@@ -25,22 +24,22 @@ import { PostulantService } from '../Service/postulant.service';
 export class DashboardComponent implements OnInit {
   entretienPicture: File;
   private subscriptions: Subscription[] = [];
-  utilisateur: Utilisateur;
-  userpicture: string;
+  utilisateur: Utilisateur = new Utilisateur();
+  userpicture: string = '';
   entretienNombre: number = 0;
-  juryNombre: number;
-  postulantNombre: number;
-  MasculinNombre: number;
-  FemininNombre: number;
+  juryNombre: number = 0;
+  postulantNombre: number = 0;
+  MasculinNombre: number = 0;
+  FemininNombre: number = 0;
 
   //Entretien Variable
   entretien: Entretien = new Entretien();
   entretienUpdate: Entretien = new Entretien()
   entretienResponse!: Entretienresponse;
   entretienId: number;
-  postulantState$!: Observable<{
-    appState: string;
-    appData?: Entretien;
+  entretienState$!: Observable<{
+    appStateEntretien: string;
+    appDataEntretien?: Entretien;
     error?: HttpErrorResponse;
   }>;
 
@@ -50,9 +49,9 @@ export class DashboardComponent implements OnInit {
   );
   currentPage$ = this.currentPageSubject.asObservable();
 
-  entretienState$!: Observable<{
-    appState: string;
-    appData?: Entretienresponse;
+  entretienStateJury$!: Observable<{
+    appStateEntretien: string;
+    appDataEntretien?: Entretienresponse;
     error?: HttpErrorResponse;
   }>;
   profilePictureChange: boolean;
@@ -83,21 +82,21 @@ export class DashboardComponent implements OnInit {
     this.getPostulantPargenre('F');
 
     //---------------Entretien Liste----------------------------
-    this.entretienState$ = this.entretienService.getAllEntretien().pipe(
+    this.entretienStateJury$ = this.entretienService.getAllEntretien().pipe(
       map((response: Entretienresponse) => {
         // this.loadingService.loadingOff();
         this.responseSubject.next(response);
         this.currentPageSubject.next(response.pageNo);
         console.log(response);
-        return { appState: 'APP_LOADED', appData: response };
+        return { appStateEntretien: 'APP_LOADED', appDataEntretien: response };
       }),
       startWith({
-        appState: 'APP_LOADED',
-        appData: this.responseSubject.value,
+        appStateEntretien: 'APP_LOADED',
+        appDataEntretien: this.responseSubject.value,
       }),
       catchError((error: HttpErrorResponse) => {
         // this.loadingService.loadingOff();
-        return of({ appState: 'APP_ERROR', error });
+        return of({ appStateEntretien: 'APP_ERROR', error });
       })
     );
     //----------------- Fin Entretien Liste------------
@@ -111,7 +110,7 @@ export class DashboardComponent implements OnInit {
     sortDir: string = ''
   ): void {
     // this.loadingService.loadingOn();
-    this.entretienState$ = this.entretienService
+    this.entretienStateJury$ = this.entretienService
       .getAllEntretien(keyword, pageNo, pageSize, sortBy, sortDir)
       .pipe(
         map((response: Entretienresponse) => {
@@ -120,15 +119,15 @@ export class DashboardComponent implements OnInit {
           this.currentPageSubject.next(pageNo);
           console.log(response);
 
-          return { appState: 'APP_LOADED', appData: response };
+          return { appStateEntretien: 'APP_LOADED', appDataEntretien: response };
         }),
         startWith({
-          appState: 'APP_LOADED',
-          appData: this.responseSubject.value,
+          appStateEntretien: 'APP_LOADED',
+          appDataEntretien: this.responseSubject.value,
         }),
         catchError((error: HttpErrorResponse) => {
           // this.loadingService.loadingOff();
-          return of({ appState: 'APP_ERROR', error });
+          return of({ appStateEntretien: 'APP_ERROR', error });
         })
       );
   }
@@ -237,9 +236,12 @@ DeleteEntretien(){
     );
   }
   getAllEntretienNombre() {
-    this.entretienService.getAllEntretien().subscribe((data) => {
-      this.entretienNombre = data.totalElements;
-      console.log(data);
+    this.entretienService.getAllEntretienNombre().subscribe((data) => {
+      if(data){
+
+        this.entretienNombre = data.totalElements;
+        console.log(data);
+      }
     });
   }
   getAlljuryNombre() {

@@ -22,6 +22,9 @@ export class NoteService {
   getAllNote(): Observable<Note[]> {
     return this.http.get<Note[]>(`${this.host}/note/list`);
   }
+  getNoteByPostulant(idPostulant:number): Observable<Note[]> {
+    return this.http.get<Note[]>(`${this.host}/note/postulant/${idPostulant}`);
+  }
   getNoteByCritere(idCritere:number): Observable<Note[]> {
     return this.http.get<Note[]>(`${this.host}/note/critere/${idCritere}`);
   }
