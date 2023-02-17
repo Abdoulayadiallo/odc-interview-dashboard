@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -15,5 +15,8 @@ export class CritereService {
 
   getAllCritere(): Observable<Critere[]> {
     return this.http.get<Critere[]>(`${this.host}/critere/list`);
+  }
+  AjouterCritere(critere: Critere): Observable<HttpErrorResponse | HttpResponse<any>> {
+    return this.http.post<HttpErrorResponse | HttpResponse<any>>(`${this.host}/critere/add`, critere);
   }
 }

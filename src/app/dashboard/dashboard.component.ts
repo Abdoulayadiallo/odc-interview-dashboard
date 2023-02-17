@@ -80,6 +80,9 @@ export class DashboardComponent implements OnInit {
     //Postulant Par Genre
     this.getPostulantPargenre('M');
     this.getPostulantPargenre('F');
+    this.getEntretien()
+  }
+  getEntretien(){
 
     //---------------Entretien Liste----------------------------
     this.entretienStateJury$ = this.entretienService.getAllEntretien().pipe(
@@ -130,6 +133,28 @@ export class DashboardComponent implements OnInit {
           return of({ appStateEntretien: 'APP_ERROR', error });
         })
       );
+    this.entretienStateJury$ = this.entretienService
+      .getAllEntretien(keyword, pageNo, pageSize, sortBy, sortDir)
+      .pipe(
+        map((response: Entretienresponse) => {
+          // this.loadingService.loadingOff();
+          this.responseSubject.next(response);
+          this.currentPageSubject.next(pageNo);
+          console.log(response);
+
+          return { appStateEntretien: 'APP_LOADED', appDataEntretien: response };
+        }),
+        startWith({
+          appStateEntretien: 'APP_LOADED',
+          appDataEntretien: this.responseSubject.value,
+        }),
+        catchError((error: HttpErrorResponse) => {
+          // this.loadingService.loadingOff();
+          return of({ appStateEntretien: 'APP_ERROR', error });
+        })
+      );
+
+
   }
   goToNextOrPreviousPage(direction: string, name?: string): void {
     this.gotToPage(
@@ -162,6 +187,7 @@ export class DashboardComponent implements OnInit {
             this.entretien.entretienNom
           );
         }
+        this.getEntretien()
         this.getAllEntretienNombre();
         //const token: string|any = response.headers.get('Authorization');
         //this.accountService.saveToken(token);
@@ -210,6 +236,7 @@ DeleteEntretien(){
   this.entretienService.deleteEntretien(this.entretienId).subscribe(
     data=>{
       console.log(data)
+      this.getEntretien()
     }
   )
 }

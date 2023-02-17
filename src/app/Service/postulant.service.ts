@@ -46,4 +46,7 @@ export class PostulantService {
       responseType: 'blob'
     });
   }
+  getAllPostulantByJury(idJury: number, pageNo: number = 0, pageSize: number = 10, sortBy: string = "", sortDir: string = "", keyword: string = ""): Observable<Postulantresponse> {
+    return this.http.get<Postulantresponse>(`${this.host}/postulant/list/utilisateur/${idJury}?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}&keyword=${keyword}`);
+  }
 }

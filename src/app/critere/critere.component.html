@@ -1,1 +1,154 @@
-<p>critere works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-sm-12 col-12 order-sm-2">
+      <div class="card">
+        <div class="card-body">
+          <form #addCritereForm="ngForm" (ngSubmit)="AjouterCritere()">
+            <div class="modal-header">
+              <h4 class="modal-title">Ajouter Critere</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Nom</label>
+                <input type="text" class="form-control" name="critereNom" [(ngModel)]="critere.critereNom" required />
+              </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="text" class="form-control" name="idEntretien" ngModel="{{idEntretien}}" ngModel required />
+              </div>
+              <div class="form-group">
+                <label>Barem</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="barem"
+                  [(ngModel)]="critere.barem"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label>Elimatoire</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="elimatoire"
+                  [(ngModel)]="critere.elimination"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+                value="Cancel"
+              />
+              <input type="submit" class="btn btn-success" value="Add" />
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-12 order-sm-1">
+      <div class="card">
+        <div class="card-body text-center">
+          <img class="w-75" src="assets/critere-evaluation.png" alt="" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <div
+          class="alert alert-primary"
+          role="alert" *ngIf="criteres.length<1"
+        >
+          Pas encore d'entretien
+        </div>
+        <table
+          class="table table-striped table-hover"
+
+        >
+          <thead class="entete">
+            <tr>
+              <th>
+                <span class="custom-checkbox">
+                  <input type="checkbox" id="selectAll" />
+                  <label for="selectAll"></label>
+                </span>
+              </th>
+              <th>N°</th>
+              <th>Critere</th>
+              <th>Elimatoire/th></th>
+              <th>Barem</th>
+              <th>Questions</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td *ngFor="let critere of criteres">
+                <span class="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    id="checkbox1"
+                    name="options[]"
+                    value="1"
+                  />
+                  <label for="checkbox1"></label>
+                </span>
+              </td>
+              <td>{{critere?.id}}</td>
+              <td>{{critere?.critereNom}}</td>
+              <td>{{critere?.elimination}}</td>
+              <td>{{critere?.barem}}</td>
+              <td>question</td>
+              <td class="action">
+                <a href="#editEntretienModal" class="edit" data-toggle="modal"
+                  ><i
+                    class="material-icons"
+                    data-toggle="tooltip"
+                    title="Modifier"
+                    >&#xE254;</i
+                  ></a
+                >
+
+                <a
+                  href="#deleteEntretienModal"
+                  class="delete"
+                  data-toggle="modal"
+                  ><i
+                    class="material-icons"
+                    data-toggle="tooltip"
+                    title="supprimer"
+                    >&#xE872;</i
+                  ></a
+                >
+
+                <a class="view" data-toggle="modal"
+                  ><i class="material-icons" data-toggle="tooltip" title="Voir"
+                    >&#xe417;</i
+                  ></a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="clearfix">
+          <div class="hint-text">
+            Page <b>state.appDataEntretien.pageNo+1</b> sur
+            <b>state.appDataEntretien?.totalPages</b> entries
+          </div>
+          <ul class="pagination">
+            <li><a>&laquo;</a></li>
+            <li class="page-item"><a>1</a></li>
+            <li class="page-item"><a>&raquo;</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

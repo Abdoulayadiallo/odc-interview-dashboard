@@ -1,7 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, BehaviorSubject, catchError, map, of, startWith, Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  Observable,
+  BehaviorSubject,
+  catchError,
+  map,
+  of,
+  startWith,
+  Subscription,
+} from 'rxjs';
 import { Entretien } from '../Model/entretien';
 import { JuryResponse } from '../Model/jury-response';
 import { Postulantresponse } from '../Model/postulantresponse';
@@ -11,20 +19,19 @@ import { EntretienService } from '../Service/entretien.service';
 import { PostulantService } from '../Service/postulant.service';
 import { saveAs } from 'file-saver';
 
-
 @Component({
   selector: 'app-entretien-details',
   templateUrl: './entretien-details.component.html',
-  styleUrls: ['./entretien-details.component.scss']
+  styleUrls: ['./entretien-details.component.scss'],
 })
 export class EntretienDetailsComponent implements OnInit {
-  id: number;
+  id: any;
   entretien: Entretien = new Entretien();
   selectedPage: number;
-  entretienPicture?: string
-  subcriptions: Subscription[] = []
+  entretienPicture?: string;
+  subcriptions: Subscription[] = [];
   //Postulant Liste
-  postulantId:number
+  postulantId: number;
   postulantResponse!: Postulantresponse;
   postulantState$!: Observable<{
     appState?: string;
@@ -46,12 +53,10 @@ export class EntretienDetailsComponent implements OnInit {
     errorJury?: HttpErrorResponse;
   }>;
   //Jury ajout
-  juryAjout: Utilisateur = new Utilisateur()
+  juryAjout: Utilisateur = new Utilisateur();
 
   private currentPageSubjectJury = new BehaviorSubject<number>(0);
-  responseSubjectJury = new BehaviorSubject<JuryResponse>(
-    this.juryResponse
-  );
+  responseSubjectJury = new BehaviorSubject<JuryResponse>(this.juryResponse);
   currentPageJury$ = this.currentPageSubject.asObservable();
   excel: File;
   excelChange: boolean = false;
@@ -62,66 +67,65 @@ export class EntretienDetailsComponent implements OnInit {
     private entretienService: EntretienService,
     private route: ActivatedRoute,
     private postulantService: PostulantService,
-    private juryService: AccountService
-  ) { }
+    private juryService: AccountService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     //Recuperer path variable id
-    this.id = this.route.snapshot.params["id"]
+    this.id = this.route.snapshot.params['id'];
     //Recuperer l'emplacement de l'image
     if (this.id) {
-
-      this.entretienPicture = this.entretienService?.imageentretien
-    }
-
-    //Recuperer la liste des Postulants
-    if (this.id) {
-
-
-        this.postulantState$ = this.postulantService
-          .getAllPostulantByEntretien(this.id)
-          .pipe(
-            map((response: Postulantresponse) => {
-              // this.loadingService.loadingOff();
-              this.responseSubject.next(response);
-              this.currentPageSubject.next(response.pageNo);
-              console.log(response);
-              return { appState: 'APP_LOADED', appData: response };
-            }),
-            startWith({
-              appState: 'APP_LOADED',
-              appData: this.responseSubject.value,
-            }),
-            catchError((error: HttpErrorResponse) => {
-              // this.loadingService.loadingOff();
-              return of({ appState: 'APP_ERROR', error });
-            })
-          );
-      // }, 1000)
-    }
-    if (this.id) {
-
-      this.juryState$ = this.juryService
-        .getAllJuryByEntretien(this.id)
-        .pipe(
-          map((response: JuryResponse) => {
-            // this.loadingService.loadingOff();
-            this.responseSubjectJury.next(response);
-            this.currentPageSubjectJury.next(response.pageNo);
-            console.log(response);
-            return { appStateJury: 'APP_LOADED', appDataJury: response };
-          }),
-          startWith({
-            appStateJury: 'APP_LOADED',
-            appDataJury: this.responseSubjectJury.value,
-          }),
-          catchError((error: HttpErrorResponse) => {
-            // this.loadingService.loadingOff();
-            return of({ appStateJury: 'APP_ERROR', error });
-          })
-        );
+      this.entretienPicture = this.entretienService?.imageentretien;
+      this.getJurys();
+      this.getPostulants();
     }
   }
+
+  //Postulant Liste
+  getPostulants() {
+    this.postulantState$ = this.postulantService
+      .getAllPostulantByEntretien(this.id)
+      .pipe(
+        map((response: Postulantresponse) => {
+          // this.loadingService.loadingOff();
+          this.responseSubject.next(response);
+          this.currentPageSubject.next(response.pageNo);
+          console.log(response);
+          return { appState: 'APP_LOADED', appData: response };
+        }),
+        startWith({
+          appState: 'APP_LOADED',
+          appData: this.responseSubject.value,
+        }),
+        catchError((error: HttpErrorResponse) => {
+          // this.loadingService.loadingOff();
+          return of({ appState: 'APP_ERROR', error });
+        })
+      );
+  }
+
+  //Jury liste
+  getJurys() {
+    this.juryState$ = this.juryService.getAllJuryByEntretien(this.id).pipe(
+      map((response: JuryResponse) => {
+        // this.loadingService.loadingOff();
+        this.responseSubjectJury.next(response);
+        this.currentPageSubjectJury.next(response.pageNo);
+        console.log(response);
+        return { appStateJury: 'APP_LOADED', appDataJury: response };
+      }),
+      startWith({
+        appStateJury: 'APP_LOADED',
+        appDataJury: this.responseSubjectJury.value,
+      }),
+      catchError((error: HttpErrorResponse) => {
+        // this.loadingService.loadingOff();
+        return of({ appStateJury: 'APP_ERROR', error });
+      })
+    );
+  }
+
   //Naviguer entre les pages Postulants
   gotToPage(
     name: string = '',
@@ -174,18 +178,11 @@ export class EntretienDetailsComponent implements OnInit {
     pageNo: number = 0,
     pageSize: number = 10,
     sortBy: string = '',
-    sortDir: string = '',
+    sortDir: string = ''
   ): void {
     // this.loadingService.loadingOn();
     this.juryState$ = this.juryService
-      .getAllJuryByEntretien(
-        this.id,
-        pageNo,
-        pageSize,
-        sortBy,
-        sortDir,
-        name
-      )
+      .getAllJuryByEntretien(this.id, pageNo, pageSize, sortBy, sortDir, name)
       .pipe(
         map((response: JuryResponse) => {
           // this.loadingService.loadingOff();
@@ -214,11 +211,9 @@ export class EntretienDetailsComponent implements OnInit {
   }
   //Recuperer Entretien par id
   getEntretienById() {
-    this.entretienService.getOneEntretienById(this.id).subscribe(
-      (data) => {
-        this.entretien = data
-      }
-    )
+    this.entretienService.getOneEntretienById(this.id).subscribe((data) => {
+      this.entretien = data;
+    });
   }
   //Ajout jury
 
@@ -227,14 +222,16 @@ export class EntretienDetailsComponent implements OnInit {
     console.log(utilisateur);
     this.subcriptions.push(
       this.juryService.addJury(utilisateur, this.id).subscribe(
-        response => {
-
+        (response) => {
           // this.loadingService.isLoading.next(false);
           // this.alertService.showAlert(
           //   'You have registered successfully. Please check your email for account details.',
           //   AlertType.SUCCESS
           // );
           console.log(response);
+          setTimeout(()=>{
+            this.getJurys();
+          },20)
         },
         (error: HttpErrorResponse) => {
           console.log(error);
@@ -261,8 +258,6 @@ export class EntretienDetailsComponent implements OnInit {
     );
   }
 
-
-
   //Importation du fichier excel
   onExcelFileSelected(event: any): void {
     console.log(event);
@@ -272,28 +267,39 @@ export class EntretienDetailsComponent implements OnInit {
   }
 
   importer() {
-    this.postulantService.UploadPostulant(this.id, this.excel).subscribe(data => {
-      console.log(data)
-    })
+    this.postulantService
+      .UploadPostulant(this.id, this.excel)
+      .subscribe((data) => {
+        console.log(data);
+        setTimeout(()=>{
+          this.getPostulants();
+        },20)
+      });
   }
   //Recuperer Postulant Id
-  getPostulantId(id:number){
-    this.postulantId=id
-    console.log(this.postulantId)
+  getPostulantId(id: number) {
+    this.postulantId = id;
+    console.log(this.postulantId);
   }
 
   // Supprimer Postulant
-DeletePostulant(){
-  this.postulantService.deletePostulant(this.postulantId).subscribe(
-    data=>{
-      console.log(data)
-    }
-  )
+  DeletePostulant() {
+    this.postulantService
+      .deletePostulant(this.postulantId)
+      .subscribe((data) => {
+        this.getPostulants()
+        console.log(data);
+      });
+      this.gotToPage()
+  }
+  DownloadPostulant() {
+    this.postulantService
+      .DownloadPostulant(this.id)
+      .subscribe((blob) => saveAs(blob, this.entretien?.entretienNom));
+  }
+  //Naviguer à la page Critere
+  gotoCritere(){
+    this.router.navigate(['/critere',this.id])
+  }
 }
-DownloadPostulant(){
-  this.postulantService.DownloadPostulant(this.id).subscribe(blob => saveAs(blob,this.entretien?.entretienNom));
 
-}
-
-
-}
