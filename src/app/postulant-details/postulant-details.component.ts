@@ -38,12 +38,13 @@ export class PostulantDetailsComponent implements OnInit {
     this.noteService.getNoteByPostulant(this.idPostulant).subscribe(data=>{
       this.notePostulant=data
       for(let i=0;i<data.length;i++){
-        if(data[i].critere.id==i-1){
+        if(data[i].critere.id==i+1){
 
           console.log(data[i].critere.id + "----------------")
           this.questionService.getQuestionBycritere(data[i].critere.id).subscribe(
             response=>{
-                this.qcritere=response[i]
+              console.log(Question)
+                this.qcritere=response[0]
                 console.log(this.qcritere)
                 this.questionCritere.push(this.qcritere)
               }

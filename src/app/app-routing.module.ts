@@ -21,7 +21,7 @@ const routes: Routes = [
   {path: 'jury-details/:idJury', component: JuryDetailsComponent},
   {path: 'postulant', component: PostulantComponent},
   {path: 'postulant-details/:idPostulant', component: PostulantDetailsComponent},
-  {path: 'critere/:idCritere', component: CritereComponent},
+  {path: 'critere/:idEntretien', component: CritereComponent},
   {path: 'questionnaire', component: QuestionnaireComponent},
   {path: 'profile', component: ProfileComponent},
   {path: 'signin', component: SigninComponent},

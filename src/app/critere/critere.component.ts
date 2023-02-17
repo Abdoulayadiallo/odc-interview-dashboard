@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Critere } from '../Model/critere';
+import { Entretien } from '../Model/entretien';
 import { CritereService } from '../Service/critere.service';
+import { EntretienService } from '../Service/entretien.service';
 
 @Component({
   selector: 'app-critere',
@@ -13,13 +15,18 @@ export class CritereComponent implements OnInit {
   critere:Critere = new Critere; 
   idEntretien: any;
   criteres: Critere[] = [];
+  entretien: Entretien;
   constructor(
     private critereService:CritereService,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private entretienService:EntretienService
   ) { }
 
   ngOnInit(): void {
     this.idEntretien=this.route.snapshot.params["idEntretien"]
+    this.critere.entretien=this.entretien
+    console.log(this.idEntretien)
+    console.log(this.critere.entretien)
     this.getAllcritere()
   }
   //Ajouter Entretien
@@ -43,5 +50,12 @@ export class CritereComponent implements OnInit {
       this.criteres=data
     })
   }
-
+  getEntretienById(){
+    this.entretienService.getOneEntretienById(this.idEntretien).subscribe(data=>{
+        console.log(data)
+        this.entretien=data
+      }
+    )
+    
+  }
 }
