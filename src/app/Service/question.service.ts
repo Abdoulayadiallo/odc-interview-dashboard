@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Critere } from '../Model/critere';
 import { Question } from '../Model/question';
 
 @Injectable({
@@ -19,5 +20,13 @@ export class QuestionService {
   getQuestionBycritere(idCritere:number): Observable<Question[]> {
     return this.http.get<Question[]>(`${this.host}/question/critere/${idCritere}`);
   }
-
+  AjouterQuestion(question: Question): Observable<HttpErrorResponse | HttpResponse<any>> {
+    return this.http.post<HttpErrorResponse | HttpResponse<any>>(`${this.host}/question/add`, question);
+  }
+  ModifierCritere(idQuestion:number,question: Question): Observable<HttpErrorResponse | HttpResponse<any>> {
+    return this.http.put<HttpErrorResponse | HttpResponse<any>>(`${this.host}/question/update/${idQuestion}`, question);
+  }
+  getOneQuestionByCritere(id:number):Observable<HttpErrorResponse | HttpResponse<any>>{
+    return this.http.get<HttpErrorResponse | HttpResponse<any>>(`${this.host}/question/critere/${id}`);
+  }
 }

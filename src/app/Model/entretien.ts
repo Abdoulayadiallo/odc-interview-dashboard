@@ -10,5 +10,4 @@ export class Entretien {
     dateFin: string;
     dateCreation: string;
     nombreParticipant: number;
-    critereList: Critere[];
 }

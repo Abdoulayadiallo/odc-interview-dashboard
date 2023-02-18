@@ -75,12 +75,12 @@ export class EntretienDetailsComponent implements OnInit {
     //Recuperer path variable id
     this.id = this.route.snapshot.params['id'];
     //Recuperer l'emplacement de l'image
-    if (this.id) {
       this.entretienPicture = this.entretienService?.imageentretien;
       this.getJurys();
       this.getPostulants();
-    }
+      this.getEntretienById()
   }
+
 
   //Postulant Liste
   getPostulants() {

@@ -19,4 +19,13 @@ export class CritereService {
   AjouterCritere(critere: Critere): Observable<HttpErrorResponse | HttpResponse<any>> {
     return this.http.post<HttpErrorResponse | HttpResponse<any>>(`${this.host}/critere/add`, critere);
   }
+  ModifierCritere(idCritere:number,critere: Critere): Observable<HttpErrorResponse | HttpResponse<any>> {
+    return this.http.put<HttpErrorResponse | HttpResponse<any>>(`${this.host}/critere/update/${idCritere}`, critere);
+  }
+  deleteCritere(id:number): Observable<HttpErrorResponse | HttpResponse<any>> {
+    return this.http.delete<HttpErrorResponse | HttpResponse<any>>(`${this.host}/critere/delete/${id}`);
+  }
+  getOneCritereById(id:number):Observable<Critere>{
+    return this.http.get<Critere>(`${this.host}/critere/${id}`);
+  }
 }

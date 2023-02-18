@@ -13,17 +13,35 @@
                   <label>Nom</label>
                   <input type="text" class="form-control" name="critereNom" [(ngModel)]="critere.critereNom" required />
                 </div>
-                <!-- <div class="form-group">
-                <input type="number" class="form-control" name="entretien" ngModel="{{ idEntretien }}" [(ngModel)]="critere.entretien" required />
-              </div> -->
+                <div *ngIf="addCritereForm.submitted && !nomcritereSaisi" class="alert alert-danger">
+                  Veuillez saisir une valeur pour le barem du critere.
+                </div>
                 <div class="form-group">
                   <label>Barem</label>
                   <input type="number" class="form-control" name="barem" [(ngModel)]="critere.barem" required />
                 </div>
+                <div *ngIf="addCritereForm.submitted && !baremSaisi" class="alert alert-danger">
+                  Veuillez saisir une valeur pour le barem du critere.
+                </div>
                 <div class="form-group">
                   <label>Elimatoire</label>
-                  <input type="text" class="form-control" name="elimatoire" [(ngModel)]="critere.elimination"
-                    required />
+                  <div class="row">
+                    <div class="col">
+                      <button type="button" (click)="OnElimination(true)"
+                        [ngClass]="clickedTrue==true ? 'fullcolor' : 'partColor'"
+                        class="btn btn-success w-100">Oui</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" (click)="OnElimination(false)"
+                        [ngClass]="clickedFalse==true ? 'fullcolor' : 'partColor'"
+                        class="btn btn-danger w-100">Non</button>
+                    </div>
+                  </div>
+                  <div *ngIf="addCritereForm.submitted && aucunBoutonSelectionne" class="alert alert-danger mt-2">
+                    Veuillez sélectionner un critere d'elimination.
+                  </div>
+                  <!-- <input type="text" class="form-control" name="elimatoire" [(ngModel)]="critere.elimination"
+                    required /> -->
                 </div>
               </div>
               <div class="modal-footer">
@@ -60,7 +78,7 @@
               </th>
               <th>N°</th>
               <th>Critere</th>
-              <th>Elimatoire/th></th>
+              <th>Elimatoire</th>
               <th>Barem</th>
               <th>Questions</th>
               <th>Action</th>
@@ -76,15 +94,24 @@
               </td>
               <td>{{critere?.id}}</td>
               <td>{{critere?.critereNom}}</td>
-              <td>{{critere?.elimination}}</td>
+              <td>
+                <button class="btn btn-danger w-75"
+                  *ngIf="critere?.elimination==true">Non</button>
+                <button class="btn btn-success w-75"
+                  *ngIf="critere?.elimination==false">Oui</button>
+              </td>
               <td>{{critere?.barem}}</td>
-              <td>question</td>
+              <td> <button href="#addQuestionModal" class="addQuestion btn" data-toggle="modal"><i
+                    class="fa-solid fa-plus" data-toggle="tooltip" title="Modifier"
+                    (click)="getCritereChoici(critere.id)"></i> Question</button>
+              </td>
+              <!-- <td>Question</td> -->
               <td class="action">
                 <a href="#editEntretienModal" class="edit" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="Modifier">&#xE254;</i></a>
+                    data-toggle="tooltip" title="Modifier" (click)="getCritereChoici(critere.id)">&#xE254;</i></a>
 
                 <a href="#deleteEntretienModal" class="delete" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="supprimer">&#xE872;</i></a>
+                    data-toggle="tooltip" title="supprimer" (click)="getCritereChoici(critere.id)">&#xE872;</i></a>
 
                 <a class="view" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                     title="Voir">&#xe417;</i></a>
@@ -95,7 +122,7 @@
         <div class="clearfix">
           <div class="hint-text">
             Page <b>state.appDataEntretien.pageNo+1</b> sur
-            <b>state.appDataEntretien?.totalPages</b> entries
+            <b>state.appDataEntretien?.totalPages</b>
           </div>
           <ul class="pagination">
             <li><a>&laquo;</a></li>
@@ -103,6 +130,121 @@
             <li class="page-item"><a>&raquo;</a></li>
           </ul>
         </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modification Modal HTML -->
+  <div id="editEntretienModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form #editEntretienForm="ngForm" (ngSubmit)="updateCritere()">
+          <div class="modal-header">
+            <h4 class="modal-title">Modifier Critere</h4>
+          </div>
+          <div class="modal-body">
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Nom</label>
+                <input type="text" class="form-control" name="critereNom" [(ngModel)]="critereUpdate.critereNom"
+                  required />
+              </div>
+              <div class="form-group">
+                <label>Barem</label>
+                <input type="number" class="form-control" name="barem" [(ngModel)]="critereUpdate.barem" required />
+              </div>
+              <div class="form-group">
+                <label>Elimatoire</label>
+                <div class="row">
+                  <div class="col">
+                    <button type="button" (click)="OnEliminationUpdate(true)"
+                      [ngClass]="clickedUpdateTrue==true ? 'fullcolor' : 'partColor'"
+                      class="btn btn-success w-100">Oui</button>
+                  </div>
+                  <div class="col">
+                    <button type="button" (click)="OnEliminationUpdate(false)"
+                      [ngClass]="clickedUpdateFalse==true ? 'fullcolor' : 'partColor'"
+                      class="btn btn-danger w-100">Non</button>
+                  </div>
+                </div>
+                <div *ngIf="addCritereForm.submitted && aucunBoutonSelectionneUpdate" class="alert alert-danger mt-2">
+                  Veuillez sélectionner un critere d'elimination.
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+              <input type="submit" class="btn btn-success" value="Add" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Ajouter Question Modal HTML -->
+  <div id="addQuestionModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form #addQuestionForm="ngForm" (ngSubmit)="AjouterQuestion()">
+          <div class="modal-header">
+            <h4 class="modal-title">Ajouter Question</h4>
+          </div>
+          <div class="modal-body">
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Question</label>
+                <input type="text" class="form-control" name="questionNom" [(ngModel)]="question.questionNom"
+                  required />
+              </div>
+              <div class="form-group">
+                <label>Type</label>
+                <div class="row">
+                  <div class="col">
+                    <button type="button" (click)=" OnTypeQuestion('ouvert')"
+                      [ngClass]="clickedquestionOuvert==true ? 'fullcolor' : 'partColor'"
+                      class="btn btn-success w-100">Ouvert</button>
+                  </div>
+                  <div class="col">
+                    <button type="button" (click)=" OnTypeQuestion('fermé')"
+                      [ngClass]="clickedquestionFerme==true ? 'fullcolor' : 'partColor'"
+                      class="btn btn-danger w-100">Fermé</button>
+                  </div>
+                </div>
+                <div *ngIf="addQuestionForm.submitted && aucunBoutonSelectionneUpdate" class="alert alert-danger mt-2">
+                  Veuillez sélectionner le type de la question.
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+              <input type="submit" class="btn btn-success" value="Add" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Supprimer Modal Entretien HTML -->
+  <div id="deleteEntretienModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form>
+          <div class="modal-header">
+            <h4 class="modal-title">Effacer Entretien</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Etes vous sure de vouloir supprimer cet entretien?</p>
+            <p class="text-warning">
+              <small>Cette action est irréversible</small>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+            <input type="submit" class="btn btn-danger" value="Delete" (click)="DeleteCritere()" />
+          </div>
+        </form>
       </div>
     </div>
   </div>
