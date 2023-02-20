@@ -137,7 +137,7 @@
                 </tbody>
               </table>
               <div class="clearfix" *ngIf="state.appDataEntretien?.contenu.length>0">
-                <div class="hint-text">Showing <b>{{state.appDataEntretien.pageNo+1}}</b> out of <b>{{state.appDataEntretien?.totalPages}}</b> entries</div>
+                <div class="hint-text">Page <b>{{state.appDataEntretien.pageNo+1}}</b> sur <b>{{state.appDataEntretien?.totalPages}}</b></div>
                 <ul class="pagination">
                   <li class="page-item"  [ngClass]="0 == (currentPage$ | async) ? ' disabled' : ''"><a (click)="goToNextOrPreviousPage('backward',searchForm.value.keyword)">&laquo;</a></li>
                   <li class="page-item" [ngClass]="i == (currentPage$ | async) ? ' active' : ''"  *ngFor="let number of [].constructor(state.appDataEntretien?.totalPages); let i = index"><a  class="page-link" [ngClass]="i == (currentPage$ | async) ? 'active' : ''" (click)="gotToPage('',i,10)">{{i+1}}</a></li>
@@ -151,4 +151,147 @@
         </div>
       </ng-container>
     </div>
+     <!-- Ajout Modal HTML -->
+  <div id="addEntretienModal"  tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form #addEntretienForm="ngForm" (ngSubmit)="AjouterEntretien()">
+          <div class="modal-header">
+            <h4 class="modal-title">Ajouter Entretien</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="actual-btn" class="image-label"
+                [ngClass]="entretienPicture==null ? ' iorange' : ' iviolet' ">Choisir L'image</label>
+              <input type="file" id="actual-btn" name="file" (change)="onProfilePictureSelected($event)" class="form-control" hidden
+               ngModel required />
+              <!-- Nom du fichier choisir -->
+              <span id="file-chosen" *ngIf="entretienPicture!=null">{{entretienPicture.name}}</span>
+            </div>
+            <div *ngIf="addEntretienForm.submitted && !profilePictureChange" class="alert alert-danger">
+              Veuillez choisir l'image de l'entretien.
+            </div>
+            <div class="form-group">
+              <label>Nom</label>
+              <input type="text" class="form-control" name="entretienNom" [(ngModel)]="entretien.entretienNom" required />
+            </div>
+            <div *ngIf="addEntretienForm.submitted && !entretien.entretienNom" class="alert alert-danger">
+              Veuillez saisir le nom de l'entretien.
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control" name="description" [(ngModel)]="entretien.description" required></textarea>
+            </div>
+            <div *ngIf="addEntretienForm.submitted && !entretien.description" class="alert alert-danger">
+              Veuillez donner la description de l'entretien.
+            </div>
+            <div class="form-group">
+              <label>Date Debut</label>
+              <input type="date" class="form-control" name="dateDebut" [(ngModel)]="entretien.dateDebut" required />
+            </div>
+            <div *ngIf="addEntretienForm.submitted && !entretien.dateDebut" class="alert alert-danger">
+              Veuillez choisir la date de debut de l'entretien.
+            </div>
+            <div class="form-group">
+              <label>Date Fin</label>
+              <input type="date" class="form-control" name="dateFin" [(ngModel)]="entretien.dateFin" required />
+            </div>
+            <div *ngIf="addEntretienForm.submitted && !entretien.dateFin" class="alert alert-danger">
+              Veuillez choisir la date de fin de l'entretien.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Fermer" />
+            <input type="submit" class="btn btn-success" value="Ajouter" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Modification Modal HTML -->
+  <div id="editEntretienModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form #editEntretienForm="ngForm" (ngSubmit)="updateEntretien()">
+          <div class="modal-header">
+            <h4 class="modal-title text-orange">Modifier Entretien</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="actual-btn" class="image-label"
+                [ngClass]="entretienPicture==null ? ' iorange' : ' iviolet' ">Choisir L'image</label>
+              <!-- <input type="file" id="actual-btn" hidden/> -->
+              <input type="file" id="actual-btn" name="file" (change)="onProfilePictureSelected($event)" class="form-control" hidden
+                required />
+              <!-- name of file chosen -->
+              <span id="file-chosen" *ngIf="entretienPicture!=null">{{entretienPicture.name}}</span>
+            </div>
+            <div class="form-group">
+              <label>Nom</label>
+              <input type="text" class="form-control" name="entretienNom" [(ngModel)]="entretienUpdate.entretienNom" required />
+            </div>
+            <div *ngIf="editEntretienForm.submitted && !entretienUpdate.entretienNom" class="alert alert-danger">
+              Veuillez saisir le nom de l'entretien.
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control" name="description" [(ngModel)]="entretienUpdate.description" required></textarea>
+            </div>
+            <div *ngIf="editEntretienForm.submitted && !entretienUpdate.description" class="alert alert-danger">
+              Veuillez saisir la description de l'entretien.
+            </div>
+            <div class="form-group">
+              <label>Date Debut</label>
+              <input type="date" class="form-control" name="dateDebut" [(ngModel)]="entretienUpdate.dateDebut" required />
+            </div>
+            <div *ngIf="editEntretienForm.submitted && !entretienUpdate.dateDebut" class="alert alert-danger">
+              Veuillez saisir la date de ebut de l'entretien.
+            </div>
+            <div class="form-group">
+              <label>Date Fin</label>
+              <input type="date" class="form-control" name="dateFin" [(ngModel)]="entretienUpdate.dateFin" required />
+            </div>
+            <div *ngIf="editEntretienForm.submitted && !entretienUpdate.dateFin" class="alert alert-danger">
+              Veuillez saisir la date de Fin de l'entretien.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Fermer" />
+            <input type="submit" class="btn btn-info" value="Save" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Supprimer Modal Entretien HTML -->
+  <div id="deleteEntretienModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form>
+          <div class="modal-header">
+            <h4 class="modal-title">Effacer Entretien</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Etes vous sure de vouloir supprimer cet entretien?</p>
+            <p class="text-warning">
+              <small>Cette action est irréversible</small>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Fermer" />
+            <input type="submit" class="btn btn-danger" value="Delete" (click)="DeleteEntretien()" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

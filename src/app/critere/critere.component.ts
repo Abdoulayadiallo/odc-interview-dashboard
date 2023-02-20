@@ -145,13 +145,14 @@ export class CritereComponent implements OnInit {
       this.criteres = data
       for(let i=0;i<this.criteres.length;i++){
         if(this.criteres[i].id==i+1){
-
-          this.questionService.getQuestionBycritere(this.criteres[i].id).subscribe(response=>{
-            this.qcritere=response[0]
-            console.log(this.qcritere)
-            this.questioncritere.push(this.qcritere)
-            console.log(this.questioncritere)
-          })
+          if(this.critere.id=i+1){
+            this.questionService.getQuestionBycritere(this.criteres[i].id).subscribe(response=>{
+              this.qcritere=response[0]
+              console.log(this.qcritere)
+              this.questioncritere.push(response[0])
+              console.log(this.questioncritere)
+            })
+          }
         }
       }
     })
@@ -218,6 +219,17 @@ export class CritereComponent implements OnInit {
             timer: 5000,
           })
           this.getAllcritere()
+        },
+        (error) => {
+          console.log(error);
+          if (error = "ce critere existe deja.") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Une erreur est survenue lors de la suppression du critere!',
+              timer: 2000,
+            })
+          }
         }
       )
     }
@@ -228,15 +240,16 @@ export class CritereComponent implements OnInit {
       this.subcription.push(
 
         this.questionService.AjouterQuestion(this.question).subscribe(data=>{
-          console.log(data)
-          $('#editCritereModal').modal('hide');
+          console.log(data)  
+          this.getAllcritere()
+
+          $('#addQuestionModal').modal('hide');
           Swal.fire({
             icon: 'success',
             title: 'Question' + this.question.questionNom + 'ajoutée',
             text: 'Question ajouté',
             timer: 5000,
           })
-          this.getAllcritere()
         },
         error=>{
           if(error="cette question existe deja."){

@@ -24,11 +24,11 @@
             </tr>
             <tr>
               <th>Nombre Postulant</th>
-              <td>data</td>
+              <td>{{postulantNombre}}</td>
             </tr>
             <tr>
               <th>Nombre Jury</th>
-              <td>data</td>
+              <td>{{ juryNombre }}</td>
             </tr>
             <tr>
               <th>Description</th>
@@ -102,7 +102,7 @@
               </div>
               <div class="col-sm">
                 <div class="container my-3 d-flex justify-content-end">
-                  <button
+                  <!-- <button
                     type="button"
                     class="btn btn-outline-dark mx-2 my-1 util px-3"
                   >
@@ -114,12 +114,13 @@
                   >
                     Exporter
                   </button>
+                  -->
                   <button
                     type="button"
                     data-toggle="modal"
                     class="btn btn mx-2 my-1 util orange px-3"
                     href="#addJuryModal"
-                  >
+                  > 
                     <i class="fa-sharp fa-regular fa-plus mr-1"></i>Ajouter
                   </button>
                 </div>
@@ -156,10 +157,10 @@
                   <td scope="row">{{ jury.prenom }}</td>
                   <td scope="row">{{ jury.email }}</td>
                   <td scope="row">{{ jury.role.roleName }}</td>
-                  <td scope="col">Date de Naissance</td>
+                  <!-- <td scope="col">Date de Naissance</td> -->
                   <td scope="row">{{ jury.numero }}</td>
                   <td scope="row">
-                    <a
+                    <!-- <a
                       href="#editEntretienModal"
                       class="edit"
                       data-toggle="modal"
@@ -169,12 +170,13 @@
                         title="Modifier"
                         >&#xE254;</i
                       ></a
-                    >
+                    > -->
 
                     <a
-                      href="#deletePostulantModal"
+                      href="#deleteJuryModal"
                       class="delete"
                       data-toggle="modal"
+                      (click)="getJuryId(jury.id)"
                       ><i
                         class="material-icons"
                         data-toggle="tooltip"
@@ -186,7 +188,7 @@
                     <a
                       class="view"
                       data-toggle="modal"
-                      [routerLink]="['/jury-details', jury.id]"
+                      [routerLink]="['/jury-details', jury.username]"
                       ><i
                         class="material-icons"
                         data-toggle="tooltip"
@@ -488,6 +490,9 @@
                 ngModel
                 #nomInput="ngModel"
               />
+              <div *ngIf="addjuryForm.submitted && nomInput" class="alert alert-danger">
+                Veuillez entrer le nom du jury.
+              </div>
             </div>
             <div class="form-group">
               <label>Prenom</label>
@@ -500,6 +505,9 @@
                 ngModel
                 #prenomInput="ngModel"
               />
+              <div *ngIf="addjuryForm.submitted && prenomInput" class="alert alert-danger">
+                Veuillez entrer le prenom du jury.
+              </div>
             </div>
             <div class="form-group">
               <label>Email</label>
@@ -512,6 +520,9 @@
                 ngModel
                 #emailInput="ngModel"
               />
+              <div *ngIf="addjuryForm.submitted && emailInput" class="alert alert-danger">
+                Veuillez entrer l'email du jury.
+              </div>
             </div>
             <div class="form-group">
               <label>Numero</label>
@@ -524,6 +535,9 @@
                 ngModel
                 #numeroInput="ngModel"
               />
+              <div *ngIf="addjuryForm.submitted && numeroInput" class="alert alert-danger">
+                Veuillez entrer le numero du jury.
+              </div>
             </div>
             <div class="form-group">
               <label>Genre</label>
@@ -534,8 +548,11 @@
                 placeholder="genre"
                 required
                 ngModel
-                #nomInput="ngModel"
+                #genreInput="ngModel"
               />
+              <div *ngIf="addjuryForm.submitted && genreInput" class="alert alert-danger">
+                Veuillez entrer le genre du jury.
+              </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -543,15 +560,15 @@
               type="button"
               class="btn btn-danger"
               data-dismiss="modal"
-              value="Cancel"
+              value="Fermer"
             />
-            <input type="submit" class="btn btn add" value="Add" />
+            <input type="submit" class="btn btn add" value="Ajouter" />
           </div>
         </form>
       </div>
     </div>
   </div>
-  <!-- Delete Modal jury HTML -->
+  <!-- Delete Modal Postulant HTML -->
   <div id="deletePostulantModal" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -578,7 +595,7 @@
               type="button"
               class="btn btn-default"
               data-dismiss="modal"
-              value="Cancel"
+              value="Fermer"
             />
             <input
               type="submit"
@@ -592,13 +609,53 @@
     </div>
   </div>
 </div>
-<!-- Import Postulant Modal HTML -->
+  <!-- Delete Modal Jury HTML -->
+  <div id="deleteJuryModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form>
+          <div class="modal-header">
+            <h4 class="modal-title">Effacer Jury</h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-hidden="true"
+            >
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Etes vous sure de vouloir supprimer ce jury?</p>
+            <p class="text-warning">
+              <small>Cette action est irréversible</small>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <input
+              type="button"
+              class="btn btn-default"
+              data-dismiss="modal"
+              value="Fermer"
+            />
+            <input
+              type="submit"
+              class="btn btn-danger"
+              value="Delete"
+              (click)="DeleteJury()"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
+<!-- Add jury Modal HTML -->
 <div id="importPostulantModal" tabindex="-1" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
       <form #addjuryForm="ngForm" (ngSubmit)="importer()">
         <div class="modal-header">
-          <h4 class="modal-title">Ajouter Jury</h4>
+          <h4 class="modal-title">Importer Postulant</h4>
           <button
             type="button"
             class="close"
@@ -633,9 +690,9 @@
             type="button"
             class="btn btn-danger"
             data-dismiss="modal"
-            value="Cancel"
+            value="Fermer"
           />
-          <input type="submit" class="btn btn add" value="Add" />
+          <input type="submit" class="btn btn add" value="Ajouter" />
         </div>
       </form>
     </div>

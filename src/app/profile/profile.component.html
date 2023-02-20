@@ -3,27 +3,30 @@
     <div class="col-6">
       <div class="card w-100">
         <div class="card-body">
-          <h5 class="orange-text">Profile</h5>
-          <div class="row">
-            <div class="col">
-              <img
-                src="../../assets/profile.png"
-                class="img-thumbnail w-25"
-                alt="..."
-              />
-            </div>
-            <div class="col">
-              <div class="text">Modifier Profile</div>
-              <div class="d-flex justify-content-start my-2">
-                <button type="button" class="btn btn-primary ml-3">
-                  Primary
-                </button>
-                <button type="button" class="btn btn-secondary ml-3">
-                  Secondary
-                </button>
+          <form (ngSubmit)="ChangerProfilePhoto()">
+            <h5 class="orange-text">Profile</h5>
+            <div class="row">
+              <div class="col">
+                <label for="image"><img src="{{ userpicture }}{{ utilisateur?.id }}.png" class="img-thumbnail w-25"
+                    alt="..." />
+                </label>
+                <input id="image" style="visibility: hidden;" (change)="onProfilePictureSelected($event)" #fileToUpload
+                  type="file" class="form-control-file" name="image" placeholder="photo" accept="image/*"
+                  (click)="fileToUpload.click()" />
+              </div>
+              <div class="col">
+                <div class="text">Modifier Profile</div>
+                <div class="d-flex justify-content-start my-2">
+                  <button type="button" class="btn btn-primary ml-3" (click)="fileToUpload.click()">
+                    Modifier
+                  </button>
+                  <button type="submit" class="btn btn-secondary ml-3">
+                    Enregistrer
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
@@ -31,43 +34,29 @@
   <div class="card">
     <div class="card-body">
       <h5 class="orange-text">Information Personnelle</h5>
-      <form>
+      <form #updateProfileForm="ngForm" (ngSubmit)="onUpdateUser(updateProfileForm.value)"
+        enctype="multipart/form-data">
         <div class="row">
           <div class="col">
             <div class="form-group">
               <label for="nom">Nom</label>
-              <input
-                type="text"
-                class="form-control"
-                id="nom"
-                aria-describedby="nameHelp"
-                placeholder="Entrer Nom"
-              />
+              <input type="text" ngModel="{{ utilisateur?.nom }}" class="form-control" id="nom" name="nom"
+                aria-describedby="nom" placeholder="Entrez votre nom" required />
               <!-- <small id="emailHelp" class="form-text text-muted"
                 >We'll never share your email with anyone else.</small
               > -->
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                aria-describedby="emailHelp"
-                placeholder="Enter email"
-              />
+              <input type="email" id="email" name="email" ngModel="{{ utilisateur?.email }}" class="form-control"
+                placeholder="Entrez votre Email" required />
               <!-- <small id="emailHelp" class="form-text text-muted"
                 >We'll never share your email with anyone else.</small
               > -->
             </div>
             <div class="form-group">
               <label for="bdate">Date de Naissance</label>
-              <input
-                type="date"
-                class="form-control"
-                id="bdate"
-                aria-describedby="bdateHelp"
-              />
+              <input type="date" class="form-control" id="bdate" aria-describedby="bdateHelp" />
               <!-- <small id="emailHelp" class="form-text text-muted"
                 >We'll never share your email with anyone else.</small
               > -->
@@ -76,73 +65,57 @@
           <div class="col">
             <div class="form-group">
               <label for="prenom">Prenom</label>
-              <input
-                type="text"
-                class="form-control"
-                id="prenom"
-                placeholder="Prenom"
-              />
+              <input type="text" id="prenom" name="prenom" ngModel="{{ utilisateur?.prenom }}" class="form-control"
+                aria-describedby="prenom" placeholder="Entrez votre prenom" required />
+            </div>
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input ngModel="{{ username }}" type="text" class="form-control" name="username" id="username"
+                placeholder="Username" disabled />
             </div>
             <div class="form-group">
               <label for="numero">Numero</label>
-              <input
-                type="tel"
-                class="form-control"
-                id="numero"
-                placeholder="Numero"
-              />
+              <input type="tel" name="numero" id="numero" ngModel="{{ utilisateur?.numero}}" class="form-control"
+                placeholder="Entrez votre numero" required />
             </div>
           </div>
         </div>
         <div class="form-group">
           <label for="bio">Bio</label>
-          <textarea class="form-control" id="bio" rows="3"></textarea>
+          <textarea name="bio" id="bio" ngModel="{{ utilisateur?.bio }}" class="form-control"
+            placeholder="Entrez votre Bio"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn valide" [disabled]="updateProfileForm.invalid">Enregistrer</button>
       </form>
     </div>
   </div>
   <div class="card">
     <div class="card-body">
       <h5 class="orange-text">Modifier Mots de Passe</h5>
-      <form>
+      <form #changePasswordForm="ngForm" (ngSubmit)="onChangePassword(changePasswordForm.value)">
         <div class="row">
           <div class="col">
             <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="exampleInputPassword1"
-                placeholder="Password"
-              />
+              <label for="currentpassword">Ancien Mots de passe: </label>
+              <input type="password" id="currentpassword" class="form-control" name="currentpassword"
+                placeholder="Ancien Mots de passe" required ngModel>
             </div>
           </div>
           <div class="col">
             <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="exampleInputPassword1"
-                placeholder="Password"
-              />
+              <label for="newpassword">Nouveau Mots de passe: </label>
+          <input id="newpassword" type="password" class="form-control" name="newpassword" placeholder="Nouveau mots de passe" required ngModel>
             </div>
           </div>
           <div class="col">
             <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="exampleInputPassword1"
-                placeholder="Password"
-              />
+              <label for="confirmpassword">Confirmer Mots de passe: </label>
+          <input id="confirmpassword" type="password" class="form-control" name="confirmpassword" placeholder="Confirmer Nouveau mots de passe" required ngModel >
             </div>
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn valide" [disabled]="changePasswordForm.invalid">Enregistrer</button>
       </form>
     </div>
   </div>

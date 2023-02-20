@@ -9,6 +9,7 @@ import {
   catchError,
   of,
 } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Postulantresponse } from '../Model/postulantresponse';
 import { Utilisateur } from '../Model/utilisateur';
 import { AccountService } from '../Service/account.service';
@@ -36,26 +37,36 @@ export class JuryDetailsComponent implements OnInit {
     this.postulantResponse
   );
   currentPage$ = this.currentPageSubject.asObservable();
-selectedPage: any;
+  selectedPage: any;
   postulantId: number;
+  jurySelect: Utilisateur;
+  usernameJury: any;
+  postulantNoteNbre: number;
+  host=environment.host
+  imagePlace: string;
   constructor(
     private route: ActivatedRoute,
     private accountService: AccountService,
     private postulantService: PostulantService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.idJury = this.route.snapshot.params['idJury'];
-    this.getPostulantParJury();
+    this.imagePlace=this.accountService.userPicture
+    this.usernameJury = this.route.snapshot.params['username'];
+    this.getJuryById();
+    setTimeout(()=>{
+      this.getPostulantParJury();
+      this.getPostulantNote()
+    },1000)
   }
   getJuryById() {
-    this.accountService.getOneJuryById(this.idJury).subscribe((data) => {
+    this.accountService.getOneJuryById(this.usernameJury).subscribe((data) => {
       this.jury = data;
     });
   }
   getPostulantParJury() {
     this.postulantState$ = this.postulantService
-      .getAllPostulantByJury(this.idJury)
+      .getAllPostulantByJury(this.jury?.id)
       .pipe(
         map((response: Postulantresponse) => {
           // this.loadingService.loadingOff();
@@ -117,9 +128,17 @@ selectedPage: any;
         : this.currentPageSubject.value - 1
     );
   }
-    //Recuperer Postulant Id
-    getPostulantId(id: number) {
-      this.postulantId = id;
-      console.log(this.postulantId);
-    }
+  //Recuperer Postulant Id
+  getPostulantId(id: number) {
+    this.postulantId = id;
+    console.log(this.postulantId);
+  }
+  //get Postulant note par jury
+  getPostulantNote(){
+    this.postulantService.getAllPostulantByJury(this.jury.id).subscribe(
+      data=>{
+        this.postulantNoteNbre=data.totalElements
+      }
+    )
+  }
 }

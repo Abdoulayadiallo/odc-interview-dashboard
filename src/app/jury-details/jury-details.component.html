@@ -1,13 +1,13 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-6">
+    <div class="col-12 col-md-12 col-lg-6 ">
       <div class="card">
         <div class="card-body">
           <h5 class="text-orange">Jury details</h5>
           <div class="presentation">
             <div class="row">
               <div class="col-3">
-                <img src="{{jury?.id}}" />
+                <img src="{{imagePlace}}{{jury?.id}}" />
               </div>
               <div class="col py-4">
                 <h5 class="violet">{{jury.nom}} {{jury.prenom}}</h5>
@@ -25,23 +25,23 @@
             </tr> -->
             <tr>
               <th>Email</th>
-              <td>{{jury.email}}</td>
+              <td>{{jury?.email}}</td>
             </tr>
             <tr>
               <th>Numero</th>
-              <td>{{jury.numero}}</td>
+              <td>{{jury?.numero}}</td>
             </tr>
             <tr>
               <th>bio</th>
-              <td>{{jury.bio}}</td>
+              <td>{{jury?.bio}}</td>
             </tr>
             <tr>
               <th>Entretien</th>
-              <td>{{jury.entretien.nom}</td>
+              <td>{{jury?.entretien?.entretienNom}}</td>
             </tr>
             <tr>
               <th>Postulants Notés</th>
-              <td>nommmmm55</td>
+              <td>{{postulantNoteNbre}}</td>
             </tr>
           </table>
         </div>
@@ -96,7 +96,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <div class="alert alert-primary" *ngIf="state.appData?.contenu.length<1">
+                        <div class="alert alert-primary" *ngIf="state.appData?.contenu?.length<1">
                             Pas encore de Postulant
                         </div>
                         <table class="table" *ngIf="state.appData?.contenu?.length>0">
@@ -129,9 +129,9 @@
                                         <a class="view" data-toggle="modal" [routerLink]="['/postulant-details',postulant.id]"><i class="material-icons"
                                                 data-toggle="tooltip" title="Voir"
                                                 [routerLink]="['/postulant-details',postulant.id]">&#xe417;</i></a>
-                                        <a href="#deletePostulantModal" class="delete" data-toggle="modal" ><i
+                                        <!-- <a href="#deletePostulantModal" class="delete" data-toggle="modal" ><i
                                                 class="material-icons" data-toggle="tooltip"
-                                                title="supprimer" (click)="getPostulantId(postulant.id)">&#xE872;</i></a>
+                                                title="supprimer" (click)="getPostulantId(postulant.id)">&#xE872;</i></a> -->
 
                                     </td>
                                 </tr>

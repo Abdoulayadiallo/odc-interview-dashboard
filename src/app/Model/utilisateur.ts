@@ -1,4 +1,5 @@
 import {Participant} from "../Model/participant"
+import { Entretien } from "./entretien";
 export class Utilisateur {
     id: number;
     image: string;
@@ -12,6 +13,7 @@ export class Utilisateur {
     dateCreation: Date;
     participant: Participant;
     role:role 
+    entretien:Entretien
 }
 
 export class role{

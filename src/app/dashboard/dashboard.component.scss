@@ -162,13 +162,13 @@ table.table-striped.table-hover tbody tr:hover {
 }
 table.table th i {
   font-size: 13px;
-  margin: 0 5px;
+  // margin: 0 5px;
   cursor: pointer;
 }
 table.table td:last-child i {
   opacity: 0.9;
   font-size: 22px;
-  margin: 0 5px;
+  // margin: 0 5px;
 }
 table.table td a {
   font-weight: bold;
@@ -192,11 +192,11 @@ table.table td a.view {
 table.table td i {
   font-size: 19px;
 }
-table.table .avatar {
-  border-radius: 50%;
-  vertical-align: middle;
-  margin-right: 10px;
-}
+// table.table .avatar {
+//   border-radius: 50%;
+//   vertical-align: middle;
+//   margin-right: 10px;
+// }
 .pagination {
   float: right;
   margin: 0 0 5px;

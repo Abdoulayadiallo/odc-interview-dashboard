@@ -18,6 +18,12 @@
   box-shadow: none;
 //   border: 2px solid blue;
 }
+table.table td a.delete {
+  color: #f44336;
+}
+table.table td a.view {
+  color: #50BE87;
+}
 
 .search .fa-search {
   position: absolute;

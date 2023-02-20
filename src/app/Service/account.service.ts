@@ -105,9 +105,12 @@ export class AccountService {
     return this.http.get<JuryResponse>(`${this.host}/utilisateur/jurylist?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}&keyword=${keyword}`);
   }
   getOneJuryById(juryId: number): Observable<Utilisateur> {
-    return this.http.get<Utilisateur>(`${this.host}/utillsateur/${juryId}`);
+    return this.http.get<Utilisateur>(`${this.host}/utilisateur/${juryId}`);
   }
   getAllJuryByEntretien(idEntretien:number,pageNo:number = 0,pageSize:number = 10,sortBy:string ="",sortDir:string="",keyword:string=""): Observable<JuryResponse> {
     return this.http.get<JuryResponse>(`${this.host}/utilisateur/entretien/${idEntretien}?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}&keyword=${keyword}`);
+  }
+  deleteJury(id:number): Observable<HttpErrorResponse | HttpResponse<any>> {
+    return this.http.delete<HttpErrorResponse | HttpResponse<any>>(`${this.host}/utilisateur/delete/${id}`);
   }
 }

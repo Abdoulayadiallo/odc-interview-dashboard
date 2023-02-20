@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit {
   FemininNombre: number = 0;
 
   //Entretien Variable
+  datedebutEntretienSuperieur=false;
   entretienNomSaisi = false;
   DateSaisi = false;
   entretien: Entretien = new Entretien();
@@ -216,7 +217,15 @@ export class DashboardComponent implements OnInit {
           // this.loadingService.isLoading.next(false);
         },
         (error) => {
-          console.log(error);
+          console.log(error.error);
+          if(error.error=="DateDebutSuperieurFin"){
+            Swal.fire({
+              icon: 'error',
+              title: 'Une erreur est Survenue',
+              text: 'La date de debut est superieure à la date de fin',
+              timer: 2000,
+            });
+          }
           // this.loadingService.isLoading.next(false);
           // this.alerteService.presentToast(' <ion-icon name="warning" size="large"></ion-icon> Email ou mots de passe incorrecte',"danger")
         }

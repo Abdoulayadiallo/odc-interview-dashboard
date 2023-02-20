@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Observable, BehaviorSubject, map, startWith, catchError, of, Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
 import { Entretien } from '../Model/entretien';
 import { Entretienresponse } from '../Model/entretienresponse';
 import { AccountService } from '../Service/account.service';
@@ -135,36 +136,51 @@ goToNextOrPreviousPage(direction: string, name?: string): void {
 //Ajouter Entretien
 AjouterEntretien() {
   // this.loadingService.isLoading.next(true);
-  this.entretienService.AjouterEntretien(this.entretien).subscribe(
-    (response) => {
-      //this.entretienId=entretien.id
-      console.log(response);
-      console.log(
-        this.entretien + '-------------------------------------------'
-      );
-      if (this.profilePictureChange) {
-        this.entretienService.uploadeEntretienPicture(
-          this.entretienPicture,
-          this.entretien.id
+  if (
+    this.entretien.entretienNom != '' &&
+    this.entretien.description != '' &&
+    this.entretien.dateDebut != null &&
+    this.entretien.dateFin != null &&
+    this.entretienPicture != null
+  ) {
+    this.entretienService.AjouterEntretien(this.entretien).subscribe(
+      (response) => {
+        //this.entretienId=entretien.id
+        console.log(response);
+        console.log(
+          this.entretien + '-------------------------------------------'
         );
+        Swal.fire({
+          icon: 'success',
+          title: 'Felicitation',
+          text: 'Entretien ' + this.entretien.entretienNom + ' ajouté',
+          timer: 5000,
+        });
+        $('#addEntretienModal').modal('hide');
+        if (this.profilePictureChange) {
+          this.entretienService.uploadeEntretienPicture(
+            this.entretienPicture,
+            response.id
+          );
+        }
+        this.getEntretien();
+        // this.loadingService.isLoading.next(false);
+      },
+      (error) => {
+        console.log(error.error);
+        if(error.error=="DateDebutSuperieurFin"){
+          Swal.fire({
+            icon: 'error',
+            title: 'Une erreur est Survenue',
+            text: 'La date de debut est superieure à la date de fin',
+            timer: 2000,
+          });
+        }
+        // this.loadingService.isLoading.next(false);
+        // this.alerteService.presentToast(' <ion-icon name="warning" size="large"></ion-icon> Email ou mots de passe incorrecte',"danger")
       }
-      $('#addEntretienModal').modal('hide');
-      this.getEntretien()
-      //const token: string|any = response.headers.get('Authorization');
-      //this.accountService.saveToken(token);
-      // if (this.accountService.redirectUrl) {
-      //   this.router.navigateByUrl(this.accountService.redirectUrl);
-      // } else {
-      //   this.router.navigateByUrl('/tabs/home');
-      // }
-      // this.loadingService.isLoading.next(false);
-    },
-    (error) => {
-      console.log(error);
-      // this.loadingService.isLoading.next(false);
-      // this.alerteService.presentToast(' <ion-icon name="warning" size="large"></ion-icon> Email ou mots de passe incorrecte',"danger")
-    }
-  );
+    );
+  }
 }
 
 // Recuperer Entretien Par Id
@@ -200,6 +216,13 @@ this.entretienService.deleteEntretien(this.entretienId).subscribe(
     this.getEntretien()
   }
 )
+}
+//Importation Image
+onProfilePictureSelected(event: any): void {
+  console.log(event);
+  this.entretienPicture = event.target.files[0] as File;
+  console.log(this.entretienPicture);
+  this.profilePictureChange = true;
 }
 
 }

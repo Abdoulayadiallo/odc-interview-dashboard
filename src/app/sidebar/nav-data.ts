@@ -21,16 +21,16 @@ export const navbarData = [
         icon: 'fal fa-users',
         label: 'Postulants'
     },
-    {
-        routeLink: 'critere',
-        icon: 'fal fa-ticket',
-        label: 'Criteres'
-    },
-    {
-        routeLink: 'questionnaire',
-        icon: 'fal fa-question',
-        label: 'Questionnaires'
-    },
+    // {
+    //     routeLink: 'critere',
+    //     icon: 'fal fa-ticket',
+    //     label: 'Criteres'
+    // },
+    // {
+    //     routeLink: 'questionnaire',
+    //     icon: 'fal fa-question',
+    //     label: 'Questionnaires'
+    // },
     {
         routeLink: 'profile',
         icon: 'fal fa-user',

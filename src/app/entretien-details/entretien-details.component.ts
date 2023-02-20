@@ -18,6 +18,9 @@ import { AccountService } from '../Service/account.service';
 import { EntretienService } from '../Service/entretien.service';
 import { PostulantService } from '../Service/postulant.service';
 import { saveAs } from 'file-saver';
+import Swal from 'sweetalert2';
+declare var $: any;
+
 
 @Component({
   selector: 'app-entretien-details',
@@ -52,6 +55,7 @@ export class EntretienDetailsComponent implements OnInit {
     appDataJury?: JuryResponse;
     errorJury?: HttpErrorResponse;
   }>;
+  juryId: number
   //Jury ajout
   juryAjout: Utilisateur = new Utilisateur();
 
@@ -60,25 +64,32 @@ export class EntretienDetailsComponent implements OnInit {
   currentPageJury$ = this.currentPageSubject.asObservable();
   excel: File;
   excelChange: boolean = false;
+  postulantNombre: number;
+  juryNombre: number;
 
   //Fin jury Liste
-
+  options = [
+    { genre: 'Option 1', selectionne: false },
+    { genre: 'Option 2', selectionne: true },
+  ];
   constructor(
     private entretienService: EntretienService,
     private route: ActivatedRoute,
     private postulantService: PostulantService,
     private juryService: AccountService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     //Recuperer path variable id
     this.id = this.route.snapshot.params['id'];
     //Recuperer l'emplacement de l'image
-      this.entretienPicture = this.entretienService?.imageentretien;
-      this.getJurys();
-      this.getPostulants();
-      this.getEntretienById()
+    this.entretienPicture = this.entretienService?.imageentretien;
+    this.getJurys();
+    this.getPostulants();
+    this.getEntretienById()
+    this.getPostulantNombreParEntretien()
+    this.getJuryNombreParEntretien()
   }
 
 
@@ -103,6 +114,20 @@ export class EntretienDetailsComponent implements OnInit {
           return of({ appState: 'APP_ERROR', error });
         })
       );
+  }
+  getPostulantNombreParEntretien() {
+    this.postulantService.getAllPostulantByEntretien(this.id).subscribe(
+      data => {
+        this.postulantNombre = data.totalElements
+      }
+    )
+  }
+  getJuryNombreParEntretien() {
+    this.juryService.getAllJuryByEntretien(this.id).subscribe(
+      data => {
+        this.juryNombre = data.totalElements
+      }
+    )
   }
 
   //Jury liste
@@ -205,8 +230,8 @@ export class EntretienDetailsComponent implements OnInit {
     this.gotToPage(
       name,
       direction === 'forward'
-        ? this.currentPageSubject.value + 1
-        : this.currentPageSubject.value - 1
+        ? this.currentPageSubjectJury.value + 1
+        : this.currentPageSubjectJury.value - 1
     );
   }
   //Recuperer Entretien par id
@@ -219,43 +244,37 @@ export class EntretienDetailsComponent implements OnInit {
 
   AjouterJury(utilisateur: Utilisateur): void {
     // this.loadingService.isLoading.next(true);
-    console.log(utilisateur);
-    this.subcriptions.push(
-      this.juryService.addJury(utilisateur, this.id).subscribe(
-        (response) => {
-          // this.loadingService.isLoading.next(false);
-          // this.alertService.showAlert(
-          //   'You have registered successfully. Please check your email for account details.',
-          //   AlertType.SUCCESS
-          // );
-          console.log(response);
-          setTimeout(()=>{
+    if(utilisateur.nom!=null && utilisateur.prenom!=null && utilisateur.email!=null && utilisateur.genre!=null){
+
+      console.log(utilisateur);
+      this.subcriptions.push(
+        this.juryService.addJury(utilisateur, this.id).subscribe(
+          (response) => {
+            // this.loadingService.isLoading.next(false);
+            // this.alertService.showAlert(
+            //   'You have registered successfully. Please check your email for account details.',
+            //   AlertType.SUCCESS
+            // );
+            console.log(response);
+            $('#addJuryModal').modal('hide');
             this.getJurys();
-          },20)
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error);
-          // this.loadingService.isLoading.next(false);
-          // const errorMsg: string = error.error;
-          // if (errorMsg === 'username Existe') {
-          //   this.alertService.showAlert(
-          //     'Ce username existe déjà. Veuillez essayer avec un autre username',
-          //     AlertType.DANGER
-          //   );
-          // } else if (errorMsg === 'email Existe') {
-          //   this.alertService.showAlert(
-          //     'Cette email existe déjà. Veuillez essayer avec une autre adresse e-mail',
-          //     AlertType.DANGER
-          //   );
-          // } else {
-          //   this.alertService.showAlert(
-          //     'Un problème est survenu. Veuillez réessayer.',
-          //     AlertType.DANGER
-          //   );
-          // }
-        }
-      )
-    );
+  
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error);
+            const errorMsg: string = error.error;
+            if (errorMsg) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: 'Un problème est survenu. Veuillez réessayer...',
+                timer: 2000,
+              });
+            }
+          }
+        )
+      );
+    }
   }
 
   //Importation du fichier excel
@@ -271,9 +290,9 @@ export class EntretienDetailsComponent implements OnInit {
       .UploadPostulant(this.id, this.excel)
       .subscribe((data) => {
         console.log(data);
-        setTimeout(()=>{
+        setTimeout(() => {
           this.getPostulants();
-        },20)
+        }, 20)
       });
   }
   //Recuperer Postulant Id
@@ -290,16 +309,48 @@ export class EntretienDetailsComponent implements OnInit {
         this.getPostulants()
         console.log(data);
       });
-      this.gotToPage()
+    this.getPostulants()
   }
   DownloadPostulant() {
     this.postulantService
       .DownloadPostulant(this.id)
       .subscribe((blob) => saveAs(blob, this.entretien?.entretienNom));
   }
+  //Recuperer Jury par Id
+  getJuryId(id: number) {
+    this.juryId = id;
+    console.log(this.juryId);
+  }
+
+  // Supprimer Jury
+  DeleteJury() {
+    this.juryService
+      .deleteJury(this.juryId)
+      .subscribe((data) => {
+        this.getPostulants()
+        console.log(data);
+        this.getJurys()
+        Swal.fire({
+          icon: 'success',
+          title: 'Jury supprimé',
+          text: 'Le jury supprimé',
+          timer: 2000,
+        });
+      },
+        error => {
+          if (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Une erreur est Survenue',
+              text: 'Lors de la suppression du jury',
+              timer: 2000,
+            });
+          }
+        })
+  }
   //Naviguer à la page Critere
-  gotoCritere(){
-    this.router.navigate(['/critere',this.id])
+  gotoCritere() {
+    this.router.navigate(['/critere', this.id])
   }
 }
 
