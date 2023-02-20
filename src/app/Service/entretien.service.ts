@@ -14,8 +14,8 @@ export class EntretienService {
   public clientHost = environment.client;
   constructor(private http:HttpClient) { }
   
-  AjouterEntretien(entretien: Entretien): Observable<HttpErrorResponse | HttpResponse<any>> {
-    return this.http.post<HttpErrorResponse | HttpResponse<any>>(`${this.host}/entretien/add`, entretien);
+  AjouterEntretien(entretien: Entretien): Observable<HttpErrorResponse | HttpResponse<any>|any> {
+    return this.http.post<any | HttpErrorResponse | HttpResponse<any>>(`${this.host}/entretien/add`, entretien);
   }
   ModifierEntretien(id:number,entretien: Entretien): Observable<HttpErrorResponse | HttpResponse<any>> {
     return this.http.put<HttpErrorResponse | HttpResponse<any>>(`${this.host}/entretien/update/${id}`, entretien);
@@ -30,11 +30,11 @@ export class EntretienService {
     return this.http.get<Entretienresponse>(`${this.host}/entretien/list`);
   }
 
-  uploadeUserEntretienPicture(EntretienPicture: File,entretienNom:string) {
+  uploadeEntretienPicture(EntretienPicture: File,idEntretien:number) {
     const fd = new FormData();
     fd.append('image', EntretienPicture);
     return this.http
-      .post(`${this.host}/entretien/photo/upload/${entretienNom}`, fd, { responseType: 'text' })
+      .post(`${this.host}/entretien/photo/upload/${idEntretien}`, fd, { responseType: 'text' })
       .subscribe(
         (response: any) => {
           console.log(response);

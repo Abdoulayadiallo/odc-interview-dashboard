@@ -5,7 +5,7 @@ import { Entretien } from '../Model/entretien';
 import { Entretienresponse } from '../Model/entretienresponse';
 import { AccountService } from '../Service/account.service';
 import { EntretienService } from '../Service/entretien.service';
-import { PostulantService } from '../Service/postulant.service';
+declare var $: any;
 
 @Component({
   selector: 'app-entretien',
@@ -143,11 +143,12 @@ AjouterEntretien() {
         this.entretien + '-------------------------------------------'
       );
       if (this.profilePictureChange) {
-        this.entretienService.uploadeUserEntretienPicture(
+        this.entretienService.uploadeEntretienPicture(
           this.entretienPicture,
-          this.entretien.entretienNom
+          this.entretien.id
         );
       }
+      $('#addEntretienModal').modal('hide');
       this.getEntretien()
       //const token: string|any = response.headers.get('Authorization');
       //this.accountService.saveToken(token);
@@ -183,9 +184,9 @@ updateEntretien() {
         console.log(this.entretienId);
         console.log(data);
         if (this.profilePictureChange) {
-          this.entretienService.uploadeUserEntretienPicture(
+          this.entretienService.uploadeEntretienPicture(
             this.entretienPicture,
-            this.entretienUpdate.entretienNom
+            this.entretienUpdate.id
           );
         }
       })

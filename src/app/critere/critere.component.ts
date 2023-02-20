@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Critere } from '../Model/critere';
 import { Entretien } from '../Model/entretien';
@@ -8,6 +9,7 @@ import { Question } from '../Model/question';
 import { CritereService } from '../Service/critere.service';
 import { EntretienService } from '../Service/entretien.service';
 import { QuestionService } from '../Service/question.service';
+declare var $: any;
 
 @Component({
   selector: 'app-critere',
@@ -15,6 +17,7 @@ import { QuestionService } from '../Service/question.service';
   styleUrls: ['./critere.component.scss']
 })
 export class CritereComponent implements OnInit {
+  subcription:Subscription[]=[]
   // Variable Critere
   critere: Critere = new Critere;
   critereUpdate: Critere = new Critere;
@@ -36,7 +39,9 @@ export class CritereComponent implements OnInit {
   question:Question = new Question
   clickedquestionOuvert: boolean;
   clickedquestionFerme: boolean;
-  criterequestion: any;
+  aucunBoutonSelectionneQuestion:boolean=true
+  questioncritere: any=[];
+  qcritere: Question;
 
   constructor(
     private critereService: CritereService,
@@ -79,7 +84,7 @@ export class CritereComponent implements OnInit {
             text: 'Critere ajouté',
             timer: 5000,
           })
-
+          $('#addEntretienModal').modal('hide');
         },
         (error) => {
           console.log(error);
@@ -128,15 +133,27 @@ export class CritereComponent implements OnInit {
     if(type=="ouvert"){
       this.clickedquestionOuvert = true;
       this.question.type = type;
+      this.aucunBoutonSelectionneQuestion = false;
     }else{
       this.clickedquestionFerme = true;
       this.question.type = type;
+      this.aucunBoutonSelectionneQuestion = false;
     }
-    this.aucunBoutonSelectionneUpdate = false;
   }
   getAllcritere() {
     this.critereService.getAllCritere().subscribe(data => {
       this.criteres = data
+      for(let i=0;i<this.criteres.length;i++){
+        if(this.criteres[i].id==i+1){
+
+          this.questionService.getQuestionBycritere(this.criteres[i].id).subscribe(response=>{
+            this.qcritere=response[0]
+            console.log(this.qcritere)
+            this.questioncritere.push(this.qcritere)
+            console.log(this.questioncritere)
+          })
+        }
+      }
     })
   }
   getEntretienById() {
@@ -174,7 +191,15 @@ export class CritereComponent implements OnInit {
       this.critereId = id
       this.critereUpdate = data
       this.critereSelection = data
+      console.log(data)
       this.question.critere = data
+      console.log(this.question.critere)
+    })
+  }
+  getCritereChoiciQuestion(id: number) {
+    this.critereService.getOneCritereById(id).subscribe(data => {
+      this.question.critere = data
+      console.log(this.question.critere)
     })
   }
   // Supprimer entretien
@@ -184,10 +209,12 @@ export class CritereComponent implements OnInit {
       this.critereService.deleteCritere(this.critereId).subscribe(
         data => {
           console.log(data)
+          $('#deleteCritereModal').modal('hide');
+
           Swal.fire({
             icon: 'success',
             title: 'Critere' + this.critereSelection.critereNom + 'supprimé',
-            text: 'Critere ajouté',
+            text: 'Critere supprimé',
             timer: 5000,
           })
           this.getAllcritere()
@@ -197,10 +224,33 @@ export class CritereComponent implements OnInit {
   }
   //Ajouter question à critere
   AjouterQuestion(){
-    // this.question.critere.id=this.critereId
-    this.questionService.AjouterQuestion(this.question).subscribe(data=>{
-      console.log(data)
-    })
+    if(this.question.questionNom!='' && this.question.type!=null){
+      this.subcription.push(
+
+        this.questionService.AjouterQuestion(this.question).subscribe(data=>{
+          console.log(data)
+          $('#editCritereModal').modal('hide');
+          Swal.fire({
+            icon: 'success',
+            title: 'Question' + this.question.questionNom + 'ajoutée',
+            text: 'Question ajouté',
+            timer: 5000,
+          })
+          this.getAllcritere()
+        },
+        error=>{
+          if(error="cette question existe deja."){
+            Swal.fire({
+              icon: 'info',
+              title: 'Question' + this.question.questionNom + 'existe deja',
+              text: 'Question existe',
+              timer: 5000,
+            })
+          }
+        }),  
+      
+      )
+      }
   }
 
 

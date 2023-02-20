@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import {
   BehaviorSubject,
   catchError,
@@ -9,13 +10,14 @@ import {
   startWith,
   Subscription,
 } from 'rxjs';
+import Swal from 'sweetalert2';
 import { Entretien } from '../Model/entretien';
 import { Entretienresponse } from '../Model/entretienresponse';
 import { Utilisateur } from '../Model/utilisateur';
 import { AccountService } from '../Service/account.service';
 import { EntretienService } from '../Service/entretien.service';
 import { PostulantService } from '../Service/postulant.service';
-
+declare var $: any;
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -33,8 +35,10 @@ export class DashboardComponent implements OnInit {
   FemininNombre: number = 0;
 
   //Entretien Variable
+  entretienNomSaisi = false;
+  DateSaisi = false;
   entretien: Entretien = new Entretien();
-  entretienUpdate: Entretien = new Entretien()
+  entretienUpdate: Entretien = new Entretien();
   entretienResponse!: Entretienresponse;
   entretienId: number;
   entretienState$!: Observable<{
@@ -55,6 +59,8 @@ export class DashboardComponent implements OnInit {
     error?: HttpErrorResponse;
   }>;
   profilePictureChange: boolean;
+  addEntretienForm: any;
+  entretienSelectionne: Entretien;
 
   constructor(
     private accountService: AccountService,
@@ -80,10 +86,9 @@ export class DashboardComponent implements OnInit {
     //Postulant Par Genre
     this.getPostulantPargenre('M');
     this.getPostulantPargenre('F');
-    this.getEntretien()
+    this.getEntretien();
   }
-  getEntretien(){
-
+  getEntretien() {
     //---------------Entretien Liste----------------------------
     this.entretienStateJury$ = this.entretienService.getAllEntretien().pipe(
       map((response: Entretienresponse) => {
@@ -122,7 +127,10 @@ export class DashboardComponent implements OnInit {
           this.currentPageSubject.next(pageNo);
           console.log(response);
 
-          return { appStateEntretien: 'APP_LOADED', appDataEntretien: response };
+          return {
+            appStateEntretien: 'APP_LOADED',
+            appDataEntretien: response,
+          };
         }),
         startWith({
           appStateEntretien: 'APP_LOADED',
@@ -142,7 +150,10 @@ export class DashboardComponent implements OnInit {
           this.currentPageSubject.next(pageNo);
           console.log(response);
 
-          return { appStateEntretien: 'APP_LOADED', appDataEntretien: response };
+          return {
+            appStateEntretien: 'APP_LOADED',
+            appDataEntretien: response,
+          };
         }),
         startWith({
           appStateEntretien: 'APP_LOADED',
@@ -153,8 +164,6 @@ export class DashboardComponent implements OnInit {
           return of({ appStateEntretien: 'APP_ERROR', error });
         })
       );
-
-
   }
   goToNextOrPreviousPage(direction: string, name?: string): void {
     this.gotToPage(
@@ -174,72 +183,119 @@ export class DashboardComponent implements OnInit {
   //Ajouter Entretien
   AjouterEntretien() {
     // this.loadingService.isLoading.next(true);
-    this.entretienService.AjouterEntretien(this.entretien).subscribe(
-      (response) => {
-        //this.entretienId=entretien.id
-        console.log(response);
-        console.log(
-          this.entretien + '-------------------------------------------'
-        );
-        if (this.profilePictureChange) {
-          this.entretienService.uploadeUserEntretienPicture(
-            this.entretienPicture,
-            this.entretien.entretienNom
+    if (
+      this.entretien.entretienNom != '' &&
+      this.entretien.description != '' &&
+      this.entretien.dateDebut != null &&
+      this.entretien.dateFin != null &&
+      this.entretienPicture != null
+    ) {
+      this.entretienService.AjouterEntretien(this.entretien).subscribe(
+        (response) => {
+          //this.entretienId=entretien.id
+          console.log(response);
+          console.log(
+            this.entretien + '-------------------------------------------'
           );
+          Swal.fire({
+            icon: 'success',
+            title: 'Felicitation',
+            text: 'Entretien ' + this.entretien.entretienNom + ' ajouté',
+            timer: 5000,
+          });
+          $('#addEntretienModal').modal('hide');
+          if (this.profilePictureChange) {
+            this.entretienService.uploadeEntretienPicture(
+              this.entretienPicture,
+              response.id
+            );
+          }
+          this.resetForm();
+          this.getEntretien();
+          this.getAllEntretienNombre();
+          // this.loadingService.isLoading.next(false);
+        },
+        (error) => {
+          console.log(error);
+          // this.loadingService.isLoading.next(false);
+          // this.alerteService.presentToast(' <ion-icon name="warning" size="large"></ion-icon> Email ou mots de passe incorrecte',"danger")
         }
-        this.getEntretien()
-        this.getAllEntretienNombre();
-        //const token: string|any = response.headers.get('Authorization');
-        //this.accountService.saveToken(token);
-        // if (this.accountService.redirectUrl) {
-        //   this.router.navigateByUrl(this.accountService.redirectUrl);
-        // } else {
-        //   this.router.navigateByUrl('/tabs/home');
-        // }
-        // this.loadingService.isLoading.next(false);
-      },
-      (error) => {
-        console.log(error);
-        // this.loadingService.isLoading.next(false);
-        // this.alerteService.presentToast(' <ion-icon name="warning" size="large"></ion-icon> Email ou mots de passe incorrecte',"danger")
-      }
-    );
+      );
+    }
+    this.entretienNomSaisi = !!this.entretien.entretienNom;
+  }
+  resetForm() {
+    this.entretienPicture = null;
+    this.entretien = new Entretien();
   }
 
   // Recuperer Entretien Par Id
-  GetEntretienById(id: number) {    
+  GetEntretienById(id: number) {
     this.entretienService.getOneEntretienById(id).subscribe((data) => {
       this.entretienId = data.id;
+      this.entretienSelectionne = data;
+      this.entretienUpdate = data;
       console.log(data);
     });
   }
 
   //Modifier Entretien
   updateEntretien() {
-    this.subscriptions.push(
-      this.entretienService
-        .ModifierEntretien(this.entretienId, this.entretienUpdate)
-        .subscribe((data) => {
-          console.log(this.entretienId);
-          console.log(data);
-          if (this.profilePictureChange) {
-            this.entretienService.uploadeUserEntretienPicture(
-              this.entretienPicture,
-              this.entretienUpdate.entretienNom
-            );
-          }
-        })
-    );
-  }
-// Supprimer entretien
-DeleteEntretien(){
-  this.entretienService.deleteEntretien(this.entretienId).subscribe(
-    data=>{
-      console.log(data)
-      this.getEntretien()
+    if (
+      this.entretienUpdate.entretienNom != '' &&
+      this.entretienUpdate.description != '' &&
+      this.entretienUpdate.dateDebut != null &&
+      this.entretienUpdate.dateFin != null
+    ) {
+      this.subscriptions.push(
+        this.entretienService
+          .ModifierEntretien(this.entretienId, this.entretienUpdate)
+          .subscribe((data) => {
+            console.log(this.entretienId);
+            console.log(data);
+            if (this.profilePictureChange) {
+              this.entretienService.uploadeEntretienPicture(
+                this.entretienPicture,
+                this.entretienUpdate.id
+              );
+            }
+            this.getEntretien();
+            $('#editEntretienModal').modal('hide');
+            Swal.fire({
+              icon: 'success',
+              title: 'Felicitation',
+              text:
+                'Entretien ' +
+                this.entretienSelectionne.entretienNom +
+                ' modifié',
+              timer: 3000,
+            });
+          })
+      );
     }
-  )
-}
+  }
+  // Supprimer entretien
+  DeleteEntretien() {
+    if (this.entretienId) {
+      this.entretienService
+        .deleteEntretien(this.entretienId)
+        .subscribe((data) => {
+          console.log(data);
+          this.getEntretien();
+          $('#deleteEntretienModal').modal('hide');
+          Swal.fire({
+            icon: 'success',
+            title: 'Felicitation',
+            text:
+              'Entretien ' +
+              this.entretienSelectionne.entretienNom +
+              ' supprimé',
+            timer: 3000,
+          });
+        });
+    }
+  }
+  getPostulantByEntretien() {}
   getUserInfo(username: string): void {
     this.subscriptions.push(
       this.accountService.getUserInformation(username).subscribe(
@@ -264,8 +320,7 @@ DeleteEntretien(){
   }
   getAllEntretienNombre() {
     this.entretienService.getAllEntretienNombre().subscribe((data) => {
-      if(data){
-
+      if (data) {
         this.entretienNombre = data.totalElements;
         console.log(data);
       }
