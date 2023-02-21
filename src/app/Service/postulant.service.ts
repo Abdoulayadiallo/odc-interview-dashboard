@@ -19,10 +19,10 @@ export class PostulantService {
   getOnePostulantById(postId: number): Observable<Postulant> {
     return this.http.get<Postulant>(`${this.host}/postulant/${postId}`);
   }
-  UploadPostulant(idEntretien: number,file:File): Observable<HttpErrorResponse | HttpResponse<any>> {
+  UploadPostulant(idEntretien: number,file:File): Observable<HttpErrorResponse | HttpResponse<any>|any> {
     const fd = new FormData();
     fd.append('file', file);
-    return this.http.post<HttpErrorResponse | HttpResponse<any>>(`${this.host}/postulant/upload/${idEntretien}`,fd);
+    return this.http.post(`${this.host}/postulant/upload/${idEntretien}`,fd, { responseType: 'text' });
   }
 
   getAllPostulant(pageNo: number = 0, pageSize: number = 10, sortBy: string = "", sortDir: string = "", genre: string = "", nom: string = ""): Observable<Postulantresponse> {
@@ -38,8 +38,10 @@ export class PostulantService {
   getOnePostulantParGenre(idEntretien: number, genre: string): Observable<NombreResponse> {
     return this.http.get<NombreResponse>(`${this.host}/postulant/nombreGenre/${idEntretien}/${genre}`);
   }
-  deletePostulant(id:number): Observable<HttpErrorResponse | HttpResponse<any>> {
-    return this.http.delete<HttpErrorResponse | HttpResponse<any>>(`${this.host}/postulant/delete/${id}`);
+  deletePostulant(id:number): Observable<HttpErrorResponse | HttpResponse<any>|any> {
+    return this.http.delete(`${this.host}/postulant/delete/${id}`,{
+      responseType: 'text'
+    });
   }
   DownloadPostulant(id:number): Observable<Blob> {
     return this.http.get(`${this.host}/postulant/download/${id}`,{

@@ -490,7 +490,7 @@
                 ngModel
                 #nomInput="ngModel"
               />
-              <div *ngIf="addjuryForm.submitted && nomInput" class="alert alert-danger">
+              <div *ngIf="addjuryForm.submitted && nomInput.invalid" class="alert alert-danger">
                 Veuillez entrer le nom du jury.
               </div>
             </div>
@@ -505,7 +505,7 @@
                 ngModel
                 #prenomInput="ngModel"
               />
-              <div *ngIf="addjuryForm.submitted && prenomInput" class="alert alert-danger">
+              <div *ngIf="addjuryForm.submitted && prenomInput.invalid" class="alert alert-danger">
                 Veuillez entrer le prenom du jury.
               </div>
             </div>
@@ -520,7 +520,7 @@
                 ngModel
                 #emailInput="ngModel"
               />
-              <div *ngIf="addjuryForm.submitted && emailInput" class="alert alert-danger">
+              <div *ngIf="addjuryForm.submitted && emailInput.invalid" class="alert alert-danger">
                 Veuillez entrer l'email du jury.
               </div>
             </div>
@@ -535,22 +535,16 @@
                 ngModel
                 #numeroInput="ngModel"
               />
-              <div *ngIf="addjuryForm.submitted && numeroInput" class="alert alert-danger">
+              <div *ngIf="addjuryForm.submitted && numeroInput.invalid" class="alert alert-danger">
                 Veuillez entrer le numero du jury.
               </div>
             </div>
             <div class="form-group">
               <label>Genre</label>
-              <input
-                type="text"
-                class="form-control"
-                name="genre"
-                placeholder="genre"
-                required
-                ngModel
-                #genreInput="ngModel"
-              />
-              <div *ngIf="addjuryForm.submitted && genreInput" class="alert alert-danger">
+              <select class="form-control form-select-sm" name="critere" aria-label="Default select example" class="form-control" name="genre" ngModel #genreInput="ngModel">
+                <option [ngValue]="genreselect.genre" *ngFor=" let genreselect of genre">{{genreselect.genre}}</option>
+              </select>
+              <div *ngIf="addjuryForm.submitted && genreInput.invalid" class="alert alert-danger">
                 Veuillez entrer le genre du jury.
               </div>
             </div>
@@ -668,7 +662,7 @@
         <div class="form-group text-center">
           <label for="actual-btn" class="image-label"
             ><i
-              class="fa-solid fa-cloud-arrow-down fa-10x"
+              class="fa-solid fa-cloud-arrow-down fa-10x file"
               [ngClass]="!excelChange ? ' not-choose' : ' choose'"
             ></i
           ></label>
@@ -683,7 +677,11 @@
             required
           />
           <!-- Nom du fichier choisir -->
-          <span id="file-chosen" *ngIf="excelChange">{{ excel?.name }}</span>
+        </div>
+        <div class="text-center">
+          <span  id="file-chosen" *ngIf="!excelChange">choisir un fichier</span>
+          <span  id="file-chosen" *ngIf="excelChange">{{ excel?.name }}</span>
+
         </div>
         <div class="modal-footer">
           <input

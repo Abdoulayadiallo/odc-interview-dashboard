@@ -20,8 +20,10 @@ export class EntretienService {
   ModifierEntretien(id:number,entretien: Entretien): Observable<HttpErrorResponse | HttpResponse<any>> {
     return this.http.put<HttpErrorResponse | HttpResponse<any>>(`${this.host}/entretien/update/${id}`, entretien);
   }
-  deleteEntretien(id:number): Observable<HttpErrorResponse | HttpResponse<any>> {
-    return this.http.delete<HttpErrorResponse | HttpResponse<any>>(`${this.host}/entretien/delete/${id}`);
+  deleteEntretien(id:number): Observable<HttpErrorResponse | HttpResponse<any>|any> {
+    return this.http.delete(`${this.host}/entretien/delete/${id}`,{
+      responseType: 'text'
+    });
   }
   getAllEntretien(keyword:string="",pageNo:number = 0,pageSize:number = 10,sortBy:string ="",sortDir:string="",username:string=""): Observable<Entretienresponse> {
     return this.http.get<Entretienresponse>(`${this.host}/entretien/list?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}$keyword=${keyword}$username=${username}`);

@@ -61,70 +61,143 @@
       </div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-body">
-      <div class="table-responsive">
-        <div class="alert alert-primary" role="alert" *ngIf="criteres.length<1">
-          Pas encore de critere
-        </div>
-        <table class="table table-striped table-hover">
-          <thead class="entete">
-            <tr>
-              <!-- <th>
-                <span class="custom-checkbox">
-                  <input type="checkbox" id="selectAll" />
-                  <label for="selectAll"></label>
-                </span>
-              </th> -->
-              <th>N°</th>
-              <th>Critere</th>
-              <th>Elimatoire</th>
-              <th>Barem</th>
-              <th>Questions</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let critere of criteres;let i= index">
-             
-              <td>{{critere?.id}}</td>
-              <td>{{critere?.critereNom}}</td>
-              <td>
-                <button class="btn btn-danger w-75"
-                  *ngIf="critere?.elimination==false">Non</button>
-                <button class="btn btn-success w-75"
-                  *ngIf="critere?.elimination==true">Oui</button>
-              </td>
-              <td>{{critere?.barem}}</td>
-              <td *ngIf="questioncritere[i]==null"> 
-                <button href="#addQuestionModal" (click)="getCritereChoiciQuestion(critere.id)" class="addQuestion btn" data-toggle="modal">
-                  <i class="fa-solid fa-plus" data-toggle="tooltip" title="Modifier"></i>Question</button>
-              </td>
-              <td *ngIf="questioncritere[i]!=null">{{questioncritere[i]?.questionNom}}</td>
-              <td class="action">
-                <a href="#editCritereModal" class="edit" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="Modifier" (click)="getCritereChoici(critere.id)">&#xE254;</i></a>
+  <div class="row">
+    <div class="col">
 
-                <a href="#deleteCritereModal" class="delete" data-toggle="modal"><i class="material-icons"
-                    data-toggle="tooltip" title="supprimer" (click)="getCritereChoici(critere.id)">&#xE872;</i></a>
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <div class="alert alert-primary" role="alert" *ngIf="criteres.contenu?.length<1">
+              Pas encore de critere
+            </div>
+            <table class="table table-striped table-hover">
+              <thead class="entete">
+                <tr>
+                  <!-- <th>
+                    <span class="custom-checkbox">
+                      <input type="checkbox" id="selectAll" />
+                      <label for="selectAll"></label>
+                    </span>
+                  </th> -->
+                  <!-- <th>N°</th> -->
+                  <th>Critere</th>
+                  <th>Elimatoire</th>
+                  <th>Barem</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let critere of criteres.contenu;let i= index">
 
-                <!-- <a class="view" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
-                    title="Voir">&#xe417;</i></a> -->
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <!-- <div class="clearfix">
-          <div class="hint-text">
-            Page <b>state.appDataCritere.pageNo+1</b> sur
-            <b>state.appDataCritere?.totalPages</b>
+                  <!-- <td>{{critere?.id}}</td> -->
+                  <td>{{critere?.critereNom}}</td>
+                  <td>
+                    <button class="btn btn-danger w-75" *ngIf="critere?.elimination==false">Non</button>
+                    <button class="btn btn-success w-75" *ngIf="critere?.elimination==true">Oui</button>
+                  </td>
+                  <td>{{critere?.barem}}</td>
+                  <td>
+                    <!-- <td *ngIf="questioncritere[i]==null">
+                    <button href="#addQuestionModal" (click)="getCritereChoiciQuestion(critere.id)"
+                      class="addQuestion btn" data-toggle="modal">
+                      <i class="fa-solid fa-plus" data-toggle="tooltip" title="Modifier"></i>Question</button>
+                  </td>
+                  <td *ngIf="questioncritere[i]!=null">{{questioncritere[i]?.questionNom}}</td>
+                  <td class="action"> -->
+                    <a href="#editCritereModal" class="edit" data-toggle="modal"><i class="material-icons"
+                        data-toggle="tooltip" title="Modifier" (click)="getCritereChoici(critere.id)">&#xE254;</i></a>
+
+                    <a href="#deleteCritereModal" class="delete" data-toggle="modal"><i class="material-icons"
+                        data-toggle="tooltip" title="supprimer" (click)="getCritereChoici(critere.id)">&#xE872;</i></a>
+
+                    <!-- <a class="view" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                        title="Voir">&#xe417;</i></a> -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- <div class="clearfix">
+              <div class="hint-text">
+                Page <b>state.appDataCritere.pageNo+1</b> sur
+                <b>state.appDataCritere?.totalPages</b>
+              </div>
+              <ul class="pagination">
+                <li><a>&laquo;</a></li>
+                <li class="page-item"><a>1</a></li>
+                <li class="page-item"><a>&raquo;</a></li>
+              </ul>
+            </div> -->
           </div>
-          <ul class="pagination">
-            <li><a>&laquo;</a></li>
-            <li class="page-item"><a>1</a></li>
-            <li class="page-item"><a>&raquo;</a></li>
-          </ul>
-        </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="col">
+
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>Les Question </div>
+            <button href="#addQuestionModal" class="orange btn mb-2"
+              data-toggle="modal">
+              <i class="fa-solid fa-plus" data-toggle="tooltip" title="Modifier"></i>
+              Question
+            </button>
+          </div>
+          <div class="table-responsive">
+            <div class="alert alert-primary" role="alert" *ngIf="criteres?.contenu?.length<1">
+              Pas encore de question
+            </div>
+            <table class="table table-striped table-hover">
+              <thead class="entete">
+                <tr>
+                  <!-- <th>
+                    <span class="custom-checkbox">
+                      <input type="checkbox" id="selectAll" />
+                      <label for="selectAll"></label>
+                    </span>
+                  </th> -->
+                  <!-- <th>N°</th> -->
+                  <th>Question</th>
+                  <th>Type</th>
+                  <th>Critere</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let question of questionView;let i= index">
+
+                  <!-- <td>{{critere?.id}}</td> -->
+                  <td>{{question?.questionNom}}</td>
+                  <td>
+                    <button class="btn btn-danger w-75" *ngIf="question?.type=='fermé'">Fermé</button>
+                    <button class="btn btn-success w-75" *ngIf="question?.type=='ouvert'">Ouvert</button>
+                  </td>
+                  <td>
+                    {{question?.critere.critereNom}}
+                  </td>
+                  <td class="action">
+                    <a href="#editQuestionModal" class="edit" data-toggle="modal"><i class="material-icons"
+                        data-toggle="tooltip" title="Modifier" (click)="getQuestionChoici(question?.id)">&#xE254;</i></a>
+
+                    <a href="#deleteQuestionModal" class="delete" data-toggle="modal"><i class="material-icons"
+                        data-toggle="tooltip" title="supprimer" (click)="getQuestionChoici(question?.id)">&#xE872;</i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- <div class="clearfix">
+              <div class="hint-text">
+                Page <b>state.appDataCritere.pageNo+1</b> sur
+                <b>state.appDataCritere?.totalPages</b>
+              </div>
+              <ul class="pagination">
+                <li><a>&laquo;</a></li>
+                <li class="page-item"><a>1</a></li>
+                <li class="page-item"><a>&raquo;</a></li>
+              </ul>
+            </div> -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -185,10 +258,17 @@
           </div>
           <div class="modal-body">
             <div class="modal-body">
+              <div>
+                <label for="critere">Critere</label>
+                <select class="form-control form-select-sm" name="critere" aria-label="Default select example" [(ngModel)]="question.critere">
+                  <!-- <option selected>Selectionner un critere</option> -->
+                  <option [ngValue]="critereselect" *ngFor=" let critereselect of criteres.contenu">{{critereselect?.critereNom}}</option>
+                </select>
+              </div>
               <div class="form-group">
                 <label>Question</label>
                 <input type="text" class="form-control" name="questionNom" [(ngModel)]="question.questionNom"
-                required />
+                  required />
               </div>
               <div *ngIf="addQuestionForm.submitted && !question.questionNom" class="alert alert-danger mt-2">
                 Veuillez saisir la question du critere.
@@ -207,14 +287,15 @@
                       class="btn btn-danger w-100">Fermé</button>
                   </div>
                 </div>
-                <div *ngIf="addQuestionForm.submitted && aucunBoutonSelectionneQuestion" class="alert alert-danger mt-2">
+                <div *ngIf="addQuestionForm.submitted && aucunBoutonSelectionneQuestion"
+                  class="alert alert-danger mt-2">
                   Veuillez sélectionner le type de la question.
                 </div>
               </div>
             </div>
             <div class="modal-footer">
               <input type="button" class="btn btn-default" data-dismiss="modal" value="Fermer" />
-              <input type="submit" class="btn btn-success" value="Add" />
+              <input type="submit" class="btn btn-success" value="Ajouter" />
             </div>
           </div>
         </form>
@@ -241,6 +322,30 @@
           <div class="modal-footer">
             <input type="button" class="btn btn-default" data-dismiss="modal" value="Fermer" />
             <input type="submit" class="btn btn-danger" value="Delete" (click)="DeleteCritere()" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="deleteQuestionModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form>
+          <div class="modal-header">
+            <h4 class="modal-title">Effacer Question</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Etes vous sure de vouloir supprimer cette question?</p>
+            <p class="text-warning">
+              <small>Cette action est irréversible</small>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Fermer" />
+            <input type="submit" class="btn btn-danger" value="Delete" (click)="DeleteQuestion()" />
           </div>
         </form>
       </div>

@@ -68,9 +68,9 @@ export class EntretienDetailsComponent implements OnInit {
   juryNombre: number;
 
   //Fin jury Liste
-  options = [
-    { genre: 'Option 1', selectionne: false },
-    { genre: 'Option 2', selectionne: true },
+  genre = [
+    { genre: 'M' },
+    { genre: 'F' },
   ];
   constructor(
     private entretienService: EntretienService,
@@ -244,7 +244,7 @@ export class EntretienDetailsComponent implements OnInit {
 
   AjouterJury(utilisateur: Utilisateur): void {
     // this.loadingService.isLoading.next(true);
-    if(utilisateur.nom!=null && utilisateur.prenom!=null && utilisateur.email!=null && utilisateur.genre!=null){
+    if (utilisateur.nom != null && utilisateur.prenom != null && utilisateur.email != null && utilisateur.genre != null) {
 
       console.log(utilisateur);
       this.subcriptions.push(
@@ -258,12 +258,20 @@ export class EntretienDetailsComponent implements OnInit {
             console.log(response);
             $('#addJuryModal').modal('hide');
             this.getJurys();
-  
+
           },
           (error: HttpErrorResponse) => {
             console.log(error);
             const errorMsg: string = error.error;
-            if (errorMsg) {
+            if (errorMsg == "email existe") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: 'Email exist déja. Veuillez réessayer avec un autre...',
+                timer: 2000,
+              });
+            }
+            if (errorMsg != "email existe") {
               Swal.fire({
                 icon: 'error',
                 title: 'Erreur',
@@ -271,6 +279,7 @@ export class EntretienDetailsComponent implements OnInit {
                 timer: 2000,
               });
             }
+
           }
         )
       );
@@ -290,9 +299,14 @@ export class EntretienDetailsComponent implements OnInit {
       .UploadPostulant(this.id, this.excel)
       .subscribe((data) => {
         console.log(data);
-        setTimeout(() => {
-          this.getPostulants();
-        }, 20)
+        this.getPostulants();
+        $('#importPostulantModal').modal('hide');
+        Swal.fire({
+          icon: 'success',
+          title: 'Importation reussie',
+          text: 'Postulants importés avec succès',
+          timer: 2000,
+        });
       });
   }
   //Recuperer Postulant Id
@@ -310,6 +324,13 @@ export class EntretienDetailsComponent implements OnInit {
         console.log(data);
       });
     this.getPostulants()
+    Swal.fire({
+      icon: 'success',
+      title: 'suppression reussie',
+      text: 'Postulant supprimé avec succès',
+      timer: 2000,
+    });
+    $('#deletePostulantModal').modal('hide');
   }
   DownloadPostulant() {
     this.postulantService
@@ -329,13 +350,14 @@ export class EntretienDetailsComponent implements OnInit {
       .subscribe((data) => {
         this.getPostulants()
         console.log(data);
-        this.getJurys()
         Swal.fire({
           icon: 'success',
           title: 'Jury supprimé',
           text: 'Le jury supprimé',
           timer: 2000,
         });
+        $('#deleteJuryModal').modal('hide');
+        this.getJurys()
       },
         error => {
           if (error) {

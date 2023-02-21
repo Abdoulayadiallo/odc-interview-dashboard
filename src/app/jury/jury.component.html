@@ -222,23 +222,21 @@
             </div>
             <div class="form-group">
               <label>Genre</label>
-              <input
-                type="text"
-                class="form-control"
-                name="genre"
-                placeholder="genre"
-                required
-                ngModel
-                #nomInput="ngModel"
-              />
+              <select class="form-control form-select-sm" name="critere" aria-label="Default select example" class="form-control" name="genre" ngModel #genreInput="ngModel">
+                <option [ngValue]="genreselect.genre" *ngFor=" let genreselect of genre">{{genreselect.genre}}</option>
+              </select>
             </div>
             <div *ngIf="addjuryForm.submitted && !nomInput" class="alert alert-danger">
               Veuillez entrer le genre du jury.
             </div>
             <div class="form-group">
               <label for="entretien">Entretien</label>
-              <select [(ngModel)]="idEntretien" name="entretien" id="" class="form-select  form-select-lg mb-3 w-100" aria-label=".form-select-lg example">
+              <!-- <select [(ngModel)]="idEntretien" name="entretien" id="" class="form-select  form-select-lg mb-3 w-100" aria-label=".form-select-lg example">
                 <option value="" *ngFor="let entretien of entretiens">{{entretien.entretienNom}}</option>
+              </select> -->
+              <select class="form-control form-select-sm" name="entretien" aria-label="Default select example" [(ngModel)]="idEntretien">
+                <!-- <option selected>Selectionner un critere</option> -->
+                <option [ngValue]="entretien.id" *ngFor="let entretien of entretiens">{{entretien?.entretienNom}}</option>
               </select>
             </div>
           </div>

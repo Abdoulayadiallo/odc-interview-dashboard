@@ -29,4 +29,10 @@ export class QuestionService {
   getOneQuestionByCritere(id:number):Observable<HttpErrorResponse | HttpResponse<any>>{
     return this.http.get<HttpErrorResponse | HttpResponse<any>>(`${this.host}/question/critere/${id}`);
   }
+  getAllQuestionByEntretien(id:number):Observable<HttpErrorResponse | HttpResponse<any>>{
+    return this.http.get<HttpErrorResponse | HttpResponse<any>>(`${this.host}/question/entretien/${id}`);
+  }
+  deleteQuestion(id:number): Observable<HttpErrorResponse | HttpResponse<any>| any> {
+    return this.http.delete(`${this.host}/question/delete/${id}`,{responseType: 'text'});
+  }
 }

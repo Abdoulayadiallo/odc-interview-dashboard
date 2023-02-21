@@ -17,14 +17,14 @@ export class AccountService {
   public loggInUsername!: string;
   public redirectUrl!: string;
   private jwtHelper = new JwtHelperService();
-  public userPicture =`${this.host}/image/user/`;
+  public userPicture = `${this.host}/image/user/`;
   isAuthentificate: boolean;
   constructor(private http: HttpClient) { }
 
   login(utilisateur: Utilisateur): Observable<HttpErrorResponse | HttpResponse<any>> {
     return this.http.post<HttpErrorResponse | HttpResponse<any>>(`${this.host}/utilisateur/login`, utilisateur, { observe: 'response' });
   }
-  addJury(utilisateur: Utilisateur,idEntretien:number): Observable<Utilisateur | HttpErrorResponse> {
+  addJury(utilisateur: Utilisateur, idEntretien: number): Observable<Utilisateur | HttpErrorResponse> {
     return this.http.post<Utilisateur>(`${this.host}/utilisateur/register/${idEntretien}`, utilisateur);
   }
 
@@ -58,13 +58,13 @@ export class AccountService {
       if (this.jwtHelper.decodeToken(this.token).sub != null || '') {
         if (!this.jwtHelper.isTokenExpired(this.token)) {
           this.loggInUsername = this.jwtHelper.decodeToken(this.token).sub;
-          this.isAuthentificate=true
+          this.isAuthentificate = true
           return true;
         }
       }
     } else {
       this.logOut();
-      this.isAuthentificate=false
+      this.isAuthentificate = false
       return false;
     }
   }
@@ -101,16 +101,18 @@ export class AccountService {
         }
       );
   }
-  getAllJury(pageNo:number = 0,pageSize:number = 10,sortBy:string ="",sortDir:string="",keyword:string=""): Observable<JuryResponse> {
+  getAllJury(pageNo: number = 0, pageSize: number = 10, sortBy: string = "", sortDir: string = "", keyword: string = ""): Observable<JuryResponse> {
     return this.http.get<JuryResponse>(`${this.host}/utilisateur/jurylist?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}&keyword=${keyword}`);
   }
   getOneJuryById(juryId: number): Observable<Utilisateur> {
     return this.http.get<Utilisateur>(`${this.host}/utilisateur/${juryId}`);
   }
-  getAllJuryByEntretien(idEntretien:number,pageNo:number = 0,pageSize:number = 10,sortBy:string ="",sortDir:string="",keyword:string=""): Observable<JuryResponse> {
+  getAllJuryByEntretien(idEntretien: number, pageNo: number = 0, pageSize: number = 10, sortBy: string = "", sortDir: string = "", keyword: string = ""): Observable<JuryResponse> {
     return this.http.get<JuryResponse>(`${this.host}/utilisateur/entretien/${idEntretien}?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}&keyword=${keyword}`);
   }
-  deleteJury(id:number): Observable<HttpErrorResponse | HttpResponse<any>> {
-    return this.http.delete<HttpErrorResponse | HttpResponse<any>>(`${this.host}/utilisateur/delete/${id}`);
+  deleteJury(id: number): Observable<HttpErrorResponse | HttpResponse<any> | any> {
+    return this.http.delete(`${this.host}/utilisateur/delete/${id}`, {
+      responseType: 'text'
+    });
   }
 }

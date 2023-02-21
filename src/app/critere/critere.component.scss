@@ -15,3 +15,12 @@
 .delete{
     color: #f44336;
 }
+.orange{
+    background-color: #FF7900;
+    color: #FFF;
+}
+.orange:hover{
+    background-color: #FFF;
+    color: #FF7900;
+    border: #FF7900 1px solid;
+}

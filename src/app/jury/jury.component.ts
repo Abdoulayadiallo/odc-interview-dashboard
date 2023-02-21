@@ -1,13 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Observable, BehaviorSubject, catchError, map, of, startWith, Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
 import { Entretien } from '../Model/entretien';
 import { Entretienresponse } from '../Model/entretienresponse';
 import { JuryResponse } from '../Model/jury-response';
 import { Utilisateur } from '../Model/utilisateur';
 import { AccountService } from '../Service/account.service';
 import { EntretienService } from '../Service/entretien.service';
-
+declare var $:any;
 @Component({
   selector: 'app-jury',
   templateUrl: './jury.component.html',
@@ -41,10 +42,14 @@ export class JuryComponent implements OnInit {
     private entretienService:EntretienService) { }
 
   ngOnInit(): void {
-    this.getJurys()  
+    this.getJurys() 
+    this.getAllEntretien() 
   }
   //Ajout jury
-
+  genre = [
+    { genre: 'M' },
+    { genre: 'F'},
+  ];
   AjouterJury(utilisateur: Utilisateur): void {
     // this.loadingService.isLoading.next(true);
     console.log(utilisateur);
@@ -52,9 +57,8 @@ export class JuryComponent implements OnInit {
       this.juryService.addJury(utilisateur, this.idEntretien).subscribe(
         (response) => {
           console.log(response);
-          setTimeout(()=>{
+          $('#addJuryModal').modal('hide');
             this.getJurys();
-          },20)
         },
         (error: HttpErrorResponse) => {
           console.log(error);
@@ -139,6 +143,15 @@ export class JuryComponent implements OnInit {
         .subscribe((data) => {
           this.getJurys()
           console.log(data);
+        });   
+      $('#deleteJuryModal').modal('hide');
+
+        this.getJurys()
+        Swal.fire({
+          icon: 'success',
+          title: 'Felicitation',
+          text: 'Jury supprimé avec succès',
+          timer: 5000,
         });
     }
 }

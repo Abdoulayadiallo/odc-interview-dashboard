@@ -214,6 +214,14 @@ this.entretienService.deleteEntretien(this.entretienId).subscribe(
   data=>{
     console.log(data)
     this.getEntretien()
+    $('#deleteEntretienModal').modal('hide');
+    Swal.fire({
+      icon: 'success',
+      title: 'Felicitation',
+      text:
+        'Entretien supprimé avec succès',
+      timer: 3000,
+    });
   }
 )
 }
