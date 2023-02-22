@@ -118,6 +118,10 @@ export class SidebarComponent implements OnInit {
     //    "success"
     //  );
   }
+  
+  isLoginPage(): boolean {
+    return this.router.url === '/signin';
+  }
 
 
 

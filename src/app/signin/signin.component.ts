@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
 import { AlertType } from '../Model/alert-type.enum';
 import { Utilisateur } from '../Model/utilisateur';
 import { AccountService } from '../Service/account.service';
@@ -54,6 +55,12 @@ export class SigninComponent implements OnInit{
         },
         error => {
           console.log(error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: 'Email ou mots de passe incorrectes. Veuillez réessayer avec un autre...',
+            timer: 2000,
+          });
           this.loadingService.isLoading.next(false);
           this.alerteService.showAlert('Email ou mots de passe incorrecte',AlertType.DANGER)
         }

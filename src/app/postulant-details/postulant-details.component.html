@@ -60,9 +60,12 @@
               <td>{{questionCritere[i]?.questionNom}}</td>
               <td>{{note?.point}}</td>
               <td>{{note?.commentaire}}</td>
-              <td>{{note?.critere.elimination}}</td>
+              <td>
+                <button class="btn btn-danger w-100" *ngIf="note?.critere.elimination==false">Non</button>
+                <button class="btn btn-success w-100" *ngIf="note?.critere.elimination==true">Oui</button>
+              </td>
               <td>{{note?.critere.barem}}</td>
-       
+
             </tr>
           </table>
         </div>

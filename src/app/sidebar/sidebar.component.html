@@ -1,4 +1,4 @@
-<div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
+<div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''" *ngIf="!isLoginPage()">
     <div class="logo-container">
         <button class="logo" [ngClass]="hidded ? 'logo-hidded': ''" (click)="toggleCollapse()"><img class="logoI"
                 src="assets/Logo sans ecrit.png"></button>

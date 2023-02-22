@@ -115,10 +115,10 @@ export class CritereComponent implements OnInit {
     }
     this.baremSaisi = !!this.critere.barem;
     this.nomcritereSaisi = !!this.critere.critereNom;
-    this.critere = new Critere
+    //this.critere = new Critere
     this.clickedTrue = false;
     this.clickedFalse = false;
-    this.aucunBoutonSelectionne = true;
+    this.aucunBoutonSelectionne = null;
   }
   // Recuperer le critere d'elimination
   OnElimination(elimination: boolean) {
@@ -149,18 +149,18 @@ export class CritereComponent implements OnInit {
   getAllcritere() {
     this.critereService.getAllCritereByEntretien(this.idEntretien).subscribe(data => {
       this.criteres = data
-      for (let i = 0; i < this.criteres.contenu.length; i++) {
-        if (this.criteres.contenu[i].id == i + 1) {
-          if (this.critere.id = i + 1) {
-            this.questionService.getQuestionBycritere(this.criteres.contenu[i].id).subscribe(response => {
-              this.qcritere = response[0]
-              console.log(this.qcritere)
-              this.questioncritere.push(response[0])
-              console.log(this.questioncritere)
-            })
-          }
-        }
-      }
+      // for (let i = 0; i < this.criteres.contenu.length; i++) {
+      //   if (this.criteres.contenu[i].id == i + 1) {
+      //     if (this.critere.id = i + 1) {
+      //       this.questionService.getQuestionBycritere(this.criteres.contenu[i].id).subscribe(response => {
+      //         this.qcritere = response[0]
+      //         console.log(this.qcritere)
+      //         this.questioncritere.push(response[0])
+      //         console.log(this.questioncritere)
+      //       })
+      //     }
+      //   }
+      // }
     })
   }
   getEntretienById() {

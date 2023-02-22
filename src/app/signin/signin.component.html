@@ -39,9 +39,9 @@
                         <input type="submit" value="Connecter" [disabled]="loginForm.invalid">
                       </div>
                       <div class="passf">
-                        <button (click)="!isForgetpass ? isForgetpass = true : isForgetpass=false">
+                        <a class="passbtn btn w-100 text-center my-2 text-warning border border-warning"  (click)="!isForgetpass ? isForgetpass = true : isForgetpass=false">
                           Mot de passe oublié
-                        </button>
+                        </a>
                       </div>
 
                     </div>
