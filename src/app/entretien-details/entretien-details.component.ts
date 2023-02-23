@@ -58,7 +58,7 @@ export class EntretienDetailsComponent implements OnInit {
   juryId: number
   //Jury ajout
   juryAjout: Utilisateur = new Utilisateur();
-
+  isSelected=false
   private currentPageSubjectJury = new BehaviorSubject<number>(0);
   responseSubjectJury = new BehaviorSubject<JuryResponse>(this.juryResponse);
   currentPageJury$ = this.currentPageSubject.asObservable();
