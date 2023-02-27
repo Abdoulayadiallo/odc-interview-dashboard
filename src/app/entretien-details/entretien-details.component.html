@@ -12,11 +12,11 @@
             </tr>
             <tr>
               <th>Date debut</th>
-              <td>{{ entretien.dateDebut }}</td>
+              <td>{{ entretien.dateDebut | date:"dd/MM/YYYY"}}</td>
             </tr>
             <tr>
               <th>Date Fin</th>
-              <td>{{ entretien.dateFin }}</td>
+              <td>{{ entretien.dateFin | date:"dd/MM/YYYY"}}</td>
             </tr>
             <tr>
               <th>Status</th>
@@ -143,7 +143,7 @@
                   <td scope="col">Prenom</td>
                   <td scope="col">Email</td>
                   <td scope="col">Status</td>
-                  <td scope="col">Date de Naissance</td>
+                  <!-- <td scope="col">Date de Naissance</td> -->
                   <td scope="col">Contact</td>
                   <td scope="col">Actions</td>
                 </tr>
@@ -489,9 +489,10 @@
                 required
                 ngModel
                 #nomInput="ngModel"
+                pattern="^[a-zA-Z0-9\s]*$" 
               />
               <div *ngIf="addjuryForm.submitted && nomInput.invalid" class="alert alert-danger">
-                Veuillez entrer le nom du jury.
+                Veuillez saisir un nom de jury valide.
               </div>
             </div>
             <div class="form-group">
@@ -503,10 +504,11 @@
                 placeholder="prenom"
                 required
                 ngModel
+                pattern="^[a-zA-Z0-9\s]*$" 
                 #prenomInput="ngModel"
               />
               <div *ngIf="addjuryForm.submitted && prenomInput.invalid" class="alert alert-danger">
-                Veuillez entrer le prenom du jury.
+                Veuillez saisir un prenom de jury valide.
               </div>
             </div>
             <div class="form-group">
@@ -521,7 +523,7 @@
                 #emailInput="ngModel"
               />
               <div *ngIf="addjuryForm.submitted && emailInput.invalid" class="alert alert-danger">
-                Veuillez entrer l'email du jury.
+                Veuillez saisir un email de jury valide.
               </div>
             </div>
             <div class="form-group">
@@ -530,13 +532,14 @@
                 type="tel"
                 class="form-control"
                 name="numero"
-                placeholder="numero"
+                placeholder="+22370000000"
                 required
                 ngModel
+                pattern="^\+223[5-9][0-9]{7}$"
                 #numeroInput="ngModel"
               />
               <div *ngIf="addjuryForm.submitted && numeroInput.invalid" class="alert alert-danger">
-                Veuillez entrer le numero du jury.
+                Veuillez saisir un numero de jury falide.
               </div>
             </div>
             <div class="form-group">
@@ -546,7 +549,7 @@
                 <option [ngValue]="genreselect.genre[0]"  [selected]="genreselect.genre" *ngFor=" let genreselect of genre">{{genreselect.genre}}</option>
               </select>
               <div *ngIf="addjuryForm.submitted && genreInput.invalid" class="alert alert-danger">
-                Veuillez entrer le genre du jury.
+                Veuillez selectionner le genre du jury.
               </div>
             </div>
           </div>

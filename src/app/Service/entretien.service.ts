@@ -28,6 +28,9 @@ export class EntretienService {
   getAllEntretien(keyword:string="",pageNo:number = 0,pageSize:number = 10,sortBy:string ="",sortDir:string="",username:string=""): Observable<Entretienresponse> {
     return this.http.get<Entretienresponse>(`${this.host}/entretien/list?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}$keyword=${keyword}$username=${username}`);
   }
+  getEntretienByStatus(status:string): Observable<any> {
+    return this.http.get<any>(`${this.host}/entretien/etat/${status}`);
+  }
   getAllEntretienNombre(): Observable<Entretienresponse> {
     return this.http.get<Entretienresponse>(`${this.host}/entretien/list`);
   }

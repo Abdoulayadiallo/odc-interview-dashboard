@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Observable, BehaviorSubject, catchError, map, of, startWith, Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Entretien } from '../Model/entretien';
@@ -16,6 +17,7 @@ declare var $:any;
 })
 export class JuryComponent implements OnInit {
   //Jury Liste
+  @ViewChild('addjuryForm') addjuryForm: NgForm;
   juryResponse: JuryResponse = new JuryResponse();
   juryState$!: Observable<{
     appStateJury: string;
@@ -52,19 +54,29 @@ export class JuryComponent implements OnInit {
   ];
   AjouterJury(utilisateur: Utilisateur): void {
     // this.loadingService.isLoading.next(true);
-    console.log(utilisateur);
-    this.subcriptions.push(
-      this.juryService.addJury(utilisateur, this.idEntretien).subscribe(
-        (response) => {
-          console.log(response);
-          $('#addJuryModal').modal('hide');
-            this.getJurys();
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error);
-        }
-      )
-    );
+    if(this.addjuryForm.valid){
+
+      console.log(utilisateur);
+      this.subcriptions.push(
+        this.juryService.addJury(utilisateur, this.idEntretien).subscribe(
+          (response) => {
+            console.log(response);
+            Swal.fire({
+              icon: 'success',
+              title: 'Felicitation',
+              text: 'jury ajouté',
+              timer: 5000,
+            });
+            $('#addJuryModal').modal('hide');
+              this.getJurys();
+            
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error);
+          }
+        )
+      );
+    }
   }
 
   //Jury liste

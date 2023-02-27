@@ -6,6 +6,7 @@ import { Entretien } from '../Model/entretien';
 import { Entretienresponse } from '../Model/entretienresponse';
 import { AccountService } from '../Service/account.service';
 import { EntretienService } from '../Service/entretien.service';
+import { PostulantService } from '../Service/postulant.service';
 declare var $: any;
 
 @Component({
@@ -16,6 +17,9 @@ declare var $: any;
 export class EntretienComponent implements OnInit {
 
 //Entretien Variable
+encour:number
+termine:number
+avenir:number
 entretien: Entretien = new Entretien();
 entretienUpdate: Entretien = new Entretien()
 entretienResponse!: Entretienresponse;
@@ -45,11 +49,15 @@ profilePictureChange: boolean;
 
 constructor(
   private accountService: AccountService,
-  private entretienService: EntretienService
+  private entretienService: EntretienService,
+  private postulantService: PostulantService,
 ) {}
 
 ngOnInit(): void {
   this.getEntretien()
+  this.getEntretienByStatus("en cour")
+  this.getEntretienByStatus("termine")
+  this.getEntretienByStatus("avenir")
 }
 getEntretien(){
 
@@ -231,6 +239,29 @@ onProfilePictureSelected(event: any): void {
   this.entretienPicture = event.target.files[0] as File;
   console.log(this.entretienPicture);
   this.profilePictureChange = true;
+}
+
+getEntretienByStatus(status:string){
+  if(status=="en cour"){
+    this.entretienService.getEntretienByStatus(status).subscribe(data=>{
+      console.log(this.encour)
+      this.encour=data.length
+    })
+  }
+  else if(status=="termine"){
+    this.entretienService.getEntretienByStatus(status).subscribe(data=>{
+      this.termine=data.length
+      console.log(this.termine)
+
+    })
+  }
+  else()=>{
+    this.entretienService.getEntretienByStatus(status).subscribe(data=>{
+      this.avenir=data.length
+      console.log(this.avenir)
+
+    })
+  }
 }
 
 }

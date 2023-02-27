@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -48,7 +48,24 @@ export class PostulantService {
       responseType: 'blob'
     });
   }
+  DownloadAllPostulant(): Observable<Blob> {
+    return this.http.get(`${this.host}/postulant/download`,{
+      responseType: 'blob'
+    });
+  }
   getAllPostulantByJury(idJury: number, pageNo: number = 0, pageSize: number = 10, sortBy: string = "", sortDir: string = "", keyword: string = ""): Observable<Postulantresponse> {
     return this.http.get<Postulantresponse>(`${this.host}/postulant/list/utilisateur/${idJury}?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}&keyword=${keyword}`);
+  }
+  accepterPostulant(idPostulant: number, commentaireFinal: string) {
+    const body = JSON.stringify(commentaireFinal).replace(/"/g, '');
+    return this.http.post(`${this.host}/postulant/accepter/${idPostulant}`, body);
+  }
+  RefuserPostulant(idPostulant: number, commentaireFinal: string) {
+    const body = JSON.stringify(commentaireFinal).replace(/"/g, '');
+    return this.http.post(`${this.host}/postulant/refuser/${idPostulant}`, body);
+  }
+  MettreEnAttentePostulant(idPostulant: number, commentaireFinal: string) {
+    const body = JSON.stringify(commentaireFinal).replace(/"/g, '');
+    return this.http.post(`${this.host}/postulant/enattente/${idPostulant}`, body);
   }
 }

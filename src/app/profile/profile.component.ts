@@ -14,16 +14,22 @@ export class ProfileComponent implements OnInit {
   profilePicture: File;
   profilePictureChange: boolean;
   private subscriptions: Subscription[] = [];
-  utilisateur: Utilisateur;
+  utilisateur: Utilisateur = new Utilisateur;
   userpicture: string;
   username: string;
-  constructor(private accountService: AccountService,
-  ) { }
+  constructor(private accountService: AccountService) { }
 
   ngOnInit(): void {
-    this.userpicture = this.accountService.userPicture;
-    this.getUserInfo(this.accountService?.loggInUsername);
-    this.username=this.accountService.loggInUsername;
+    // if (this.accountService && this.accountService.userPicture) {
+      this.userpicture = this.accountService.userPicture;
+      setTimeout(()=>{
+        this.getUserInfo(this.accountService.loggInUsername);
+
+      },5000)
+      console.log(this.accountService.loggInUsername)
+      this.username=this.accountService.loggInUsername;
+    // }
+   // this.userpicture = this.accountService?.userPicture;
   }
   getUserInfo(username: string): void {
     this.subscriptions.push(

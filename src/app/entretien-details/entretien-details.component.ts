@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   Observable,
@@ -19,6 +19,7 @@ import { EntretienService } from '../Service/entretien.service';
 import { PostulantService } from '../Service/postulant.service';
 import { saveAs } from 'file-saver';
 import Swal from 'sweetalert2';
+import { NgForm } from '@angular/forms';
 declare var $: any;
 
 
@@ -28,6 +29,7 @@ declare var $: any;
   styleUrls: ['./entretien-details.component.scss'],
 })
 export class EntretienDetailsComponent implements OnInit {
+  @ViewChild('addjuryForm') addjuryForm: NgForm;
   id: any;
   entretien: Entretien = new Entretien();
   selectedPage: number;
@@ -244,7 +246,7 @@ export class EntretienDetailsComponent implements OnInit {
 
   AjouterJury(utilisateur: Utilisateur): void {
     // this.loadingService.isLoading.next(true);
-    if (utilisateur.nom != null && utilisateur.prenom != null && utilisateur.email != null && utilisateur.genre != null) {
+    if (this.addjuryForm.valid) {
 
       console.log(utilisateur);
       this.subcriptions.push(

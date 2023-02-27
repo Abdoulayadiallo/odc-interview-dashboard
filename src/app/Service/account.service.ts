@@ -54,17 +54,14 @@ export class AccountService {
 
   isLoggedIn(): boolean | any {
     this.loadToken();
-    if (this.token != null && this.token !== '') {
-      if (this.jwtHelper.decodeToken(this.token).sub != null || '') {
-        if (!this.jwtHelper.isTokenExpired(this.token)) {
-          this.loggInUsername = this.jwtHelper.decodeToken(this.token).sub;
-          this.isAuthentificate = true
-          return true;
-        }
-      }
+    // 
+    if (this.jwtHelper.decodeToken(this.token) && typeof this.jwtHelper.decodeToken(this.token).sub !== 'undefined') {
+      // la propriété sub existe et n'est pas undefined
+      this.loggInUsername = this.jwtHelper.decodeToken(this.token).sub;
+      this.isAuthentificate = true;
+      return true;
     } else {
-      this.logOut();
-      this.isAuthentificate = false
+      // la propriété sub n'existe pas ou est undefined
       return false;
     }
   }

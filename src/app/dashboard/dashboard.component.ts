@@ -24,6 +24,7 @@ declare var $: any;
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+  pattern = /^[a-zA-Z0-9\s]*$/;
   entretienPicture: File;
   private subscriptions: Subscription[] = [];
   utilisateur: Utilisateur = new Utilisateur();
@@ -189,7 +190,10 @@ export class DashboardComponent implements OnInit {
       this.entretien.description != '' &&
       this.entretien.dateDebut != null &&
       this.entretien.dateFin != null &&
-      this.entretienPicture != null
+      this.entretienPicture != null && 
+      this.pattern.test(this.entretien.entretienNom) &&
+      this.pattern.test(this.entretien.description) 
+
     ) {
       this.entretienService.AjouterEntretien(this.entretien).subscribe(
         (response) => {
@@ -254,7 +258,9 @@ export class DashboardComponent implements OnInit {
       this.entretienUpdate.entretienNom != '' &&
       this.entretienUpdate.description != '' &&
       this.entretienUpdate.dateDebut != null &&
-      this.entretienUpdate.dateFin != null
+      this.entretienUpdate.dateFin != null &&
+      this.pattern.test(this.entretienUpdate.entretienNom) &&
+      this.pattern.test(this.entretienUpdate.description) 
     ) {
       this.subscriptions.push(
         this.entretienService

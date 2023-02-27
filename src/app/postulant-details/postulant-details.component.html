@@ -1,5 +1,19 @@
 <div class="container-fluid">
   <div class="row">
+    <div class="col-sm-12 d-flex justify-content-between">
+      <div class="card">
+        <div class="card-body">
+          <button type="button" class="btn btn-success w-75 m-2"  href="#AccepterPostulantModal" data-toggle="modal">Valider</button>
+          <button type="button" class="btn btn-warning w-75 m-2" href="#EnattentePostulantModal" data-toggle="modal">En attente</button>
+          <button type="button" class="btn btn-danger w-75 m-2" href="#RefuserPostulantModal" data-toggle="modal">Refuser</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+
+    </div>
+  </div>
+  <div class="row">
     <div class="col-6">
       <div class="card">
         <div class="card-body">
@@ -7,23 +21,23 @@
           <table class="table table-borderless">
             <tr>
               <th>Nom</th>
-              <td>{{postulant.nom}}</td>
+              <td>{{ postulant.nom }}</td>
             </tr>
             <tr>
               <th>Prenom</th>
-              <td>{{postulant.prenom}}</td>
+              <td>{{ postulant.prenom }}</td>
             </tr>
             <tr>
               <th>Email</th>
-              <td>{{postulant.email}}</td>
+              <td>{{ postulant.email }}</td>
             </tr>
             <tr>
               <th>Numero</th>
-              <td>{{postulant.numero}}</td>
+              <td>{{ postulant.numero }}</td>
             </tr>
             <tr>
               <th>Note</th>
-              <td>{{postulant.noteFinal}}</td>
+              <td>{{ postulant.noteFinal }}</td>
             </tr>
             <tr>
               <th>Jury</th>
@@ -31,11 +45,11 @@
             </tr>
             <tr>
               <th>Entretien</th>
-              <td>{{postulant?.entretien?.entretienNom}}</td>
+              <td>{{ postulant?.entretien?.entretienNom }}</td>
             </tr>
             <tr>
               <th>Commentaire Final</th>
-              <td>{{postulant?.commentaireFinal}}</td>
+              <td>{{ postulant?.commentaireFinal }}</td>
             </tr>
           </table>
         </div>
@@ -56,19 +70,121 @@
               </tr>
             </thead>
 
-            <tr *ngFor="let note of notePostulant,let i = index">
-              <td>{{questionCritere[i]?.questionNom}}</td>
-              <td>{{note?.point}}</td>
-              <td>{{note?.commentaire}}</td>
+            <tr *ngFor="let note of notePostulant; let i = index">
+              <td>{{ questionCritere[i]?.questionNom }}</td>
+              <td>{{ note?.point }}</td>
+              <td>{{ note?.commentaire }}</td>
               <td>
-                <button class="btn btn-danger w-100" *ngIf="note?.critere.elimination==false">Non</button>
-                <button class="btn btn-success w-100" *ngIf="note?.critere.elimination==true">Oui</button>
+                <button
+                  class="btn btn-danger w-100"
+                  *ngIf="note?.critere.elimination == false"
+                >
+                  Non
+                </button>
+                <button
+                  class="btn btn-success w-100"
+                  *ngIf="note?.critere.elimination == true"
+                >
+                  Oui
+                </button>
               </td>
-              <td>{{note?.critere.barem}}</td>
-
+              <td>{{ note?.critere.barem }}</td>
             </tr>
           </table>
         </div>
+      </div>
+    </div>
+  </div>
+   <!-- Accepter Postulant Modal HTML -->
+   <div id="AccepterPostulantModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form #AccepterPostulantForm="ngForm" (ngSubmit)="AccepterPostulant()">
+          <div class="modal-header">
+            <h4 class="modal-title text-orange">Valider Postulant</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Commentaire final</label>
+              <input type="text" class="form-control" name="commentaireFinal" placeholder="Un etudiant brillant" pattern="^[a-zA-Z0-9\s]*$" [(ngModel)]="commentaireFinal" required />
+            </div>
+            <div *ngIf="AccepterPostulantForm.submitted && !commentaireFinal" class="alert alert-danger">
+              Veuillez donner un commentaire final.
+            </div>
+            <div *ngIf="AccepterPostulantForm.submitted && AccepterPostulantForm.controls['commentaireFinal'].errors['pattern']" class="alert alert-danger">
+              Veuillez donner un commentaire valide.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Fermer" />
+            <input type="submit" class="btn btn-info" value="Save" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+   <!-- Refuser Postulant Modal HTML -->
+   <div id="RefuserPostulantModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form #RefuserPostulantForm="ngForm" (ngSubmit)="RefuserPostulant()">
+          <div class="modal-header">
+            <h4 class="modal-title text-orange">Refuser Postulant</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Commentaire final</label>
+              <input type="text" class="form-control" name="commentaireFinal" placeholder="Un etudiant brillant" [(ngModel)]="commentaireFinal" pattern="^[a-zA-Z0-9\s]*$"  required />
+            </div>
+            <div *ngIf="RefuserPostulantForm.submitted && !commentaireFinal" class="alert alert-danger">
+              Veuillez donner un commentaire final.
+            </div>
+            <div *ngIf="RefuserPostulantForm.submitted && RefuserPostulantForm.controls['commentaireFinal'].errors['pattern']" class="alert alert-danger">
+              Veuillez donner un commentaire valide.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Fermer" />
+            <input type="submit" class="btn btn-info" value="Save" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+   <!-- En attente Postulant Modal HTML -->
+   <div id="EnattentePostulantModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form #EnattentePostulantForm="ngForm" (ngSubmit)="EnAttentePostulant()">
+          <div class="modal-header">
+            <h4 class="modal-title text-orange">Mettre en attente postulant</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Commentaire final</label>
+              <input type="text" class="form-control" name="commentaireFinal" placeholder="Un etudiant brillant" [(ngModel)]="commentaireFinal" required />
+            </div>
+            <div *ngIf="EnattentePostulantForm.submitted && !commentaireFinal" class="alert alert-danger">
+              Veuillez donner un commentaire final.
+            </div>
+            <div *ngIf="EnattentePostulantForm.submitted && EnattentePostulantForm.controls['commentaireFinal'].errors['pattern']" class="alert alert-danger">
+              Veuillez donner un commentaire valide.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Fermer" />
+            <input type="submit" class="btn btn-info" value="Save" />
+          </div>
+        </form>
       </div>
     </div>
   </div>

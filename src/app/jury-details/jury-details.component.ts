@@ -8,6 +8,7 @@ import {
   startWith,
   catchError,
   of,
+  lastValueFrom,
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Postulantresponse } from '../Model/postulantresponse';
@@ -42,27 +43,29 @@ export class JuryDetailsComponent implements OnInit {
   jurySelect: Utilisateur;
   usernameJury: any;
   postulantNoteNbre: number;
-  host=environment.host
+  host = environment.host;
   imagePlace: string;
   constructor(
     private route: ActivatedRoute,
     private accountService: AccountService,
     private postulantService: PostulantService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.imagePlace=this.accountService.userPicture
+    this.imagePlace = this.accountService.userPicture;
     this.usernameJury = this.route.snapshot.params['username'];
-    this.getJuryById();
-    setTimeout(()=>{
+    this.getJuryById().then(() => {
       this.getPostulantParJury();
-      this.getPostulantNote()
-    },1000)
-  }
-  getJuryById() {
-    this.accountService.getOneJuryById(this.usernameJury).subscribe((data) => {
-      this.jury = data;
+      this.getPostulantNote();
     });
+  }
+  async getJuryById(): Promise<void>{
+    try {
+      const data = await lastValueFrom(this.accountService.getOneJuryById(this.usernameJury));
+      this.jury = data;
+    } catch (error) {
+      console.error(error);
+    }
   }
   getPostulantParJury() {
     this.postulantState$ = this.postulantService
@@ -134,11 +137,11 @@ export class JuryDetailsComponent implements OnInit {
     console.log(this.postulantId);
   }
   //get Postulant note par jury
-  getPostulantNote(){
-    this.postulantService.getAllPostulantByJury(this.jury.id).subscribe(
-      data=>{
-        this.postulantNoteNbre=data.totalElements
-      }
-    )
+  getPostulantNote() {
+    this.postulantService
+      .getAllPostulantByJury(this.jury.id)
+      .subscribe((data) => {
+        this.postulantNoteNbre = data.totalElements;
+      });
   }
 }

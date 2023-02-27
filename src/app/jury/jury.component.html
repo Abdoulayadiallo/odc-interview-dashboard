@@ -128,7 +128,7 @@
                 <a
                   class="view"
                   data-toggle="modal"
-                  [routerLink]="['/jury-details', jury.id]"
+                  [routerLink]="['/jury-details', jury.username]"
                   ><i
                     class="material-icons"
                     data-toggle="tooltip"
@@ -169,11 +169,12 @@
                 placeholder="nom"
                 required
                 ngModel
+                pattern="^[a-zA-Z0-9\s]*$" 
                 #nomInput="ngModel"
               />
             </div>
-            <div *ngIf="addjuryForm.submitted && !nomInput" class="alert alert-danger">
-              Veuillez entrer le nom du jury.
+            <div *ngIf="addjuryForm.submitted && nomInput.invalid" class="alert alert-danger">
+              Veuillez saisir un nom de jury valide.
             </div>
             <div class="form-group">
               <label>Prenom</label>
@@ -184,11 +185,12 @@
                 placeholder="prenom"
                 required
                 ngModel
+                pattern="^[a-zA-Z0-9\s]*$" 
                 #prenomInput="ngModel"
               />
             </div>
-            <div *ngIf="addjuryForm.submitted && !prenomInput" class="alert alert-danger">
-              Veuillez entrer le prenom du jury.
+            <div *ngIf="addjuryForm.submitted && prenomInput.invalid" class="alert alert-danger">
+              Veuillez saisir un prenom de jury valide.
             </div>
             <div class="form-group">
               <label>Email</label>
@@ -202,7 +204,7 @@
                 #emailInput="ngModel"
               />
             </div>
-            <div *ngIf="addjuryForm.submitted && !emailInput" class="alert alert-danger">
+            <div *ngIf="addjuryForm.submitted && emailInput.invalid" class="alert alert-danger">
               Veuillez entrer le email du jury.
             </div>
             <div class="form-group">
@@ -214,10 +216,11 @@
                 placeholder="numero"
                 required
                 ngModel
+                pattern="^\+223[5-9][0-9]{7}$"
                 #numeroInput="ngModel"
               />
-              <div *ngIf="addjuryForm.submitted && !numeroInput" class="alert alert-danger">
-                Veuillez entrer le numero du jury.
+              <div *ngIf="addjuryForm.submitted && numeroInput.invalid" class="alert alert-danger">
+                Veuillez saisir un numero de jury valide.
               </div>
             </div>
             <div class="form-group">
@@ -226,18 +229,21 @@
                 <option [ngValue]="genreselect.genre" *ngFor=" let genreselect of genre">{{genreselect.genre}}</option>
               </select>
             </div>
-            <div *ngIf="addjuryForm.submitted && !nomInput" class="alert alert-danger">
-              Veuillez entrer le genre du jury.
+            <div *ngIf="addjuryForm.submitted && genreInput.invalid" class="alert alert-danger">
+              Veuillez selectionner le genre du jury.
             </div>
             <div class="form-group">
               <label for="entretien">Entretien</label>
               <!-- <select [(ngModel)]="idEntretien" name="entretien" id="" class="form-select  form-select-lg mb-3 w-100" aria-label=".form-select-lg example">
                 <option value="" *ngFor="let entretien of entretiens">{{entretien.entretienNom}}</option>
               </select> -->
-              <select class="form-control form-select-sm" name="entretien" aria-label="Default select example" [(ngModel)]="idEntretien">
+              <select class="form-control form-select-sm" name="entretien" aria-label="Default select example" [(ngModel)]="idEntretien" #entretienInput="ngModel">
                 <!-- <option selected>Selectionner un critere</option> -->
                 <option [ngValue]="entretien.id" *ngFor="let entretien of entretiens">{{entretien?.entretienNom}}</option>
               </select>
+            </div>
+            <div *ngIf="addjuryForm.submitted && entretienInput.invalid" class="alert alert-danger">
+              Veuillez selectionner l'entretien du jury.
             </div>
           </div>
           <div class="modal-footer">
@@ -247,7 +253,7 @@
               data-dismiss="modal"
               value="Fermer"
             />
-            <input type="submit" class="btn btn add" value="Add" />
+            <input type="submit" class="btn btn add orange" value="Ajouter" />
           </div>
         </form>
       </div>

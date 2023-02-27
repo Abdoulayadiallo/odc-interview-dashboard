@@ -9,7 +9,7 @@
         </button>
     </div>
     <ul class="sidenav-nav">
-        <li class="sidenav-nav-item">
+        <!-- <li class="sidenav-nav-item">
             <form>
                 <div class="input-group" *ngIf="collapsed && hidded">
                     <input class="form-control py-2 border-right-0 border" type="search" value="search"
@@ -24,7 +24,7 @@
                     <i class="fa fa-search sidenav-link-icon"></i>
                 </span>
             </div>
-        </li>
+        </li> -->
 
         <li class="sidenav-nav-item" *ngFor="let data of navData">
             <a class="sidenav-nav-link" [routerLink]="[data.routeLink]" routerLinkActive="active"

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, startWith, Subscription } from 'rxjs';
 import { Postulantresponse } from '../Model/postulantresponse';
 import { PostulantService } from '../Service/postulant.service';
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-postulant',
   templateUrl: './postulant.component.html',
@@ -129,10 +129,11 @@ export class PostulantComponent implements OnInit {
       });
       this.gotToPage()
   }
-  DownloadPostulant() {
-    // this.postulantService
-    //   .DownloadPostulant(this.id)
-    //   .subscribe((blob) => saveAs(blob, this.entretien?.entretienNom));
-  }
+//Telecharger tous les postulants
+DownloadAllPostulant() {
+  this.postulantService
+    .DownloadAllPostulant()
+    .subscribe((blob) => saveAs(blob, "tous_les_postulants"));
+}
 
 }

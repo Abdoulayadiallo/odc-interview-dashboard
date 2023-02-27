@@ -270,17 +270,23 @@
             </div>
             <div class="form-group">
               <label>Nom</label>
-              <input type="text" class="form-control" name="entretienNom" [(ngModel)]="entretien.entretienNom" required />
+              <input type="text" class="form-control" name="entretienNom" [(ngModel)]="entretien.entretienNom" pattern="^[a-zA-Z0-9\s]*$"  required />
             </div>
             <div *ngIf="addEntretienForm.submitted && !entretienNomSaisi" class="alert alert-danger">
               Veuillez saisir le nom de l'entretien.
             </div>
+            <div *ngIf="addEntretienForm.submitted && addEntretienForm.controls['entretienNom'].errors['pattern']" class="alert alert-danger">
+              Veuillez donner un nom d'entretien valide.
+            </div>
             <div class="form-group">
               <label>Description</label>
-              <textarea class="form-control" name="description" [(ngModel)]="entretien.description" required></textarea>
+              <textarea class="form-control" name="description" [(ngModel)]="entretien.description" pattern="^[a-zA-Z0-9\s]*$"  required></textarea>
             </div>
             <div *ngIf="addEntretienForm.submitted && !entretien.description" class="alert alert-danger">
               Veuillez donner la description de l'entretien.
+            </div>
+            <div *ngIf="addEntretienForm.submitted && addEntretienForm.controls['description'].errors['pattern']" class="alert alert-danger">
+              Veuillez donner une description d'entretien valide.
             </div>
             <div class="form-group">
               <label>Date Debut</label>
@@ -328,24 +334,30 @@
             </div>
             <div class="form-group">
               <label>Nom</label>
-              <input type="text" class="form-control" name="entretienNom" [(ngModel)]="entretienUpdate.entretienNom" required />
+              <input type="text" class="form-control" name="entretienNom" [(ngModel)]="entretienUpdate.entretienNom" pattern="^[a-zA-Z0-9\s]*$"  required />
             </div>
             <div *ngIf="editEntretienForm.submitted && !entretienUpdate.entretienNom" class="alert alert-danger">
               Veuillez saisir le nom de l'entretien.
             </div>
+            <div *ngIf="editEntretienForm.submitted && editEntretienForm.controls['entretienNom'].errors['pattern']" class="alert alert-danger">
+              Veuillez donner un nom d'entretien valide.
+            </div>
             <div class="form-group">
               <label>Description</label>
-              <textarea class="form-control" name="description" [(ngModel)]="entretienUpdate.description" required></textarea>
+              <textarea class="form-control" name="description" [(ngModel)]="entretienUpdate.description" pattern="^[a-zA-Z0-9\s]*$"  required></textarea>
             </div>
             <div *ngIf="editEntretienForm.submitted && !entretienUpdate.description" class="alert alert-danger">
               Veuillez saisir la description de l'entretien.
+            </div>
+            <div *ngIf="editEntretienForm.submitted && editEntretienForm.controls['description'].errors['pattern']" class="alert alert-danger">
+              Veuillez donner une description d'entretien valide.
             </div>
             <div class="form-group">
               <label>Date Debut</label>
               <input type="date" class="form-control" name="dateDebut" [(ngModel)]="entretienUpdate.dateDebut" required />
             </div>
             <div *ngIf="editEntretienForm.submitted && !entretienUpdate.dateDebut" class="alert alert-danger">
-              Veuillez saisir la date de ebut de l'entretien.
+              Veuillez saisir la date de debut de l'entretien.
             </div>
             <div class="form-group">
               <label>Date Fin</label>

@@ -24,19 +24,19 @@ export class CacheInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
-    if (req.url.includes(`${this.host}/user/resetPassword/`)) {
+    if (req.url.includes(`${this.host}/utilisateur/resetPassword/`)) {
       return next.handle(req);
     }
 
-    if (req.url.includes(`${this.host}/user/register`)) {
+    if (req.url.includes(`${this.host}/utilisateur/register`)) {
       return next.handle(req);
     }
 
-    if (req.url.includes(`${this.host}/user/login`)) {
+    if (req.url.includes(`${this.host}/utilisateur/login`)) {
       return next.handle(req);
     }
 
-    if (req.url.includes(`${this.host}/user/findByUsername/`)) {
+    if (req.url.includes(`${this.host}/utilisateur/findByUsername/`)) {
       return next.handle(req);
     }
 

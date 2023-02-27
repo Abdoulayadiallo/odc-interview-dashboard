@@ -11,33 +11,26 @@ import { AccountService } from '../Service/account.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private accountService: AccountService) { }
+  constructor(private accountService: AccountService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    if (req.url.includes(`${this.accountService.host}/user/login`)) {
+    if (req.url.includes(`${this.accountService.host}/utilisateur/login`)) {
       return next.handle(req);
     }
 
-    if (req.url.includes(`${this.accountService.host}/user/register`)) {
+    if (req.url.includes(`${this.accountService.host}/utilisateur/register`)) {
       return next.handle(req);
     }
 
-    if (req.url.includes(`${this.accountService.host}/user/resetPassword/`)) {
+    if (req.url.includes(`${this.accountService.host}/utilisateur/resetPassword/`)) {
       return next.handle(req);
     }
 
-    // if (req.url.includes('https://maps.googleapis.com/')) {
-    //   return next.handle(req);
-    // }
     this.accountService.loadToken();
     const token = this.accountService.getToken();
-    if (token) {
-      const request = req.clone({ setHeaders: { Authorization: token } });
-      return next.handle(request);
-    }
-    return next.handle(req);
-
+    const request = req.clone({ setHeaders: { Authorization: token } });
+    return next.handle(request);
   }
 
 }
