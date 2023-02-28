@@ -1,0 +1,23 @@
+.navbar {
+    position: absolute;
+    z-index: 1;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: end;
+    padding: .5rem 1rem;
+    width: 100%;
+    top: 2px;
+    left: 1px;
+    background-color: #fff;
+    border: #cacaca 1px solid;
+  }
+  .rounded{
+        vertical-align: middle;
+        border-style: none;
+        width: 3rem;
+  }

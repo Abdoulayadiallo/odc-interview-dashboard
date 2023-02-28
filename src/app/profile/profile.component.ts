@@ -21,29 +21,26 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     // if (this.accountService && this.accountService.userPicture) {
-      this.userpicture = this.accountService.userPicture;
-      setTimeout(()=>{
-        this.getUserInfo(this.accountService.loggInUsername);
-
-      },5000)
-      console.log(this.accountService.loggInUsername)
-      this.username=this.accountService.loggInUsername;
+    this.userpicture = this.accountService.userPicture;
+    this.getUserInfo(this.accountService.loggInUsername);
+    console.log(this.accountService.loggInUsername)
+    this.username = this.accountService.loggInUsername;
     // }
-   // this.userpicture = this.accountService?.userPicture;
+    // this.userpicture = this.accountService?.userPicture;
   }
   getUserInfo(username: string): void {
     this.subscriptions.push(
       this.accountService.getUserInformation(username).subscribe(
-      (response: Utilisateur) => {
-        this.utilisateur = response;
-        console.log(response)
-        console.log(this.utilisateur)
-      },
-      error => {
-        console.log(error);
-        this.utilisateur = null;
-      }
-    ));
+        (response: Utilisateur) => {
+          this.utilisateur = response;
+          console.log(response)
+          console.log(this.utilisateur)
+        },
+        error => {
+          console.log(error);
+          this.utilisateur = null;
+        }
+      ));
   }
 
   onProfilePictureSelected(event: any): void {
@@ -58,7 +55,7 @@ export class ProfileComponent implements OnInit {
       this.accountService.updateUser(updatedUser).subscribe(
         response => {
           console.log(response);
-        
+
         },
         error => {
           console.log(error);
@@ -72,7 +69,7 @@ export class ProfileComponent implements OnInit {
       )
     );
   }
-  ChangerProfilePhoto(){
+  ChangerProfilePhoto() {
     if (this.profilePictureChange) {
       this.accountService.uploadeUserProfilePicture(this.profilePicture);
     }
