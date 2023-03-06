@@ -109,13 +109,10 @@
           <div class="modal-body">
             <div class="form-group">
               <label>Commentaire final</label>
-              <input type="text" class="form-control" name="commentaireFinal" placeholder="Un etudiant brillant" pattern="^[a-zA-Z0-9\s]*$" [(ngModel)]="commentaireFinal" required />
+              <input type="text" class="form-control" name="commentaireFinal" placeholder="Un etudiant brillant" [(ngModel)]="commentaireFinal" required />
             </div>
             <div *ngIf="AccepterPostulantForm.submitted && !commentaireFinal" class="alert alert-danger">
               Veuillez donner un commentaire final.
-            </div>
-            <div *ngIf="AccepterPostulantForm.submitted && AccepterPostulantForm.controls['commentaireFinal'].errors['pattern']" class="alert alert-danger">
-              Veuillez donner un commentaire valide.
             </div>
           </div>
           <div class="modal-footer">
@@ -140,13 +137,10 @@
           <div class="modal-body">
             <div class="form-group">
               <label>Commentaire final</label>
-              <input type="text" class="form-control" name="commentaireFinal" placeholder="Un etudiant brillant" [(ngModel)]="commentaireFinal" pattern="^[a-zA-Z0-9\s]*$"  required />
+              <input type="text" class="form-control" name="commentaireFinal" placeholder="Un etudiant brillant" [(ngModel)]="commentaireFinal"  required />
             </div>
             <div *ngIf="RefuserPostulantForm.submitted && !commentaireFinal" class="alert alert-danger">
               Veuillez donner un commentaire final.
-            </div>
-            <div *ngIf="RefuserPostulantForm.submitted && RefuserPostulantForm.controls['commentaireFinal'].errors['pattern']" class="alert alert-danger">
-              Veuillez donner un commentaire valide.
             </div>
           </div>
           <div class="modal-footer">
@@ -175,9 +169,6 @@
             </div>
             <div *ngIf="EnattentePostulantForm.submitted && !commentaireFinal" class="alert alert-danger">
               Veuillez donner un commentaire final.
-            </div>
-            <div *ngIf="EnattentePostulantForm.submitted && EnattentePostulantForm.controls['commentaireFinal'].errors['pattern']" class="alert alert-danger">
-              Veuillez donner un commentaire valide.
             </div>
           </div>
           <div class="modal-footer">

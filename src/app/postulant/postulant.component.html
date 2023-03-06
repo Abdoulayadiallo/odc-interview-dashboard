@@ -96,11 +96,11 @@
                     <td>{{ postulant.nom }}</td>
                     <td>{{ postulant.prenom }}</td>
                     <td>{{ postulant.noteFinal }}</td>
-                    <td *ngIf="postulant?.decisionFinal !== null">
+                    <td *ngIf="postulant?.decisionFinal!=null">
                       {{ postulant?.decisionFinal }}
                     </td>
-                    <td *ngIf="postulant?.decisionFinal === null">
-                      {{ postulant }}
+                    <td *ngIf="postulant?.decisionFinal==null">
+                      postulant
                     </td>
                     <td>{{ postulant.rang }}</td>
                     <td>{{ postulant.numeroMTCL }}</td>
