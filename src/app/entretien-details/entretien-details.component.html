@@ -51,7 +51,6 @@
         <img
           class="card-img w-100 h-100"
           src="{{ entretienPicture }}{{ entretien.id }}.png"
-          alt="Card image"
         />
       </div>
       <!-- Carte image Details -->
@@ -525,7 +524,7 @@
                 #numeroInput="ngModel"
               />
               <div *ngIf="addjuryForm.submitted && numeroInput.invalid" class="alert alert-danger">
-                Veuillez saisir un numero de jury falide.
+                Veuillez saisir un numero de jury valide.
               </div>
             </div>
             <div class="form-group">

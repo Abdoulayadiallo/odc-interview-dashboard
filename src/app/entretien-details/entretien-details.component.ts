@@ -60,7 +60,7 @@ export class EntretienDetailsComponent implements OnInit {
   juryId: number
   //Jury ajout
   juryAjout: Utilisateur = new Utilisateur();
-  isSelected=false
+  isSelected = false
   private currentPageSubjectJury = new BehaviorSubject<number>(0);
   responseSubjectJury = new BehaviorSubject<JuryResponse>(this.juryResponse);
   currentPageJury$ = this.currentPageSubject.asObservable();
@@ -86,7 +86,7 @@ export class EntretienDetailsComponent implements OnInit {
     //Recuperer path variable id
     this.id = this.route.snapshot.params['id'];
     //Recuperer l'emplacement de l'image
-    this.entretienPicture = this.entretienService?.imageentretien;
+    this.entretienPicture = this.entretienService.imageentretien;
     this.getJurys();
     this.getPostulants();
     this.getEntretienById()
@@ -252,11 +252,22 @@ export class EntretienDetailsComponent implements OnInit {
       this.subcriptions.push(
         this.juryService.addJury(utilisateur, this.id).subscribe(
           (response) => {
-            // this.loadingService.isLoading.next(false);
-            // this.alertService.showAlert(
-            //   'You have registered successfully. Please check your email for account details.',
-            //   AlertType.SUCCESS
-            // );
+            Swal.fire({
+              icon: 'success',
+              title: 'Erreur',
+              text: 'Utilisateur ajouter avec succès',
+              didOpen: () => {
+                Swal.showLoading()
+              },
+              willClose: () => {
+
+              }
+            }).then((result) => {
+              /* Read more about handling dismissals below */
+              if (result.dismiss === Swal.DismissReason.timer) {
+                console.log('I was closed by the timer')
+              }
+            })
             console.log(response);
             $('#addJuryModal').modal('hide');
             this.getJurys();

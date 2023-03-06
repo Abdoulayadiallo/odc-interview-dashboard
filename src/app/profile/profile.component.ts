@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     // if (this.accountService && this.accountService.userPicture) {
     this.userpicture = this.accountService.userPicture;
-    this.getUserInfo(this.accountService.loggInUsername);
+    this.getUserInfo("ADMIN");
     console.log(this.accountService.loggInUsername)
     this.username = this.accountService.loggInUsername;
     // }

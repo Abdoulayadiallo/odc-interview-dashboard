@@ -191,7 +191,7 @@
               </th> -->
               <!-- <th>Rang</th> -->
               <th>Entretien</th>
-              <th>Nombre postulant</th>
+              <!-- <th>Nombre postulant</th> -->
               <th>Status</th>
               <th>Date Debut</th>
               <th>Date Fin</th>
@@ -208,7 +208,7 @@
               </td> -->
               <!-- <td>{{entretienl.id}}</td> -->
               <td>{{entretienl.entretienNom}}</td>
-              <td>5000</td>
+              <!-- <td>5000</td> -->
               <td><button type="button" [ngClass]="entretienl.etat.status==='EN COUR' ? ' borange' : (entretienl.etat.status === 'TERMINE' ? 'bviolet':'bvert')">{{entretienl.etat.status}}</button></td>
               <td>{{entretienl.dateDebut | date:"dd/MM/YYYY"}}</td>
               <td>{{entretienl.dateFin | date:"dd/MM/YYYY"}}</td>
